@@ -9,10 +9,10 @@ before:
 builds:
   - id: general
     ldflags: &build-ldflags
-      - -X github.com/maahsome/gitlab-tool/cmd.semVer=v{{ .Version }}
-      - -X github.com/maahsome/gitlab-tool/cmd.buildDate={{ .CommitDate }}
-      - -X github.com/maahsome/gitlab-tool/cmd.gitCommit={{ .Commit }}
-      - -X github.com/maahsome/gitlab-tool/cmd.gitRef=refs/tags/{{ .Tag }}
+      - -X github.com/maahsome/ktrouble/cmd.semVer=v{{ .Version }}
+      - -X github.com/maahsome/ktrouble/cmd.buildDate={{ .CommitDate }}
+      - -X github.com/maahsome/ktrouble/cmd.gitCommit={{ .Commit }}
+      - -X github.com/maahsome/ktrouble/cmd.gitRef=refs/tags/{{ .Tag }}
     goos:
       - linux
       - windows
@@ -29,7 +29,7 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 
 brews:
-  - name: gitlab-tool
+  - name: ktrouble
     ids:
       - general
 
@@ -50,7 +50,7 @@ brews:
     # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
     # Default for gitea is "https://gitea.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    url_template: "https://github.com/maahsome/gitlab-tool/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    url_template: "https://github.com/maahsome/ktrouble/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     # Allows you to set a custom download strategy. Note that you'll need
     # to implement the strategy and add it to your tap repository.
     # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
@@ -77,7 +77,7 @@ brews:
 
     # Your app's homepage.
     # Default is empty.
-    homepage: "https://github.com/maahsome/gitlab-tool/"
+    homepage: "https://github.com/maahsome/ktrouble/"
 
     # Your app's description.
     # Default is empty.
@@ -98,9 +98,10 @@ brews:
     # So you can `brew test` your formula.
     # Default is empty.
     test: |
-      system "#{bin}/gitlab-tool --help"
+      system "#{bin}/ktrouble --help"
 
     # Custom install script for brew.
     # Default is 'bin.install "program"'.
     install: |
-      bin.install "gitlab-tool"
+      bin.install "ktrouble"
+
