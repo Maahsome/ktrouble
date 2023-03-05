@@ -2,6 +2,12 @@
 
 A CLI tool for launching troubleshooting docker images into a kubernetes cluster
 
+## Installation
+
+```bash
+brew install maahsome/tap/ktrouble --formula
+```
+
 ## TODO
 
 - [ ] Validate the name of the utility container?
