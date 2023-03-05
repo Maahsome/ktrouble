@@ -5,9 +5,7 @@ import (
 	"ktrouble/objects"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // utilitiesCmd represents the namespace command
@@ -19,15 +17,6 @@ var utilitiesCmd = &cobra.Command{
 	> ktrouble get utilities
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		utilDefs := []objects.UtilityPod{}
-		err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
-		if err != nil {
-			logrus.Fatal("Error unmarshalling utility defs...")
-		}
-		if len(utilDefs) == 0 {
-			utilDefs = defaultUtilityDefinitions()
-		}
 
 		if !c.FormatOverridden {
 			c.OutputFormat = "text"
