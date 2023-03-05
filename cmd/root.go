@@ -196,11 +196,12 @@ func initConfig() {
 		}
 	} else {
 		updatedSources := false
+		defaultDefs := defaults.UtilityDefinitions()
 		c.UtilMap = make(map[string]objects.UtilityPod, len(c.UtilDefs))
 		for i, v := range c.UtilDefs {
 			c.UtilMap[v.Name] = v
 			if len(v.Source) == 0 {
-				c.UtilDefs[i].Source = "ktrouble-utils"
+				c.UtilDefs[i].Source = whichSource(defaultDefs, v.Name)
 				updatedSources = true
 			}
 		}
@@ -272,6 +273,23 @@ func initConfig() {
 		}
 	}
 
+}
+
+// whichSource returns 'ktrouble-utils' if the utility name is in the default list
+// otherwise it returns 'local' which would be something that was added locally.
+// this function is to bring the config.yaml up to date with new properties added
+func whichSource(defList []objects.UtilityPod, name string) string {
+
+	source := "local"
+
+	for _, v := range defList {
+		if name == v.Name {
+			source = "ktrouble-utils"
+			break
+		}
+	}
+
+	return source
 }
 
 func createRestrictedConfigFile(fileName string) {
