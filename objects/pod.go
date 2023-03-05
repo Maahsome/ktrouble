@@ -3,6 +3,7 @@ package objects
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"ktrouble/common"
@@ -55,13 +56,16 @@ func (p *PodList) ToYAML() string {
 	return string(podYAML[:])
 }
 
-func (p *PodList) ToTEXT(noHeaders bool) string {
+func (p *PodList) ToTEXT(noHeaders bool, showExec bool, utilMap map[string]UtilityPod, uniqIdLength int) string {
 	buf, row := new(bytes.Buffer), make([]string, 0)
 
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
 		headerText := []string{"NAME", "NAMESPACE", "STATUS"}
+		if showExec {
+			headerText = append(headerText, "EXEC")
+		}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
@@ -77,11 +81,27 @@ func (p *PodList) ToTEXT(noHeaders bool) string {
 	table.SetTablePadding("\t") // pad with tabs
 	table.SetNoWhiteSpace(true)
 
+	displayOptions := 0
+	if showExec {
+		displayOptions += 1
+	}
+
 	for _, v := range *p {
-		row = []string{
-			v.Name,
-			v.Namespace,
-			v.Status,
+		switch displayOptions {
+		case 0:
+			row = []string{
+				v.Name,
+				v.Namespace,
+				v.Status,
+			}
+		case 1:
+			baseTool := v.Name[0 : len(v.Name)-(uniqIdLength+1)]
+			row = []string{
+				v.Name,
+				v.Namespace,
+				v.Status,
+				fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", v.Namespace, v.Name, utilMap[baseTool].ExecCommand),
+			}
 		}
 		table.Append(row)
 	}
