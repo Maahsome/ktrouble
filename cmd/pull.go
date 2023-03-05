@@ -26,7 +26,8 @@ func pullUtilityDefinitions() {
 	remoteDefs, remoteDefsMap := c.GitUpstream.GetNewUpstreamDefs(c.UtilDefs)
 
 	if len(remoteDefs) > 0 {
-		addUtils := ask.PromptForPulledUtility(remoteDefs)
+		prompt := "Choose utility definitions to add to your local configuration:"
+		addUtils := ask.PromptForUtilityList(remoteDefs, prompt)
 
 		if len(addUtils) > 0 {
 			for _, v := range addUtils {

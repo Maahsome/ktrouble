@@ -15,7 +15,7 @@ var statusCmd = &cobra.Command{
   > ktrouble status
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		status := utilityDefinitionStatus()
+		status := UtilityDefinitionStatus()
 		c.OutputData(&status, objects.TextOptions{
 			NoHeaders: c.NoHeaders,
 			Fields:    c.Fields,
@@ -23,7 +23,7 @@ var statusCmd = &cobra.Command{
 	},
 }
 
-func utilityDefinitionStatus() objects.StatusList {
+func UtilityDefinitionStatus() objects.StatusList {
 	status := objects.StatusList{}
 
 	remoteDefs, remoteDefsMap := c.GitUpstream.GetUpstreamDefs()

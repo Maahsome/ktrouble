@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func PromptForPulledUtility(utils objects.UtilityPodList) []string {
+func PromptForUtilityList(utils objects.UtilityPodList, prompt string) []string {
 
 	var utilArray []string
 	for _, v := range utils {
@@ -28,7 +28,7 @@ func PromptForPulledUtility(utils objects.UtilityPodList) []string {
 		{
 			Name: "utilityname",
 			Prompt: &survey.MultiSelect{
-				Message: "Choose utility definitions to add to your local configuration:",
+				Message: prompt,
 				Options: utilArray,
 			},
 		},

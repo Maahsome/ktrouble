@@ -17,6 +17,7 @@
 - [get utilities](#get-utilities)
 - [launch](#launch)
 - [pull](#pull)
+- [push](#push)
 - [remove](#remove)
 - [remove utility](#remove-utility)
 - [set](#set)
@@ -53,6 +54,7 @@ Available Commands:
   help        Help about any command
   launch      launch a kubernetes troubleshooting pod
   pull        Pull utility definitions from git
+  push        Push local objects to upstream repository
   remove      
   set         
   status      Get a comparison of the local utility definitions with the upstream one
@@ -471,6 +473,28 @@ EXAMPLE:
 
 Usage:
   ktrouble pull [flags]
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## push
+
+```plaintext
+EXAMPLE:
+  > ktrouble push
+
+Usage:
+  ktrouble push [flags]
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
