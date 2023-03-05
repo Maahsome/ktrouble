@@ -206,6 +206,11 @@ func defaultUtilityDefinitions() []UtilityPod {
 			Repository:  "curlimages/curl:latest",
 			ExecCommand: "/bin/sh",
 		},
+		{
+			Name:        "basic-tools",
+			Repository:  "cmaahs/basic-tools:v0.0.1",
+			ExecCommand: "/bin/bash",
+		},
 	}
 
 }
