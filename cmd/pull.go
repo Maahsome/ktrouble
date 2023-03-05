@@ -37,20 +37,20 @@ func pullUtilityDefinitions() {
 
 	gitUser := viper.GetString("gitUser")
 	if len(gitUser) == 0 {
-		common.Logger.Fatal("gitUser is not set")
+		common.Logger.Fatal("gitUser is not set, use 'ktrouble set config --help'")
 	}
 	gitTokenVar := ""
 	gitToken := viper.GetString("gitToken")
 	if len(gitToken) == 0 {
 		gitTokenVar = viper.GetString("gitTokenVar")
 		if len(gitTokenVar) == 0 {
-			common.Logger.Fatal("gitToken or gitTokenVar config option is not set")
+			common.Logger.Fatal("gitToken or gitTokenVar config option is not set, use 'ktrouble set config --help'")
 		}
 		gitToken = os.Getenv(gitTokenVar)
 	}
 
 	if len(gitToken) == 0 {
-		common.Logger.Fatalf("no git token set, gitToken or %s ENV VAR is not set", gitTokenVar)
+		common.Logger.Fatalf("no git token set, gitToken or %s ENV VAR is not set, use 'ktrouble set config --help'", gitTokenVar)
 	}
 
 	storer = memory.NewStorage()
