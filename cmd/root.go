@@ -295,6 +295,11 @@ func defaultUtilityDefinitions() []objects.UtilityPod {
 			Repository:  "cmaahs/basic-tools:v0.0.1",
 			ExecCommand: "/bin/bash",
 		},
+		{
+			Name:        "golang19-bullseye",
+			Repository:  "golang:1.19-bullseye",
+			ExecCommand: "/bin/bash",
+		},
 	}
 
 }
