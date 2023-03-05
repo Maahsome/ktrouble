@@ -19,6 +19,8 @@
 - [pull](#pull)
 - [remove](#remove)
 - [remove utility](#remove-utility)
+- [set](#set)
+- [set config](#set-config)
 - [update](#update)
 - [update utility](#update-utility)
 - [version](#version)
@@ -51,6 +53,7 @@ Available Commands:
   launch      launch a kubernetes troubleshooting pod
   pull        Pull utility definitions from git
   remove      
+  set         
   update      
   version     Express the 'version' of ktrouble.
 
@@ -518,6 +521,72 @@ Usage:
 
 Flags:
   -u, --name string   Unique name for your utility pod
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## set
+
+```plaintext
+EXAMPLES
+	ktrouble set gituser
+
+Usage:
+  ktrouble set [flags]
+  ktrouble set [command]
+
+Available Commands:
+  config      Set git configuration options
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+
+Use "ktrouble set [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## set config
+
+```plaintext
+EXAMPLE:
+  If you store your git personal access token in an ENV variable, you can specify
+  the variable name.
+
+  > ktrouble set config --user christopher.maahs --tokenvar GLA_TOKEN
+
+EXAMPLE:
+  If you don't store your personal access token in an ENV variable, it can be
+  stored directly in the config.yaml file.  Don't forgot to add a 'space' in
+  front of running this next command so the token doesn't end up in your
+  history file, if you have that option set in your shell
+
+  > ktrouble set config --user christopher.maahs --token <your token>
+
+Usage:
+  ktrouble set config [flags]
+
+Flags:
+      --token string      Set your git personal token
+      --tokenvar string   Set the name of the ENV VAR that contains your git personal token
+  -u, --user string       Set your git username
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)

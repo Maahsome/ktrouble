@@ -9,6 +9,7 @@ import (
 	"ktrouble/cmd/add"
 	"ktrouble/cmd/get"
 	"ktrouble/cmd/remove"
+	"ktrouble/cmd/set"
 	"ktrouble/cmd/update"
 	"ktrouble/common"
 	"ktrouble/config"
@@ -131,6 +132,7 @@ func addSubCommands() {
 		add.InitSubCommands(c),
 		remove.InitSubCommands(c),
 		update.InitSubCommands(c),
+		set.InitSubCommands(c),
 	)
 }
 
