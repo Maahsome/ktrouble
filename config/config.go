@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"ktrouble/gitupstream"
 	"ktrouble/kubernetes"
 	"ktrouble/objects"
 	"strings"
@@ -31,6 +32,7 @@ type (
 		Fields             []string
 		GitUser            string
 		GitToken           string
+		GitUpstream        gitupstream.GitUpstream
 	}
 
 	Outputtable interface {
