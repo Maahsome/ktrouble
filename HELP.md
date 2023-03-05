@@ -15,6 +15,8 @@
 - [get sizes](#get-sizes)
 - [get utilities](#get-utilities)
 - [launch](#launch)
+- [remove](#remove)
+- [remove utility](#remove-utility)
 - [version](#version)
 
 ## ktrouble
@@ -42,6 +44,7 @@ Available Commands:
   get         Get various internal configuration and kubernetes resource listings
   help        Help about any command
   launch      launch a kubernetes troubleshooting pod
+  remove      
   version     Express the 'version' of ktrouble.
 
 Flags:
@@ -51,6 +54,7 @@ Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 
 Use "ktrouble [command] --help" for more information about a command.
 ```
@@ -77,6 +81,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 
 Use "ktrouble add [command] --help" for more information about a command.
 ```
@@ -102,6 +107,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -125,6 +131,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -174,6 +181,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 
 Use "ktrouble get [command] --help" for more information about a command.
 ```
@@ -201,6 +209,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -226,6 +235,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -251,6 +261,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -285,6 +296,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -316,6 +328,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -341,6 +354,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -357,7 +371,7 @@ Usage:
   ktrouble get utilities [flags]
 
 Aliases:
-  utilities, utility, util, container, containers, image, images
+  utilities, utility, utils, util, container, containers, image, images
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -366,6 +380,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -397,6 +412,57 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## remove
+
+```plaintext
+EXAMPLES
+	ktrouble remove utility
+
+Usage:
+  ktrouble remove [flags]
+  ktrouble remove [command]
+
+Available Commands:
+  utility     Remove a utility from the config file, or HIDE it if it is an upstream definition
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+
+Use "ktrouble remove [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## remove utility
+
+```plaintext
+Remove a utility from the config file, or HIDE it if it is an upstream definition
+
+Usage:
+  ktrouble remove utility [flags]
+
+Flags:
+  -u, --name string   Unique name for your utility pod
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)
@@ -416,6 +482,7 @@ Global Flags:
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
 ```
 
 [TOC](#TOC)

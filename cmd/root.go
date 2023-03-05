@@ -8,6 +8,7 @@ import (
 
 	"ktrouble/cmd/add"
 	"ktrouble/cmd/get"
+	"ktrouble/cmd/remove"
 	"ktrouble/common"
 	"ktrouble/config"
 	"ktrouble/defaults"
@@ -98,13 +99,11 @@ var RootCmd = &cobra.Command{
 			}
 		}
 
-		if os.Args[1] != "version" && os.Args[1] != "add" {
-			if os.Args[2] != "utilities" {
-				c.Client = kubernetes.New()
-				if c.Client == nil {
-					common.Logger.Fatal("failed to create a kubernetes context")
-				}
-			}
+		if os.Args[1] != "version" {
+			c.Client = kubernetes.New()
+			// if c.Client == nil {
+			// 	common.Logger.Warn("failed to create a kubernetes context")
+			// }
 		}
 	},
 }
@@ -117,6 +116,7 @@ func buildRootCmd() *cobra.Command {
 	RootCmd.PersistentFlags().StringVarP(&c.LogLevel, "log-level", "v", "", "Set the logging level: trace,debug,info,warning,error,fatal")
 	RootCmd.PersistentFlags().StringVar(&c.LogFile, "log-file", "", "Set the logging level: trace,debug,info,warning,error,fatal")
 	RootCmd.PersistentFlags().StringVarP(&c.Namespace, "namespace", "n", "", "Specify the namespace to run in, ENV NAMESPACE then -n for preference")
+	RootCmd.PersistentFlags().BoolVarP(&c.ShowHidden, "show-hidden", "s", false, "Show entries with the 'hidden' property set to 'true'")
 
 	return RootCmd
 }
@@ -127,6 +127,7 @@ func addSubCommands() {
 		// <package>.InitSubCommands(c),
 		get.InitSubCommands(c),
 		add.InitSubCommands(c),
+		remove.InitSubCommands(c),
 	)
 }
 

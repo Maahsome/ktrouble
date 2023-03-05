@@ -35,17 +35,17 @@ func New() KubernetesClient {
 
 	cfg, err := restConfig()
 	if err != nil {
-		common.Logger.WithError(err).Error("could not get config")
+		common.Logger.WithError(err).Debug("could not get config")
 		return nil
 	}
 	if cfg == nil {
-		common.Logger.Error("failed to determine kubernetes config")
+		common.Logger.Debug("failed to determine kubernetes config")
 		return nil
 	}
 
 	client, err := kofficial.NewForConfig(cfg)
 	if err != nil {
-		common.Logger.WithError(err).Error("could not create client from config")
+		common.Logger.WithError(err).Debug("could not create client from config")
 		return nil
 	}
 

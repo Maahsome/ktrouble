@@ -1,6 +1,7 @@
 package get
 
 import (
+	"ktrouble/common"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -23,16 +24,20 @@ EXAMPLE:
   > ktrouble get sa
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		namespace := c.Client.DetermineNamespace(c.Namespace)
+		if c.Client != nil {
+			namespace := c.Client.DetermineNamespace(c.Namespace)
 
-		sasList := c.Client.GetServiceAccounts(namespace)
+			sasList := c.Client.GetServiceAccounts(namespace)
 
-		saData := objects.ServiceAccountList{}
-		for _, v := range sasList.Items {
-			saData.ServiceAccount = append(saData.ServiceAccount, v.Name)
+			saData := objects.ServiceAccountList{}
+			for _, v := range sasList.Items {
+				saData.ServiceAccount = append(saData.ServiceAccount, v.Name)
+			}
+
+			c.OutputData(&saData, objects.TextOptions{NoHeaders: c.NoHeaders})
+		} else {
+			common.Logger.Warn("Cannot fetch service accounts, no valid kubernetes context")
 		}
-
-		c.OutputData(&saData, objects.TextOptions{NoHeaders: c.NoHeaders})
 
 	},
 }

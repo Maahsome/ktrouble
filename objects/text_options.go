@@ -6,5 +6,6 @@ type (
 		ShowExec     bool
 		UtilMap      map[string]UtilityPod
 		UniqIdLength int
+		ShowHidden   bool
 	}
 )

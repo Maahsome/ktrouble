@@ -1,6 +1,7 @@
 package get
 
 import (
+	"ktrouble/common"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -18,14 +19,18 @@ var nodeCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		nodeList := c.Client.GetNodes()
+		if c.Client != nil {
+			nodeList := c.Client.GetNodes()
 
-		nodeData := objects.NodeList{}
-		for _, v := range nodeList.Items {
-			nodeData.Node = append(nodeData.Node, v.Name)
+			nodeData := objects.NodeList{}
+			for _, v := range nodeList.Items {
+				nodeData.Node = append(nodeData.Node, v.Name)
+			}
+
+			c.OutputData(&nodeData, objects.TextOptions{NoHeaders: c.NoHeaders})
+		} else {
+			common.Logger.Warn("Cannot fetch nodes, no valid kubernetes context")
 		}
-
-		c.OutputData(&nodeData, objects.TextOptions{NoHeaders: c.NoHeaders})
 
 	},
 }
