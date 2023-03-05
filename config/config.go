@@ -28,6 +28,7 @@ type (
 		SizeDefs           objects.ResourceSizeList
 		NodeSelectorLabels []string
 		Client             kubernetes.KubernetesClient
+		Fields             []string
 	}
 
 	Outputtable interface {

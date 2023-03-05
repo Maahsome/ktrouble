@@ -6,6 +6,7 @@
 - [add](#add)
 - [add utility](#add-utility)
 - [delete](#delete)
+- [fields](#fields)
 - [get](#get)
 - [get namespace](#get-namespace)
 - [get node](#get-node)
@@ -17,6 +18,8 @@
 - [launch](#launch)
 - [remove](#remove)
 - [remove utility](#remove-utility)
+- [update](#update)
+- [update utility](#update-utility)
 - [version](#version)
 
 ## ktrouble
@@ -40,15 +43,18 @@ Available Commands:
   add         
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
+  fields      Display a list of valid fields to use with the --fields/-f parameter for each command
   genhelp     Output help from all the sub commands
   get         Get various internal configuration and kubernetes resource listings
   help        Help about any command
   launch      launch a kubernetes troubleshooting pod
   remove      
+  update      
   version     Express the 'version' of ktrouble.
 
 Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -76,6 +82,7 @@ Available Commands:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -102,6 +109,7 @@ Flags:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -126,6 +134,28 @@ Usage:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## fields
+
+```plaintext
+Display a list of valid fields to use with the --fields/-f parameter for each command
+
+Usage:
+  ktrouble fields [flags]
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -176,6 +206,7 @@ Available Commands:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -204,6 +235,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -230,6 +262,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -256,6 +289,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -291,6 +325,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -323,6 +358,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -349,6 +385,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -375,6 +412,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -407,6 +445,7 @@ Aliases:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -432,6 +471,7 @@ Available Commands:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -457,6 +497,61 @@ Flags:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## update
+
+```plaintext
+EXAMPLES
+	ktrouble update utility
+
+Usage:
+  ktrouble update [flags]
+  ktrouble update [command]
+
+Available Commands:
+  utility     
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+
+Use "ktrouble update [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## update utility
+
+```plaintext
+Usage:
+  ktrouble update utility [flags]
+
+Flags:
+  -c, --cmd string          Default shell/command to use when 'exec'ing into the POD
+  -u, --name string         Unique name for your utility pod
+  -r, --repository string   Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
+  -e, --toggle-exclude      Switch the current 'excludeFromShare' flag for the utility definition
+      --toggle-hidden       Switch the current 'hidden' flag for the utility definition
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
@@ -477,6 +572,7 @@ Usage:
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
       --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference

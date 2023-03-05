@@ -20,17 +20,16 @@ var utilityCmd = &cobra.Command{
 		if len(utilityParam.Name) > 0 {
 			err := removeOrHideUtility()
 			if err != nil {
-				logrus.WithError(err).Error("Failed to express the version")
+				logrus.WithError(err).Error("Failed to remove the utility definition")
 			}
 			if !c.FormatOverridden {
 				c.OutputFormat = "text"
 			}
 			c.OutputData(&c.UtilDefs, objects.TextOptions{
-				NoHeaders:    c.NoHeaders,
-				ShowExec:     c.EnableBashLinks,
-				UtilMap:      c.UtilMap,
-				UniqIdLength: c.UniqIdLength,
-				ShowHidden:   c.ShowHidden,
+				NoHeaders:        c.NoHeaders,
+				ShowHidden:       true,
+				Fields:           c.Fields,
+				AdditionalFields: []string{"HIDDEN"},
 			})
 		}
 	},

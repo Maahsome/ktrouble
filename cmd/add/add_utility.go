@@ -17,19 +17,20 @@ var utilityCmd = &cobra.Command{
 	Short: "",
 	Run: func(cmd *cobra.Command, args []string) {
 		if checkAddUtilityParams() {
-			err := addUtility()
+			u, err := addUtility()
 			if err != nil {
-				common.Logger.WithError(err).Error("Failed to express the version")
+				common.Logger.WithError(err).Error("Failed to add the utility definition")
 			}
 			if !c.FormatOverridden {
 				c.OutputFormat = "text"
 			}
-			c.OutputData(&c.UtilDefs, objects.TextOptions{
-				NoHeaders:    c.NoHeaders,
-				ShowExec:     c.EnableBashLinks,
-				UtilMap:      c.UtilMap,
-				UniqIdLength: c.UniqIdLength,
-				ShowHidden:   c.ShowHidden,
+			added := objects.UtilityPodList{}
+			added = append(added, u)
+			c.OutputData(&added, objects.TextOptions{
+				NoHeaders:        c.NoHeaders,
+				ShowHidden:       c.ShowHidden,
+				Fields:           c.Fields,
+				AdditionalFields: []string{"EXCLUDED"},
 			})
 		}
 	},
@@ -67,11 +68,9 @@ func checkAddUtilityParams() bool {
 					c.OutputFormat = "text"
 				}
 				c.OutputData(&u, objects.TextOptions{
-					NoHeaders:    c.NoHeaders,
-					ShowExec:     c.EnableBashLinks,
-					UtilMap:      c.UtilMap,
-					UniqIdLength: c.UniqIdLength,
-					ShowHidden:   c.ShowHidden,
+					NoHeaders:  c.NoHeaders,
+					ShowHidden: c.ShowHidden,
+					Fields:     c.Fields,
 				})
 			}
 		}
@@ -79,22 +78,23 @@ func checkAddUtilityParams() bool {
 	return allParamsSet
 }
 
-func addUtility() error {
+func addUtility() (objects.UtilityPod, error) {
 
-	c.UtilDefs = append(c.UtilDefs, objects.UtilityPod{
+	newUtil := objects.UtilityPod{
 		Name:             utilityParam.Name,
 		Repository:       utilityParam.Repository,
 		ExecCommand:      utilityParam.ExecCommand,
 		Source:           "local",
 		ExcludeFromShare: utilityParam.ExcludeFromShare,
-	})
+	}
+	c.UtilDefs = append(c.UtilDefs, newUtil)
 	viper.Set("utilityDefinitions", c.UtilDefs)
 	verr := viper.WriteConfig()
 	if verr != nil {
 		common.Logger.WithError(verr).Info("Failed to write config")
-		return verr
+		return newUtil, verr
 	}
-	return nil
+	return newUtil, nil
 }
 
 func init() {
