@@ -43,11 +43,11 @@ type (
 	}
 )
 
-func askForUtility(utils map[string]UtilityPod) string {
+func askForUtility(utils []UtilityPod) string {
 
 	var utilArray []string
-	for k := range utils {
-		utilArray = append(utilArray, k)
+	for _, v := range utils {
+		utilArray = append(utilArray, v.Name)
 	}
 	sort.Strings(utilArray)
 
@@ -237,6 +237,9 @@ func askForNodeLabels(nodeList *v1.NodeList) string {
 	err := viper.UnmarshalKey("nodeSelectorLabels", &labelList)
 	if err != nil {
 		logrus.Fatal("Error unmarshalling...")
+	}
+	if len(labelList) == 0 {
+		labelList = defaultLabelList()
 	}
 	labelMap := make(map[string]string, len(labelList))
 	for _, v := range labelList {

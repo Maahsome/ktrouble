@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // utilitiesCmd represents the namespace command
@@ -16,7 +18,14 @@ var utilitiesCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		utilDefs := buildUtilityDefinitions()
+		utilDefs := []UtilityPod{}
+		err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
+		if err != nil {
+			logrus.Fatal("Error unmarshalling utility defs...")
+		}
+		if len(utilDefs) == 0 {
+			utilDefs = defaultUtilityDefinitions()
+		}
 
 		fmt.Printf("%-15s %-50s %s\n", "UTILITY", "REGISTRY", "EXEC_CMD")
 		fmt.Printf("%-15s %-50s %s\n", "---------------", "----------------------------------------------", "---------------------")
