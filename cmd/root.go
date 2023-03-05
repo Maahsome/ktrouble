@@ -9,6 +9,7 @@ import (
 	"ktrouble/cmd/add"
 	"ktrouble/cmd/get"
 	"ktrouble/cmd/remove"
+	"ktrouble/cmd/update"
 	"ktrouble/common"
 	"ktrouble/config"
 	"ktrouble/defaults"
@@ -117,6 +118,7 @@ func buildRootCmd() *cobra.Command {
 	RootCmd.PersistentFlags().StringVar(&c.LogFile, "log-file", "", "Set the logging level: trace,debug,info,warning,error,fatal")
 	RootCmd.PersistentFlags().StringVarP(&c.Namespace, "namespace", "n", "", "Specify the namespace to run in, ENV NAMESPACE then -n for preference")
 	RootCmd.PersistentFlags().BoolVarP(&c.ShowHidden, "show-hidden", "s", false, "Show entries with the 'hidden' property set to 'true'")
+	RootCmd.PersistentFlags().StringSliceVarP(&c.Fields, "fields", "f", []string{}, "Specify an array of field names: eg, --fields 'NAME,REPOSITORY'")
 
 	return RootCmd
 }
@@ -128,6 +130,7 @@ func addSubCommands() {
 		get.InitSubCommands(c),
 		add.InitSubCommands(c),
 		remove.InitSubCommands(c),
+		update.InitSubCommands(c),
 	)
 }
 

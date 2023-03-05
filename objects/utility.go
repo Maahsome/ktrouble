@@ -3,6 +3,7 @@ package objects
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -62,19 +63,35 @@ func (up *UtilityPodList) ToYAML() string {
 func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 
 	noHeaders := to.NoHeaders
-
+	fields := []string{}
+	if len(to.Fields) > 0 {
+		fields = append(fields, to.Fields...)
+	} else {
+		fields = []string{"NAME", "REPOSITORY", "EXEC"}
+	}
+	if len(to.AdditionalFields) > 0 {
+		fields = append(fields, to.AdditionalFields...)
+	}
 	buf, row := new(bytes.Buffer), make([]string, 0)
 
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
+	headerText := []string{}
 	if !noHeaders {
-		headerText := []string{"NAME", "REPOSITORY", "EXEC"}
+		if len(to.Fields) > 0 {
+			headerText = append(headerText, to.Fields...)
+		} else {
+			headerText = []string{"NAME", "REPOSITORY", "EXEC"}
+		}
+		if len(to.AdditionalFields) > 0 {
+			headerText = append(headerText, to.AdditionalFields...)
+		}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
 	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(false)
+	table.SetAutoFormatHeaders(true)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
 	table.SetColumnSeparator("")
@@ -95,12 +112,23 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 	sort.Strings(nameList)
 
 	for _, v := range nameList {
-		if !mapList[v].Hidden || to.ShowHidden {
-			row = []string{
-				mapList[v].Name,
-				mapList[v].Repository,
-				mapList[v].ExecCommand,
+		row = []string{}
+
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, mapList[v].Name)
+			case "REPOSITORY":
+				row = append(row, mapList[v].Repository)
+			case "EXEC":
+				row = append(row, mapList[v].ExecCommand)
+			case "HIDDEN":
+				row = append(row, fmt.Sprintf("%t", mapList[v].Hidden))
+			case "EXCLUDED":
+				row = append(row, fmt.Sprintf("%t", mapList[v].ExcludeFromShare))
 			}
+		}
+		if !mapList[v].Hidden || to.ShowHidden {
 			table.Append(row)
 		}
 	}

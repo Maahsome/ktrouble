@@ -19,11 +19,9 @@ var utilitiesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		c.OutputData(&c.UtilDefs, objects.TextOptions{
-			NoHeaders:    c.NoHeaders,
-			ShowExec:     c.EnableBashLinks,
-			UtilMap:      c.UtilMap,
-			UniqIdLength: c.UniqIdLength,
-			ShowHidden:   c.ShowHidden,
+			NoHeaders:  c.NoHeaders,
+			ShowHidden: c.ShowHidden,
+			Fields:     c.Fields,
 		})
 
 	},

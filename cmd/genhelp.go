@@ -140,5 +140,5 @@ func dumpHelpConfluence(c *cobra.Command, root bool, parent string) {
 }
 func init() {
 	RootCmd.AddCommand(genhelpCmd)
-	genhelpCmd.Flags().StringP("format", "f", "markdown", "Specify the format for the doc file: markdown|confluence")
+	genhelpCmd.Flags().String("format", "markdown", "Specify the format for the doc file: markdown|confluence")
 }
