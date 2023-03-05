@@ -29,6 +29,8 @@ type (
 		NodeSelectorLabels []string
 		Client             kubernetes.KubernetesClient
 		Fields             []string
+		GitUser            string
+		GitToken           string
 	}
 
 	Outputtable interface {

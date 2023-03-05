@@ -22,7 +22,7 @@ var versionCmd = &cobra.Command{
 		if !c.FormatOverridden {
 			c.OutputFormat = "json"
 		}
-		c.OutputData(&version, objects.TextOptions{ NoHeaders: c.NoHeaders })
+		c.OutputData(&version, objects.TextOptions{NoHeaders: c.NoHeaders})
 	},
 }
 
