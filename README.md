@@ -34,15 +34,19 @@ jira readme
 
 ### Done
 
-- [x] KT-4:    Add a LIST for running PODs
-- [x] KT-5:    Add a LIST for defined container images
-- [x] KT-2:    Move container list details to config.yaml, create an initial version
-- [x] KT-12:   Add a basic-tools image combining some of the others
-- [x] KT-6:    Convert to real OUTPUT formats
-- [x] KT-11:   Read the utilitydefinitions into a global variable rather than re-read config all the time (both MAP and ARRAY)
-- [x] KT-7:    Replace logrus with common.Logger
-- [x] KT-13:   Add a bash:// column to the get pods output
-- [x] KT-14:   Add get sizes to display the request/limits for each size
-- [x] KT-15:   Turn off auto-format for headers, change header names
-- [x] KT-17:   Refactor for clarity
-- [x] KT-19:   Add an add command to add a utility definition
+  - [x] KT-4:   Add a LIST for running PODs 
+  - [x] KT-5:   Add a LIST for defined container images 
+  - [x] KT-2:   Move container list details to config.yaml, create an initial version 
+  - [x] KT-12:  Add a basic-tools image combining some of the others 
+  - [x] KT-6:   Convert to real OUTPUT formats 
+  - [x] KT-11:  Read the utilitydefinitions into a global variable rather than re-read config all the time (both MAP and ARRAY) 
+  - [x] KT-7:   Replace logrus with common.Logger 
+  - [x] KT-13:  Add a bash:// column to the get pods output 
+  - [x] KT-14:  Add get sizes to display the request/limits for each size 
+  - [x] KT-15:  Turn off auto-format for headers, change header names 
+  - [x] KT-17:  Refactor for clarity 
+  - [x] KT-19:  Add an add command to add a utility definition 
+  - [x] KT-27:  Update the update of the "source" property, so that it only changes ones that are "" blank AND also in the "default" list, and setting all others to "local" 
+
+
+
