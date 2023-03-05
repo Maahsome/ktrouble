@@ -21,6 +21,7 @@
 - [remove utility](#remove-utility)
 - [set](#set)
 - [set config](#set-config)
+- [status](#status)
 - [update](#update)
 - [update utility](#update-utility)
 - [version](#version)
@@ -54,6 +55,7 @@ Available Commands:
   pull        Pull utility definitions from git
   remove      
   set         
+  status      Get a comparison of the local utility definitions with the upstream one
   update      
   version     Express the 'version' of ktrouble.
 
@@ -587,6 +589,28 @@ Flags:
       --token string      Set your git personal token
       --tokenvar string   Set the name of the ENV VAR that contains your git personal token
   -u, --user string       Set your git username
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## status
+
+```plaintext
+EXAMPLE:
+  > ktrouble status
+
+Usage:
+  ktrouble status [flags]
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
