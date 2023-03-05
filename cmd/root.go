@@ -98,12 +98,6 @@ var rootCmd = &cobra.Command{
 		// if os.Args[1] != "version" { // && os.Args[1] != "config" {
 		// }
 	},
-	// Run: func(cmd *cobra.Command, args []string) {
-
-	// 	for i, v := range args {
-	// 		fmt.Printf("ARG: %d: %s\n", i, v)
-	// 	}
-	// },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	"ktrouble/common"
 	"ktrouble/objects"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ var versionCmd = &cobra.Command{
 		var verData objects.Version
 		err := json.Unmarshal([]byte(c.VersionJSON), &verData)
 		if err != nil {
-			logrus.WithError(err).Error("Failed to unmarshal JSON")
+			common.Logger.WithError(err).Error("Failed to unmarshal JSON")
 		}
 
 		if !c.FormatOverridden {

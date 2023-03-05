@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"strings"
 
+	"ktrouble/common"
+
 	"github.com/maahsome/gron"
 	"github.com/olekukonko/tablewriter"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -22,7 +23,7 @@ type Version struct {
 func (v *Version) ToJSON() string {
 	versionJSON, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON")
+		common.Logger.WithError(err).Error("Error extracting JSON")
 		return ""
 	}
 	return string(versionJSON[:])
@@ -31,14 +32,14 @@ func (v *Version) ToJSON() string {
 func (v *Version) ToGRON() string {
 	versionJSON, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON for GRON")
+		common.Logger.WithError(err).Error("Error extracting JSON for GRON")
 	}
 	subReader := strings.NewReader(string(versionJSON[:]))
 	subValues := &bytes.Buffer{}
 	ges := gron.NewGron(subReader, subValues)
 	ges.SetMonochrome(false)
 	if serr := ges.ToGron(); serr != nil {
-		logrus.WithError(serr).Error("Problem generating GRON syntax")
+		common.Logger.WithError(serr).Error("Problem generating GRON syntax")
 		return ""
 	}
 	return subValues.String()
@@ -47,7 +48,7 @@ func (v *Version) ToGRON() string {
 func (v *Version) ToYAML() string {
 	versionYAML, err := yaml.Marshal(v)
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting YAML")
+		common.Logger.WithError(err).Error("Error extracting YAML")
 		return ""
 	}
 	return string(versionYAML[:])
