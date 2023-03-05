@@ -7,10 +7,10 @@ import (
 	"math/rand"
 	"strings"
 
+	"ktrouble/common"
 	"ktrouble/objects"
 	"ktrouble/template"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,12 +21,6 @@ import (
 type TemplateConfig struct {
 	Parameters map[string]string
 }
-
-// type UtilityPod struct {
-// 	Name        string
-// 	Repository  string
-// 	ExecCommand string
-// }
 
 var letters = []rune("abcdef0987654321")
 
@@ -85,14 +79,10 @@ var defaultCmd = &cobra.Command{
 				"selector":       selector,
 			},
 		}
-		// err := template.ApplicationsTemplate.Execute(os.Stdout, tc)
-		// if err != nil {
-		// 	logrus.WithError(err).Error("unable to generate the template data")
-		// }
 
 		var tpl bytes.Buffer
 		if err := template.ApplicationsTemplate.Execute(&tpl, tc); err != nil {
-			logrus.WithError(err).Error("unable to generate the template data")
+			common.Logger.WithError(err).Error("unable to generate the template data")
 		}
 
 		podManifest := tpl.String()
@@ -116,26 +106,26 @@ func createPod(podJSON string, namespace string) {
 
 	cfg, err := restConfig()
 	if err != nil {
-		logrus.WithError(err).Fatal("could not get config")
+		common.Logger.WithError(err).Fatal("could not get config")
 	}
 	if cfg == nil {
-		logrus.Fatal("failed to determine kubernetes config")
+		common.Logger.Fatal("failed to determine kubernetes config")
 	}
 
 	client, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
-		logrus.WithError(err).Fatal("could not create client from config")
+		common.Logger.WithError(err).Fatal("could not create client from config")
 	}
 
 	podClient := client.CoreV1().Pods(namespace)
 	newResource := &v1.Pod{}
 	if err := k8sYaml.NewYAMLOrJSONDecoder(strings.NewReader(podJSON), 100).Decode(&newResource); err != nil {
-		logrus.Errorf("Error converting to K8s: %s", podJSON)
+		common.Logger.Errorf("Error converting to K8s: %s", podJSON)
 	}
 	// result, err := podClient.Create(context.TODO(), newResource, metav1.CreateOptions{})
 	_, cerr := podClient.Create(context.TODO(), newResource, metav1.CreateOptions{})
 	if cerr != nil {
-		logrus.WithError(cerr).Fatal("Failed to create pod")
+		common.Logger.WithError(cerr).Fatal("Failed to create pod")
 	}
 	// fmt.Printf("Created pod %q.\n", result.GetObjectMeta().GetName())
 }

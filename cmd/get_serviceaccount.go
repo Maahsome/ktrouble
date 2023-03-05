@@ -3,10 +3,11 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"ktrouble/objects"
 	"strings"
 
-	"github.com/sirupsen/logrus"
+	"ktrouble/common"
+	"ktrouble/objects"
+
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -45,28 +46,28 @@ func getServiceAccounts(namespace string) *v1.ServiceAccountList {
 
 	cfg, err := restConfig()
 	if err != nil {
-		logrus.WithError(err).Error("could not get config")
+		common.Logger.WithError(err).Error("could not get config")
 		return &v1.ServiceAccountList{}
 	}
 	if cfg == nil {
-		logrus.Error("failed to determine kubernetes config")
+		common.Logger.Error("failed to determine kubernetes config")
 		return &v1.ServiceAccountList{}
 	}
 
 	client, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
-		logrus.WithError(err).Error("could not create client from config")
+		common.Logger.WithError(err).Error("could not create client from config")
 		return &v1.ServiceAccountList{}
 	}
 
 	sas := client.CoreV1().ServiceAccounts(namespace)
 	sasList, err := sas.List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		logrus.WithError(err).Error("could not get list of service accounts")
+		common.Logger.WithError(err).Error("could not get list of service accounts")
 		return &v1.ServiceAccountList{}
 	}
 	if len(sasList.Items) == 0 {
-		logrus.Errorf("no serviceaccounts were found in namespace: %s", namespace)
+		common.Logger.Errorf("no serviceaccounts were found in namespace: %s", namespace)
 		return &v1.ServiceAccountList{}
 	}
 	return sasList

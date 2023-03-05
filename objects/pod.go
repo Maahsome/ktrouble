@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"strings"
 
+	"ktrouble/common"
+
 	"github.com/maahsome/gron"
 	"github.com/olekukonko/tablewriter"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -23,7 +24,7 @@ type Pod struct {
 func (p *PodList) ToJSON() string {
 	podJSON, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON")
+		common.Logger.WithError(err).Error("Error extracting JSON")
 		return ""
 	}
 	return string(podJSON[:])
@@ -32,14 +33,14 @@ func (p *PodList) ToJSON() string {
 func (p *PodList) ToGRON() string {
 	podJSON, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON for GRON")
+		common.Logger.WithError(err).Error("Error extracting JSON for GRON")
 	}
 	subReader := strings.NewReader(string(podJSON[:]))
 	subValues := &bytes.Buffer{}
 	ges := gron.NewGron(subReader, subValues)
 	ges.SetMonochrome(false)
 	if serr := ges.ToGron(); serr != nil {
-		logrus.WithError(serr).Error("Problem generating GRON syntax")
+		common.Logger.WithError(serr).Error("Problem generating GRON syntax")
 		return ""
 	}
 	return string(subValues.Bytes())
@@ -48,7 +49,7 @@ func (p *PodList) ToGRON() string {
 func (p *PodList) ToYAML() string {
 	podYAML, err := yaml.Marshal(p)
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting YAML")
+		common.Logger.WithError(err).Error("Error extracting YAML")
 		return ""
 	}
 	return string(podYAML[:])

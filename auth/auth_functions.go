@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"ktrouble/common"
+
 	homedir "github.com/mitchellh/go-homedir"
-	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	// // This is the way
+	// This is the way
 	// _ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 
@@ -22,7 +23,7 @@ func restConfig() (*rest.Config, error) {
 	if kubeconfig := os.Getenv("KUBECONFIG"); kubeconfig != "" {
 		kubeCfg, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
 		if err != nil {
-			logrus.Info("No KUBECONFIG ENV")
+			common.Logger.Info("No KUBECONFIG ENV")
 			return nil, err
 		}
 	} else {
@@ -36,13 +37,16 @@ func restConfig() (*rest.Config, error) {
 		if _, err := os.Stat(kubeFile); err != nil {
 			if os.IsNotExist(err) {
 				if os.Args[1] != "version" {
-					logrus.Info("Could not locate the KUBECONFIG file, normally ~/.kube/config")
+					common.Logger.Info("Could not locate the KUBECONFIG file, normally ~/.kube/config")
 					os.Exit(1)
 				}
 				return nil, nil
 			}
 		}
 		kubeCfg, err = clientcmd.BuildConfigFromFlags("", kubeFile)
+		if err != nil {
+			common.Logger.WithError(err).Error("Failed to build KUBECONFIG")
+		}
 	}
 	return kubeCfg, nil
 }

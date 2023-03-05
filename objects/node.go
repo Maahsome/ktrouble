@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"strings"
 
+	"ktrouble/common"
+
 	"github.com/maahsome/gron"
 	"github.com/olekukonko/tablewriter"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -19,7 +20,7 @@ type NodeList struct {
 func (n *NodeList) ToJSON() string {
 	nJSON, err := json.MarshalIndent(n, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON")
+		common.Logger.WithError(err).Error("Error extracting JSON")
 		return ""
 	}
 	return string(nJSON[:])
@@ -28,14 +29,14 @@ func (n *NodeList) ToJSON() string {
 func (n *NodeList) ToGRON() string {
 	nJSON, err := json.MarshalIndent(n, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON for GRON")
+		common.Logger.WithError(err).Error("Error extracting JSON for GRON")
 	}
 	subReader := strings.NewReader(string(nJSON[:]))
 	subValues := &bytes.Buffer{}
 	ges := gron.NewGron(subReader, subValues)
 	ges.SetMonochrome(false)
 	if serr := ges.ToGron(); serr != nil {
-		logrus.WithError(serr).Error("Problem generating GRON syntax")
+		common.Logger.WithError(serr).Error("Problem generating GRON syntax")
 		return ""
 	}
 	return subValues.String()
@@ -44,7 +45,7 @@ func (n *NodeList) ToGRON() string {
 func (n *NodeList) ToYAML() string {
 	nYAML, err := yaml.Marshal(n)
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting YAML")
+		common.Logger.WithError(err).Error("Error extracting YAML")
 		return ""
 	}
 	return string(nYAML[:])

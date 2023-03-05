@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"strings"
 
+	"ktrouble/common"
+
 	"github.com/maahsome/gron"
 	"github.com/olekukonko/tablewriter"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -19,7 +20,7 @@ type ServiceAccountList struct {
 func (sa *ServiceAccountList) ToJSON() string {
 	saJSON, err := json.MarshalIndent(sa, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON")
+		common.Logger.WithError(err).Error("Error extracting JSON")
 		return ""
 	}
 	return string(saJSON[:])
@@ -28,14 +29,14 @@ func (sa *ServiceAccountList) ToJSON() string {
 func (sa *ServiceAccountList) ToGRON() string {
 	saJSON, err := json.MarshalIndent(sa, "", "  ")
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting JSON for GRON")
+		common.Logger.WithError(err).Error("Error extracting JSON for GRON")
 	}
 	subReader := strings.NewReader(string(saJSON[:]))
 	subValues := &bytes.Buffer{}
 	ges := gron.NewGron(subReader, subValues)
 	ges.SetMonochrome(false)
 	if serr := ges.ToGron(); serr != nil {
-		logrus.WithError(serr).Error("Problem generating GRON syntax")
+		common.Logger.WithError(serr).Error("Problem generating GRON syntax")
 		return ""
 	}
 	return subValues.String()
@@ -44,7 +45,7 @@ func (sa *ServiceAccountList) ToGRON() string {
 func (sa *ServiceAccountList) ToYAML() string {
 	saYAML, err := yaml.Marshal(sa)
 	if err != nil {
-		logrus.WithError(err).Error("Error extracting YAML")
+		common.Logger.WithError(err).Error("Error extracting YAML")
 		return ""
 	}
 	return string(saYAML[:])

@@ -5,10 +5,10 @@ import (
 	"os"
 	"sort"
 
+	"ktrouble/common"
 	"ktrouble/objects"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	v1 "k8s.io/api/core/v1"
 )
@@ -67,7 +67,7 @@ func askForUtility(utils []objects.UtilityPod) string {
 
 	utilAnswer := &UtilAnswer{}
 	if err := survey.Ask(utilSurvey, utilAnswer, opts); err != nil {
-		logrus.WithError(err).Fatal("No utility selected")
+		common.Logger.WithError(err).Fatal("No utility selected")
 	}
 	return utilAnswer.UtilityName
 }
@@ -94,7 +94,7 @@ func askForNamespace(nssList *v1.NamespaceList) string {
 
 	nsAnswer := &NamespaceAnswer{}
 	if err := survey.Ask(nsSurvey, nsAnswer, opts); err != nil {
-		logrus.WithError(err).Fatal("No namespace selected")
+		common.Logger.WithError(err).Fatal("No namespace selected")
 	}
 	return nsAnswer.Namespace
 }
@@ -121,7 +121,7 @@ func askForServiceAccount(sasList *v1.ServiceAccountList) string {
 
 	saAnswer := &ServiceAccountAnswer{}
 	if err := survey.Ask(saSurvey, saAnswer, opts); err != nil {
-		logrus.WithError(err).Fatal("No service account selected")
+		common.Logger.WithError(err).Fatal("No service account selected")
 	}
 	return saAnswer.ServiceAccount
 }
@@ -149,7 +149,7 @@ func askForResourceSize() map[string]string {
 
 	rsAnswer := &ResourceSizeAnswer{}
 	if err := survey.Ask(rsSurvey, rsAnswer, opts); err != nil {
-		logrus.WithError(err).Fatal("No resource size selected")
+		common.Logger.WithError(err).Fatal("No resource size selected")
 	}
 
 	switch rsAnswer.ResourceSize {
@@ -228,7 +228,7 @@ func askForPod(podList *v1.PodList) PodDetail {
 
 	podAnswer := &PodAnswer{}
 	if err := survey.Ask(podSurvey, podAnswer, opts); err != nil {
-		logrus.WithError(err).Fatal("No pod selected")
+		common.Logger.WithError(err).Fatal("No pod selected")
 	}
 	return podArray[podAnswer.Pod]
 }
@@ -238,7 +238,7 @@ func askForNodeLabels(nodeList *v1.NodeList) string {
 	var labelList []string
 	err := viper.UnmarshalKey("nodeSelectorLabels", &labelList)
 	if err != nil {
-		logrus.Fatal("Error unmarshalling...")
+		common.Logger.Fatal("Error unmarshalling...")
 	}
 	if len(labelList) == 0 {
 		labelList = defaultLabelList()
@@ -282,7 +282,7 @@ func askForNodeLabels(nodeList *v1.NodeList) string {
 
 	labelAnswer := &LabelAnswer{}
 	if err := survey.Ask(labelSurvey, labelAnswer, opts); err != nil {
-		logrus.WithError(err).Fatal("No node selector selected")
+		common.Logger.WithError(err).Fatal("No node selector selected")
 	}
 	return labelAnswer.LabelSelector
 }

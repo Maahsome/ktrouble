@@ -10,9 +10,6 @@ var getCmd = &cobra.Command{
 	Short: "Get various resource lists",
 	Long: `EXAMPLE:
 `,
-	// Run: func(cmd *cobra.Command, args []string) {
-	// 	fmt.Println("get called")
-	// },
 }
 
 func init() {

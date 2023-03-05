@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	"ktrouble/common"
 	"ktrouble/objects"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -44,24 +44,24 @@ var nodeCmd = &cobra.Command{
 func getNodes() *v1.NodeList {
 	cfg, err := restConfig()
 	if err != nil {
-		logrus.WithError(err).Error("could not get config")
+		common.Logger.WithError(err).Error("could not get config")
 		return &v1.NodeList{}
 	}
 	if cfg == nil {
-		logrus.Error("failed to determine kubernetes config")
+		common.Logger.Error("failed to determine kubernetes config")
 		return &v1.NodeList{}
 	}
 
 	client, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
-		logrus.WithError(err).Error("could not create client from config")
+		common.Logger.WithError(err).Error("could not create client from config")
 		return &v1.NodeList{}
 	}
 
 	node := client.CoreV1().Nodes()
 	nodeList, err := node.List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		logrus.WithError(err).Error("could not get list of namespaces")
+		common.Logger.WithError(err).Error("could not get list of namespaces")
 		return &v1.NodeList{}
 	}
 	if len(nodeList.Items) == 0 {
