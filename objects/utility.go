@@ -16,9 +16,11 @@ import (
 type UtilityPodList []UtilityPod
 
 type UtilityPod struct {
-	Name        string `json:"name"`
-	Repository  string `json:"repository"`
-	ExecCommand string `json:"execcommand"`
+	Name             string `json:"name"`
+	Repository       string `json:"repository"`
+	ExecCommand      string `json:"execcommand"`
+	Source           string `json:"source"`
+	ExcludeFromShare bool   `json:"excludefromshare"`
 }
 
 // ToJSON - Write the output as JSON

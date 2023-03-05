@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"ktrouble/cmd/add"
 	"ktrouble/cmd/get"
 	"ktrouble/common"
 	"ktrouble/config"
@@ -97,10 +98,12 @@ var RootCmd = &cobra.Command{
 			}
 		}
 
-		if os.Args[1] != "version" {
-			c.Client = kubernetes.New()
-			if c.Client == nil {
-				common.Logger.Fatal("failed to create a kubernetes context")
+		if os.Args[1] != "version" && os.Args[1] != "add" {
+			if os.Args[2] != "utilities" {
+				c.Client = kubernetes.New()
+				if c.Client == nil {
+					common.Logger.Fatal("failed to create a kubernetes context")
+				}
 			}
 		}
 	},
@@ -123,6 +126,7 @@ func addSubCommands() {
 		// from 'import ktrouble/cmd/<subcommand:package>'
 		// <package>.InitSubCommands(c),
 		get.InitSubCommands(c),
+		add.InitSubCommands(c),
 	)
 }
 
@@ -191,9 +195,21 @@ func initConfig() {
 			logrus.WithError(verr).Info("Failed to write config")
 		}
 	} else {
+		updatedSources := false
 		c.UtilMap = make(map[string]objects.UtilityPod, len(c.UtilDefs))
-		for _, v := range c.UtilDefs {
+		for i, v := range c.UtilDefs {
 			c.UtilMap[v.Name] = v
+			if len(v.Source) == 0 {
+				c.UtilDefs[i].Source = "ktrouble-utils"
+				updatedSources = true
+			}
+		}
+		if updatedSources {
+			viper.Set("utilityDefinitions", c.UtilDefs)
+			verr := viper.WriteConfig()
+			if verr != nil {
+				logrus.WithError(verr).Info("Failed to write config")
+			}
 		}
 	}
 
