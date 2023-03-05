@@ -141,17 +141,6 @@ func initConfig() {
 			configFile := fmt.Sprintf("%s/%s", workDir, "config.yaml")
 			createRestrictedConfigFile(configFile)
 			viper.SetConfigFile(configFile)
-			defaultLabels := []string{
-				"kubernetes.io/arch",
-				"kubernetes.io/os",
-				"node.kubernetes.io/instance-type",
-				"node_pool",
-			}
-			viper.Set("nodeSelectorLabels", defaultLabels)
-			verr := viper.WriteConfig()
-			if verr != nil {
-				logrus.WithError(verr).Info("Failed to write config")
-			}
 		} else {
 			logrus.Info("The ~/.config/ktrouble path is a file and not a directory, please remove the 'ktrouble' file.")
 			os.Exit(1)
@@ -163,6 +152,20 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Warn("Failed to read viper config file.")
+	}
+	utilDefs := []UtilityPod{}
+	err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
+	if err != nil {
+		logrus.Fatal("Error unmarshalling utility defs...")
+	}
+	if len(utilDefs) == 0 {
+		logrus.Warn("Adding default utility definitions to config.yaml")
+		seedDefs := defaultUtilityDefinitions()
+		viper.Set("utilityDefinitions", seedDefs)
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
 	}
 }
 
@@ -179,11 +182,28 @@ func createRestrictedConfigFile(fileName string) {
 				logrus.Info("Chmod for config file failed, please set the mode to 0600.")
 			}
 		}
+		viper.SetConfigFile(fileName)
+		defaultLabels := defaultLabelList()
+		logrus.Warn("Writing default labels to config.yaml...")
+		viper.Set("nodeSelectorLabels", defaultLabels)
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
 	}
 }
 
 func Commands() []*cobra.Command {
 	return rootCmd.Commands()
+}
+
+func defaultLabelList() []string {
+	return []string{
+		"kubernetes.io/arch",
+		"kubernetes.io/os",
+		"node.kubernetes.io/instance-type",
+		"node_pool",
+	}
 }
 
 func restConfig() (*rest.Config, error) {
