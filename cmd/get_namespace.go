@@ -3,6 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"ktrouble/objects"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -22,11 +24,17 @@ var namespaceCmd = &cobra.Command{
 
 		nssList := getNamespaces()
 
-		fmt.Println("NAMESPACE")
-		fmt.Println("---------------")
+		nsData := objects.NamespaceList{}
+		rawData := []string{}
 		for _, v := range nssList.Items {
-			fmt.Println(v.Name)
+			nsData.Namespace = append(nsData.Namespace, v.Name)
+			rawData = append(rawData, v.Name)
 		}
+
+		if !c.FormatOverridden {
+			c.OutputFormat = "text"
+		}
+		fmt.Println(namespaceDataToString(nsData, strings.Join(rawData, ",")))
 	},
 }
 
@@ -59,6 +67,24 @@ func getNamespaces() *v1.NamespaceList {
 	}
 	return nssList
 
+}
+
+func namespaceDataToString(nsData objects.NamespaceList, raw string) string {
+
+	switch strings.ToLower(c.OutputFormat) {
+	case "raw":
+		return raw
+	case "json":
+		return nsData.ToJSON()
+	case "gron":
+		return nsData.ToGRON()
+	case "yaml":
+		return nsData.ToYAML()
+	case "text", "table":
+		return nsData.ToTEXT(c.NoHeaders)
+	default:
+		return nsData.ToTEXT(c.NoHeaders)
+	}
 }
 
 func init() {

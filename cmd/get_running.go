@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"ktrouble/objects"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -18,12 +20,43 @@ var runningCmd = &cobra.Command{
 
 		podList := getCreatedPods()
 
-		fmt.Printf("%-50s %s\n", "POD", "NS")
-		fmt.Printf("%-50s %s\n", "----------------------------------------------", "---------------------")
+		podData := objects.PodList{}
 		for _, v := range podList.Items {
-			fmt.Printf("%-50s %s\n", v.Name, v.Namespace)
+			status := string(v.Status.Phase)
+			if v.DeletionTimestamp != nil {
+				status = "Terminating"
+			}
+			podData = append(podData, objects.Pod{
+				Name:      v.Name,
+				Namespace: v.Namespace,
+				Status:    status,
+			})
 		}
+
+		if !c.FormatOverridden {
+			c.OutputFormat = "text"
+		}
+		fmt.Println(podDataToString(podData, fmt.Sprintf("%#v", podList.Items)))
+
 	},
+}
+
+func podDataToString(podData objects.PodList, raw string) string {
+
+	switch strings.ToLower(c.OutputFormat) {
+	case "raw":
+		return raw
+	case "json":
+		return podData.ToJSON()
+	case "gron":
+		return podData.ToGRON()
+	case "yaml":
+		return podData.ToYAML()
+	case "text", "table":
+		return podData.ToTEXT(c.NoHeaders)
+	default:
+		return podData.ToTEXT(c.NoHeaders)
+	}
 }
 
 func init() {

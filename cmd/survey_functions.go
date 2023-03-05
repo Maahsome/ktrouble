@@ -5,6 +5,8 @@ import (
 	"os"
 	"sort"
 
+	"ktrouble/objects"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -43,7 +45,7 @@ type (
 	}
 )
 
-func askForUtility(utils []UtilityPod) string {
+func askForUtility(utils []objects.UtilityPod) string {
 
 	var utilArray []string
 	for _, v := range utils {
@@ -82,7 +84,7 @@ func askForNamespace(nssList *v1.NamespaceList) string {
 		{
 			Name: "namespace",
 			Prompt: &survey.Select{
-				Message: "Choose a namespace to create the pod in:",
+				Message: "Choose a namespace:",
 				Options: nsArray,
 			},
 		},
