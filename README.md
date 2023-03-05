@@ -32,5 +32,6 @@ jira readme
 - [x] KT-6:    Convert to real OUTPUT formats 
 - [x] KT-11:   Read the utilitydefinitions into a global variable rather than re-read config all the time (both MAP and ARRAY) 
 - [x] KT-7:    Replace logrus with common.Logger 
-- [x] KT-13:   Add a bash:// column to the get pods output
+- [x] KT-13:   Add a bash:// column to the get pods output 
+- [x] KT-14:   Add get sizes to display the request/limits for each size 
 

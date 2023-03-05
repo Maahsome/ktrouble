@@ -28,12 +28,4 @@ func setDefaultCommandIfNonePresent() {
 func main() {
 	setDefaultCommandIfNonePresent()
 	cmd.Execute()
-	// if err := cmd.Execute(); err != nil {
-	// 	logrus.WithError(err).Error("Error executing command")
-	// 	os.Exit(1)
-	// }
 }
-
-// func main() {
-// 	cmd.Execute()
-// }
