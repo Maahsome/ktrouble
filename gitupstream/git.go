@@ -90,15 +90,15 @@ func (gu *gitUpstream) GetNewUpstreamDefs(localDefs objects.UtilityPodList) (obj
 	remoteDefs, _ := gu.GetUpstreamDefs()
 
 	missingDefs := objects.UtilityPodList{}
-	missingDefsMap := make(map[string]objects.UtilityPod, 0)
+	allDefsMap := make(map[string]objects.UtilityPod, 0)
 
 	for _, def := range remoteDefs {
 		if missingLocally(def.Name, localDefs) {
 			missingDefs = append(missingDefs, def)
-			missingDefsMap[def.Name] = def
 		}
+			allDefsMap[def.Name] = def
 	}
-	return missingDefs, missingDefsMap
+	return missingDefs, allDefsMap
 }
 
 func (gu *gitUpstream) PushLocals(localDefs objects.UtilityPodList) bool {

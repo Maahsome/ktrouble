@@ -474,6 +474,9 @@ EXAMPLE:
 Usage:
   ktrouble pull [flags]
 
+Flags:
+  -a, --all   Specify --all to list locally modified definitions as pull selections
+
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
   -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'

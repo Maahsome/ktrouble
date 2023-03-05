@@ -126,6 +126,8 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 				row = append(row, fmt.Sprintf("%t", mapList[v].Hidden))
 			case "EXCLUDED":
 				row = append(row, fmt.Sprintf("%t", mapList[v].ExcludeFromShare))
+			case "SOURCE":
+				row = append(row, mapList[v].Source)
 			}
 		}
 		if !mapList[v].Hidden || to.ShowHidden {
