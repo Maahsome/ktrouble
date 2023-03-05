@@ -12,29 +12,29 @@ var genhelpCmd = &cobra.Command{
 	Use:   "genhelp",
 	Short: "Output help from all the sub commands",
 	Long: `EXAMPLE:
-	> scruffy genhelp > HELP.md
+  This command will generate markdown for all of the cobra commands ktrouble
+  supports.
 
-	This command will generate markdown for all of the cobra commands scruffy
-	supports.
+  > ktrouble genhelp > HELP.md
 
 EXAMPLE:
-	> scruffy genhelp --format confluence > HELP.cf
+  This command will generate a wiki compatible file that can be submitted to
+  confluence via the REST api.  See the 'scruffy publish' command.
 
-	This command will generate a wiki compatible file that can be submitted to
-	confluence via the REST api.  See the 'scruffy publish' command.
+  > ktrouble genhelp --format confluence > HELP.cf
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		format, _ := cmd.Flags().GetString("format")
 		switch format {
 		case "markdown":
-			dumpToc(rootCmd, true, "")
+			dumpToc(RootCmd, true, "")
 			fmt.Printf("\n")
-			dumpHelp(rootCmd, true, "")
+			dumpHelp(RootCmd, true, "")
 		case "confluence":
-			dumpTocConfluence(rootCmd, true, "")
+			dumpTocConfluence(RootCmd, true, "")
 			fmt.Printf("\n")
-			dumpHelpConfluence(rootCmd, true, "")
+			dumpHelpConfluence(RootCmd, true, "")
 		}
 	},
 }
@@ -139,6 +139,6 @@ func dumpHelpConfluence(c *cobra.Command, root bool, parent string) {
 	}
 }
 func init() {
-	rootCmd.AddCommand(genhelpCmd)
+	RootCmd.AddCommand(genhelpCmd)
 	genhelpCmd.Flags().StringP("format", "f", "markdown", "Specify the format for the doc file: markdown|confluence")
 }

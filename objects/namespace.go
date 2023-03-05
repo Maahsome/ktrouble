@@ -51,7 +51,10 @@ func (n *NamespaceList) ToYAML() string {
 	return string(nsYAML[:])
 }
 
-func (n *NamespaceList) ToTEXT(noHeaders bool) string {
+func (n *NamespaceList) ToTEXT(to TextOptions) string {
+
+	noHeaders := to.NoHeaders
+
 	buf := new(bytes.Buffer)
 	var row []string
 

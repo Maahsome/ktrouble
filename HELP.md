@@ -7,6 +7,7 @@
 - [get](#get)
 - [get namespace](#get-namespace)
 - [get node](#get-node)
+- [get nodelabels](#get-nodelabels)
 - [get running](#get-running)
 - [get serviceaccount](#get-serviceaccount)
 - [get sizes](#get-sizes)
@@ -18,10 +19,15 @@
 
 ```plaintext
 EXAMPLE:
+  Simply run the 'launch' command and you will be prompted for all of the
+  required details.
+    - Utility Pod Selection
+    - Namespace
+    - Service Account
+    - Node Selector
+    - Resource Sizing
 
-  TODO: add description
-
-  > ktrouble
+  > ktrouble launch
 
 Usage:
   ktrouble [command]
@@ -30,15 +36,18 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
   genhelp     Output help from all the sub commands
-  get         Get various resource lists
+  get         Get various internal configuration and kubernetes resource listings
   help        Help about any command
   launch      launch a kubernetes troubleshooting pod
   version     Express the 'version' of ktrouble.
 
 Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 
 Use "ktrouble [command] --help" for more information about a command.
 ```
@@ -49,15 +58,21 @@ Use "ktrouble [command] --help" for more information about a command.
 
 ```plaintext
 EXAMPLE:
-	> ktrouble delete
+  Delete a running POD.  This will prompt with a list of PODs that are running
+  and were launched using ktrouble
+
+  > ktrouble delete
 
 Usage:
   ktrouble delete [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -66,22 +81,47 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
+  These are mostly utility commands to review things important to running ktrouble.
+  Allowing a display of various items stored in config.yaml and listing various
+  kubernetes resources.
+
+  > ktrouble get namespaces
+  > ktrouble get utilities
+
+EXAMPLE:
+  Get a list of PODs that are currently running on the current context kubernetes
+  cluster that were created with the ktrouble utility.  If the 'enableBashLinks'
+  config.yaml setting is 'true', a '<bash: ... >' command will be displayed,
+  otherwise the SHELL path will be displayed.
+
+  > ktrouble get pods
+
+    NAME                NAMESPACE       STATUS   EXEC
+    basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
+
+    NAME                NAMESPACE       STATUS   SHELL
+    basic-tools-e1df2f  common-tooling  Running  /bin/bash
 
 Usage:
+  ktrouble get [flags]
   ktrouble get [command]
 
 Available Commands:
   namespace      Get a list of namespaces
   node           Get a list of node labels
+  nodelabels     Get a list of defined node labels in config.yaml
   running        Get a list of running pods
   serviceaccount Get a list of K8s ServiceAccount(s) in a Namespace
   sizes          Get a list of defined sizes
   utilities      Get a list of supported utility container images
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 
 Use "ktrouble get [command] --help" for more information about a command.
 ```
@@ -92,6 +132,9 @@ Use "ktrouble get [command] --help" for more information about a command.
 
 ```plaintext
 EXAMPLE:
+  Return a list of kubernetes namespaces for the current context cluster
+
+  > ktrouble get ns
 
 Usage:
   ktrouble get namespace [flags]
@@ -100,9 +143,12 @@ Aliases:
   namespace, namespaces, ns
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -111,7 +157,9 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-	> ktrouble get node
+  Get a list of nodes for the current context cluster
+
+  > ktrouble get node
 
 Usage:
   ktrouble get node [flags]
@@ -120,9 +168,37 @@ Aliases:
   node, nodes
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+```
+
+[TOC](#TOC)
+
+## get nodelabels
+
+```plaintext
+EXAMPLE:
+  Show the list of node labels in the configuration file
+
+  > ktrouble get nodelabels
+
+Usage:
+  ktrouble get nodelabels [flags]
+
+Aliases:
+  nodelabels, nodelabel, nl, labels
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -131,7 +207,18 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-	> ktrouble get running
+  Get a list of PODs that are currently running on the current context kubernetes
+  cluster that were created with the ktrouble utility.  If the 'enableBashLinks'
+  config.yaml setting is 'true', a '<bash: ... >' command will be displayed,
+  otherwise the SHELL path will be displayed.
+
+  > ktrouble get running
+
+    NAME                NAMESPACE       STATUS   EXEC
+    basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
+
+    NAME                NAMESPACE       STATUS   SHELL
+    basic-tools-e1df2f  common-tooling  Running  /bin/bash
 
 Usage:
   ktrouble get running [flags]
@@ -140,9 +227,12 @@ Aliases:
   running, pods, pod
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -151,7 +241,15 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-	> ktrouble get serviceaccount -n myspace
+  Return a list of kubernetes service accounts for a namespace
+
+  > ktrouble get serviceaccount -n myspace
+
+EXAMPLE:
+  If you do not specify a namespace with '-n <namespace>', you will be prompted
+  to select one
+
+  > ktrouble get sa
 
 Usage:
   ktrouble get serviceaccount [flags]
@@ -160,9 +258,12 @@ Aliases:
   serviceaccount, serviceaccounts, sa
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -171,7 +272,9 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-	> ktrouble get sizes
+  Display a list of POD size options from the configuration file
+
+  > ktrouble get sizes
 
 Usage:
   ktrouble get sizes [flags]
@@ -180,9 +283,12 @@ Aliases:
   sizes, size, requests, request, limit, limits
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -191,7 +297,9 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-	> ktrouble get utilities
+  Display a list of utilities defined in the configuration file
+
+  > ktrouble get utilities
 
 Usage:
   ktrouble get utilities [flags]
@@ -200,9 +308,12 @@ Aliases:
   utilities, utility, util, container, containers, image, images
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -211,14 +322,29 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
+  Just running kubectl launch will prompt for all the things required to run
+
+  > kubectl launch
+
+EXAMPLE:
+  TODO: add command line parameters that can be used to set all the options
+  for launching a POD
+
+  > kubectl launch (...)
 
 Usage:
   ktrouble launch [flags]
 
+Aliases:
+  launch, create, apply, pod, l
+
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
@@ -232,9 +358,12 @@ Usage:
   ktrouble version [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.ktrouble.yaml)
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
   -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-  -o, --output string      Set an output format: json, text, yaml, gron, md
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)

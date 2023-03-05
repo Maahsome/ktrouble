@@ -57,7 +57,10 @@ func (rs *ResourceSizeList) ToYAML() string {
 	return string(rsYAML[:])
 }
 
-func (rs *ResourceSizeList) ToTEXT(noHeaders bool) string {
+func (rs *ResourceSizeList) ToTEXT(to TextOptions) string {
+
+	noHeaders := to.NoHeaders
+
 	buf, row := new(bytes.Buffer), make([]string, 0)
 
 	// ************************** TableWriter ******************************
