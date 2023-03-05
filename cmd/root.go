@@ -38,7 +38,8 @@ var (
 	gitRef    string
 	buildDate string
 
-	c = &config.Config{}
+	c        = &config.Config{}
+	utilDefs []objects.UtilityPod
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -154,7 +155,6 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Warn("Failed to read viper config file.")
 	}
-	utilDefs := []objects.UtilityPod{}
 	err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
 	if err != nil {
 		logrus.Fatal("Error unmarshalling utility defs...")

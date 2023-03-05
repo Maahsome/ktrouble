@@ -12,7 +12,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sYaml "k8s.io/apimachinery/pkg/util/yaml"
@@ -38,14 +37,6 @@ var defaultCmd = &cobra.Command{
 	Long: `EXAMPLE:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		utilDefs := []objects.UtilityPod{}
-		err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
-		if err != nil {
-			logrus.Fatal("Error unmarshalling utility defs...")
-		}
-		if len(utilDefs) == 0 {
-			utilDefs = defaultUtilityDefinitions()
-		}
 
 		utilMap := make(map[string]objects.UtilityPod)
 		for _, v := range utilDefs {
