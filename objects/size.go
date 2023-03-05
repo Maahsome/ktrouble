@@ -63,13 +63,13 @@ func (rs *ResourceSizeList) ToTEXT(noHeaders bool) string {
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		headerText := []string{"NAME", "CPULIMIT", "MEMLIMIT", "CPUREQUEST", "MEMREQUEST"}
+		headerText := []string{"NAME", "CPU_LIMIT", "MEM_LIMIT", "CPU_REQUEST", "MEM_REQUEST"}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
 	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(true)
+	table.SetAutoFormatHeaders(false)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
 	table.SetColumnSeparator("")

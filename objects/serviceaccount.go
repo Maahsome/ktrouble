@@ -58,12 +58,12 @@ func (sa *ServiceAccountList) ToTEXT(noHeaders bool) string {
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		table.SetHeader([]string{"SERVICEACCOUNT"})
+		table.SetHeader([]string{"SERVICE_ACCOUNT"})
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
 	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(true)
+	table.SetAutoFormatHeaders(false)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
 	table.SetColumnSeparator("")
