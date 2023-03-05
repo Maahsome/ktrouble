@@ -27,7 +27,7 @@ jobs:
           changelog_dir: changelog
       -
         name: Get Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: v0.0.0-NEXT
       -
@@ -36,7 +36,7 @@ jobs:
           cat changelog/v0.0.0-NEXT.md
       -
         name: Commit ChangeLog
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           add: 'changelog/v0.0.0-NEXT.md'
           committer_name: Christopher Maahs
