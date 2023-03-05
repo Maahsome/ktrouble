@@ -56,7 +56,10 @@ func (up *UtilityPodList) ToYAML() string {
 	return string(podYAML[:])
 }
 
-func (up *UtilityPodList) ToTEXT(noHeaders bool) string {
+func (up *UtilityPodList) ToTEXT(to TextOptions) string {
+
+	noHeaders := to.NoHeaders
+
 	buf, row := new(bytes.Buffer), make([]string, 0)
 
 	// ************************** TableWriter ******************************

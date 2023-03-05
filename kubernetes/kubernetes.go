@@ -1,17 +1,58 @@
-package auth
+package kubernetes
 
 import (
 	"fmt"
 	"os"
 
+	"ktrouble/ask"
 	"ktrouble/common"
 
 	homedir "github.com/mitchellh/go-homedir"
+	v1 "k8s.io/api/core/v1"
+	kofficial "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	// This is the way
-	// _ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
+
+type KubernetesClient interface {
+	// GetProperty(property string) string
+	// SetProperty(property string, value string) string
+	CreatePod(podJSON string, namespace string)
+	GetCreatedPods() *v1.PodList
+	GetNamespaces() *v1.NamespaceList
+	GetNodes() *v1.NodeList
+	GetServiceAccounts(namespace string) *v1.ServiceAccountList
+	DeletePod(pod ask.PodDetail) error
+	DetermineNamespace(nsParam string) string
+}
+
+type kubernetesClient struct {
+	Client *kofficial.Clientset
+}
+
+// New generate a new kubernetes client
+func New() KubernetesClient {
+
+	cfg, err := restConfig()
+	if err != nil {
+		common.Logger.WithError(err).Error("could not get config")
+		return nil
+	}
+	if cfg == nil {
+		common.Logger.Error("failed to determine kubernetes config")
+		return nil
+	}
+
+	client, err := kofficial.NewForConfig(cfg)
+	if err != nil {
+		common.Logger.WithError(err).Error("could not create client from config")
+		return nil
+	}
+
+	return &kubernetesClient{
+		Client: client,
+	}
+}
 
 func restConfig() (*rest.Config, error) {
 	// We aren't likely to run this INSIDE the K8s cluster, this routine

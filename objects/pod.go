@@ -56,7 +56,13 @@ func (p *PodList) ToYAML() string {
 	return string(podYAML[:])
 }
 
-func (p *PodList) ToTEXT(noHeaders bool, showExec bool, utilMap map[string]UtilityPod, uniqIdLength int) string {
+func (p *PodList) ToTEXT(to TextOptions) string {
+
+	noHeaders := to.NoHeaders
+	showExec := to.ShowExec
+	utilMap := to.UtilMap
+	uniqIdLength := to.UniqIdLength
+
 	buf, row := new(bytes.Buffer), make([]string, 0)
 
 	// ************************** TableWriter ******************************
@@ -65,6 +71,8 @@ func (p *PodList) ToTEXT(noHeaders bool, showExec bool, utilMap map[string]Utili
 		headerText := []string{"NAME", "NAMESPACE", "STATUS"}
 		if showExec {
 			headerText = append(headerText, "EXEC")
+		} else {
+			headerText = append(headerText, "SHELL")
 		}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
@@ -87,15 +95,16 @@ func (p *PodList) ToTEXT(noHeaders bool, showExec bool, utilMap map[string]Utili
 	}
 
 	for _, v := range *p {
+		baseTool := v.Name[0 : len(v.Name)-(uniqIdLength+1)]
 		switch displayOptions {
 		case 0:
 			row = []string{
 				v.Name,
 				v.Namespace,
 				v.Status,
+				utilMap[baseTool].ExecCommand,
 			}
 		case 1:
-			baseTool := v.Name[0 : len(v.Name)-(uniqIdLength+1)]
 			row = []string{
 				v.Name,
 				v.Namespace,

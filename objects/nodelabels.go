@@ -12,26 +12,24 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type ServiceAccountList struct {
-	ServiceAccount []string `json:"serviceAccount"`
-}
+type NodeLabels []string
 
 // ToJSON - Write the output as JSON
-func (sa *ServiceAccountList) ToJSON() string {
-	saJSON, err := json.MarshalIndent(sa, "", "  ")
+func (nl *NodeLabels) ToJSON() string {
+	podJSON, err := json.MarshalIndent(nl, "", "  ")
 	if err != nil {
 		common.Logger.WithError(err).Error("Error extracting JSON")
 		return ""
 	}
-	return string(saJSON[:])
+	return string(podJSON[:])
 }
 
-func (sa *ServiceAccountList) ToGRON() string {
-	saJSON, err := json.MarshalIndent(sa, "", "  ")
+func (nl *NodeLabels) ToGRON() string {
+	podJSON, err := json.MarshalIndent(nl, "", "  ")
 	if err != nil {
 		common.Logger.WithError(err).Error("Error extracting JSON for GRON")
 	}
-	subReader := strings.NewReader(string(saJSON[:]))
+	subReader := strings.NewReader(string(podJSON[:]))
 	subValues := &bytes.Buffer{}
 	ges := gron.NewGron(subReader, subValues)
 	ges.SetMonochrome(false)
@@ -39,28 +37,29 @@ func (sa *ServiceAccountList) ToGRON() string {
 		common.Logger.WithError(serr).Error("Problem generating GRON syntax")
 		return ""
 	}
-	return subValues.String()
+	return string(subValues.Bytes())
 }
 
-func (sa *ServiceAccountList) ToYAML() string {
-	saYAML, err := yaml.Marshal(sa)
+func (nl *NodeLabels) ToYAML() string {
+	podYAML, err := yaml.Marshal(nl)
 	if err != nil {
 		common.Logger.WithError(err).Error("Error extracting YAML")
 		return ""
 	}
-	return string(saYAML[:])
+	return string(podYAML[:])
 }
 
-func (sa *ServiceAccountList) ToTEXT(to TextOptions) string {
+func (nl *NodeLabels) ToTEXT(to TextOptions) string {
 
 	noHeaders := to.NoHeaders
-	buf := new(bytes.Buffer)
-	var row []string
+
+	buf, row := new(bytes.Buffer), make([]string, 0)
 
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		table.SetHeader([]string{"SERVICE_ACCOUNT"})
+		headerText := []string{"LABEL"}
+		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -75,13 +74,15 @@ func (sa *ServiceAccountList) ToTEXT(to TextOptions) string {
 	table.SetTablePadding("\t") // pad with tabs
 	table.SetNoWhiteSpace(true)
 
-	for _, v := range sa.ServiceAccount {
+	for _, v := range *nl {
 		row = []string{
 			v,
 		}
 		table.Append(row)
 	}
+
 	table.Render()
 
 	return buf.String()
+
 }

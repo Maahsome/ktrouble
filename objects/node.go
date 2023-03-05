@@ -51,7 +51,10 @@ func (n *NodeList) ToYAML() string {
 	return string(nYAML[:])
 }
 
-func (n *NodeList) ToTEXT(noHeaders bool) string {
+func (n *NodeList) ToTEXT(to TextOptions) string {
+
+	noHeaders := to.NoHeaders
+
 	buf := new(bytes.Buffer)
 	var row []string
 
