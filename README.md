@@ -40,6 +40,8 @@ jira readme
 
 ### Done
 
-- [x] KT-4:        Add a LIST for running PODs
-- [x] KT-5:        Add a LIST for defined container images
-- [x] KT-2:        Move container list details to config.yaml, create an initial version
+- [x] KT-4:    Add a LIST for running PODs
+- [x] KT-5:    Add a LIST for defined container images
+- [x] KT-2:    Move container list details to config.yaml, create an initial version
+- [x] KT-12:   Add a basic-tools image combining some of the others
+

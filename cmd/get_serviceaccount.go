@@ -3,6 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"ktrouble/objects"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -24,11 +26,17 @@ var serviceaccountCmd = &cobra.Command{
 
 		sasList := getServiceAccounts(namespace)
 
-		fmt.Println("SERVICE ACCOUNT")
-		fmt.Println("---------------")
+		saData := objects.ServiceAccountList{}
+		rawData := []string{}
 		for _, v := range sasList.Items {
-			fmt.Println(v.Name)
+			saData.ServiceAccount = append(saData.ServiceAccount, v.Name)
+			rawData = append(rawData, v.Name)
 		}
+
+		if !c.FormatOverridden {
+			c.OutputFormat = "text"
+		}
+		fmt.Println(saDataToString(saData, strings.Join(rawData, ",")))
 
 	},
 }
@@ -62,6 +70,24 @@ func getServiceAccounts(namespace string) *v1.ServiceAccountList {
 		return &v1.ServiceAccountList{}
 	}
 	return sasList
+}
+
+func saDataToString(saData objects.ServiceAccountList, raw string) string {
+
+	switch strings.ToLower(c.OutputFormat) {
+	case "raw":
+		return raw
+	case "json":
+		return saData.ToJSON()
+	case "gron":
+		return saData.ToGRON()
+	case "yaml":
+		return saData.ToYAML()
+	case "text", "table":
+		return saData.ToTEXT(c.NoHeaders)
+	default:
+		return saData.ToTEXT(c.NoHeaders)
+	}
 }
 
 func init() {

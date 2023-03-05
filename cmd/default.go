@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"strings"
 
+	"ktrouble/objects"
 	"ktrouble/template"
 
 	"github.com/sirupsen/logrus"
@@ -22,11 +23,11 @@ type TemplateConfig struct {
 	Parameters map[string]string
 }
 
-type UtilityPod struct {
-	Name        string
-	Repository  string
-	ExecCommand string
-}
+// type UtilityPod struct {
+// 	Name        string
+// 	Repository  string
+// 	ExecCommand string
+// }
 
 var letters = []rune("abcdef0987654321")
 
@@ -37,7 +38,7 @@ var defaultCmd = &cobra.Command{
 	Long: `EXAMPLE:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		utilDefs := []UtilityPod{}
+		utilDefs := []objects.UtilityPod{}
 		err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
 		if err != nil {
 			logrus.Fatal("Error unmarshalling utility defs...")
@@ -46,9 +47,9 @@ var defaultCmd = &cobra.Command{
 			utilDefs = defaultUtilityDefinitions()
 		}
 
-		utilMap := make(map[string]UtilityPod)
+		utilMap := make(map[string]objects.UtilityPod)
 		for _, v := range utilDefs {
-			utilMap[v.Name] = UtilityPod{
+			utilMap[v.Name] = objects.UtilityPod{
 				Name:        v.Name,
 				Repository:  v.Repository,
 				ExecCommand: v.ExecCommand,
@@ -148,9 +149,9 @@ func createPod(podJSON string, namespace string) {
 	// fmt.Printf("Created pod %q.\n", result.GetObjectMeta().GetName())
 }
 
-func defaultUtilityDefinitions() []UtilityPod {
+func defaultUtilityDefinitions() []objects.UtilityPod {
 
-	return []UtilityPod{
+	return []objects.UtilityPod{
 		{
 			Name:        "dnsutils",
 			Repository:  "gcr.io/kubernetes-e2e-test-images/dnsutils:1.3",

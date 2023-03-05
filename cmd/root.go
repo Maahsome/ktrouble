@@ -9,6 +9,7 @@ import (
 
 	"ktrouble/common"
 	"ktrouble/config"
+	"ktrouble/objects"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"k8s.io/client-go/rest"
@@ -153,7 +154,7 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Warn("Failed to read viper config file.")
 	}
-	utilDefs := []UtilityPod{}
+	utilDefs := []objects.UtilityPod{}
 	err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
 	if err != nil {
 		logrus.Fatal("Error unmarshalling utility defs...")

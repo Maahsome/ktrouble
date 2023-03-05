@@ -3,6 +3,9 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"strings"
+
+	"ktrouble/objects"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -23,11 +26,18 @@ var nodeCmd = &cobra.Command{
 
 		nodeList := getNodes()
 
-		fmt.Println("NODES")
-		fmt.Println("---------------")
+		nodeData := objects.NodeList{}
+		rawData := []string{}
 		for _, v := range nodeList.Items {
-			fmt.Println(v.Name)
+			nodeData.Node = append(nodeData.Node, v.Name)
+			rawData = append(rawData, v.Name)
 		}
+
+		if !c.FormatOverridden {
+			c.OutputFormat = "text"
+		}
+		fmt.Println(nodeDataToString(nodeData, strings.Join(rawData, ",")))
+
 	},
 }
 
@@ -60,6 +70,24 @@ func getNodes() *v1.NodeList {
 	}
 	return nodeList
 
+}
+
+func nodeDataToString(nodeData objects.NodeList, raw string) string {
+
+	switch strings.ToLower(c.OutputFormat) {
+	case "raw":
+		return raw
+	case "json":
+		return nodeData.ToJSON()
+	case "gron":
+		return nodeData.ToGRON()
+	case "yaml":
+		return nodeData.ToYAML()
+	case "text", "table":
+		return nodeData.ToTEXT(c.NoHeaders)
+	default:
+		return nodeData.ToTEXT(c.NoHeaders)
+	}
 }
 
 func init() {

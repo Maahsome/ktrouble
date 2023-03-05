@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"ktrouble/objects"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -18,7 +20,7 @@ var utilitiesCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		utilDefs := []UtilityPod{}
+		utilDefs := []objects.UtilityPod{}
 		err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
 		if err != nil {
 			logrus.Fatal("Error unmarshalling utility defs...")
@@ -27,14 +29,31 @@ var utilitiesCmd = &cobra.Command{
 			utilDefs = defaultUtilityDefinitions()
 		}
 
-		fmt.Printf("%-15s %-50s %s\n", "UTILITY", "REGISTRY", "EXEC_CMD")
-		fmt.Printf("%-15s %-50s %s\n", "---------------", "----------------------------------------------", "---------------------")
-		for _, v := range utilDefs {
-			fmt.Printf("%-15s %-50s %s\n", v.Name, v.Repository, v.ExecCommand)
+		if !c.FormatOverridden {
+			c.OutputFormat = "text"
 		}
+		fmt.Println(utilityPodDataToString(utilDefs, fmt.Sprintf("%#v", utilDefs)))
+
 	},
 }
 
+func utilityPodDataToString(podData objects.UtilityPodList, raw string) string {
+
+	switch strings.ToLower(c.OutputFormat) {
+	case "raw":
+		return raw
+	case "json":
+		return podData.ToJSON()
+	case "gron":
+		return podData.ToGRON()
+	case "yaml":
+		return podData.ToYAML()
+	case "text", "table":
+		return podData.ToTEXT(c.NoHeaders)
+	default:
+		return podData.ToTEXT(c.NoHeaders)
+	}
+}
 func init() {
 	getCmd.AddCommand(utilitiesCmd)
 }
