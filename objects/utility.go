@@ -21,6 +21,7 @@ type UtilityPod struct {
 	ExecCommand      string `json:"execcommand"`
 	Source           string `json:"source"`
 	ExcludeFromShare bool   `json:"excludefromshare"`
+	Hidden           bool   `json:"hidden"`
 }
 
 // ToJSON - Write the output as JSON
@@ -94,12 +95,14 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 	sort.Strings(nameList)
 
 	for _, v := range nameList {
-		row = []string{
-			mapList[v].Name,
-			mapList[v].Repository,
-			mapList[v].ExecCommand,
+		if !mapList[v].Hidden || to.ShowHidden {
+			row = []string{
+				mapList[v].Name,
+				mapList[v].Repository,
+				mapList[v].ExecCommand,
+			}
+			table.Append(row)
 		}
-		table.Append(row)
 	}
 
 	table.Render()

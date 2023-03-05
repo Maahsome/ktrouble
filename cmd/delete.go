@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"ktrouble/ask"
+	"ktrouble/common"
 
 	"github.com/spf13/cobra"
 )
@@ -17,12 +18,16 @@ var deleteCmd = &cobra.Command{
   > ktrouble delete
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		podList := c.Client.GetCreatedPods()
+		if c.Client != nil {
+			podList := c.Client.GetCreatedPods()
 
-		if len(podList.Items) > 0 {
-			selectedPod := ask.PromptForPod(podList)
+			if len(podList.Items) > 0 {
+				selectedPod := ask.PromptForPod(podList)
 
-			c.Client.DeletePod(selectedPod)
+				c.Client.DeletePod(selectedPod)
+			}
+		} else {
+			common.Logger.Warn("Cannot delete a pod, no valid kubernetes context")
 		}
 	},
 }

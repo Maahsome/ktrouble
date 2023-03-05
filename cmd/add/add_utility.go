@@ -29,6 +29,7 @@ var utilityCmd = &cobra.Command{
 				ShowExec:     c.EnableBashLinks,
 				UtilMap:      c.UtilMap,
 				UniqIdLength: c.UniqIdLength,
+				ShowHidden:   c.ShowHidden,
 			})
 		}
 	},
@@ -70,6 +71,7 @@ func checkAddUtilityParams() bool {
 					ShowExec:     c.EnableBashLinks,
 					UtilMap:      c.UtilMap,
 					UniqIdLength: c.UniqIdLength,
+					ShowHidden:   c.ShowHidden,
 				})
 			}
 		}

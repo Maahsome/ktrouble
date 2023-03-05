@@ -21,6 +21,7 @@ type (
 		Namespace          string
 		EnableBashLinks    bool
 		UniqIdLength       int
+		ShowHidden         bool
 		UtilMap            map[string]objects.UtilityPod
 		UtilDefs           objects.UtilityPodList
 		SizeMap            map[string]objects.ResourceSize

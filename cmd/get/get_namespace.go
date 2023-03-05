@@ -1,6 +1,7 @@
 package get
 
 import (
+	"ktrouble/common"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -18,14 +19,18 @@ var namespaceCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		nssList := c.Client.GetNamespaces()
+		if c.Client != nil {
+			nssList := c.Client.GetNamespaces()
 
-		nsData := objects.NamespaceList{}
-		for _, v := range nssList.Items {
-			nsData.Namespace = append(nsData.Namespace, v.Name)
+			nsData := objects.NamespaceList{}
+			for _, v := range nssList.Items {
+				nsData.Namespace = append(nsData.Namespace, v.Name)
+			}
+
+			c.OutputData(&nsData, objects.TextOptions{NoHeaders: c.NoHeaders})
+		} else {
+			common.Logger.Warn("Cannot fetch namespaces, no valid kubernetes context")
 		}
-
-		c.OutputData(&nsData, objects.TextOptions{NoHeaders: c.NoHeaders})
 	},
 }
 

@@ -13,6 +13,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/sh",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "psql-curl",
@@ -20,6 +21,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "psqlutils15",
@@ -27,6 +29,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "psqlutils14",
@@ -34,6 +37,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "awscli",
@@ -41,6 +45,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "gcloudutils",
@@ -48,6 +53,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "azutils",
@@ -55,6 +61,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "mysqlutils5",
@@ -62,6 +69,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "mysqlutils8",
@@ -69,6 +77,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "redis6",
@@ -76,6 +85,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "curl",
@@ -83,6 +93,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/sh",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 		{
 			Name:             "basic-tools",
@@ -90,6 +101,7 @@ func UtilityDefinitions() []objects.UtilityPod {
 			ExecCommand:      "/bin/bash",
 			Source:           "ktrouble-utils",
 			ExcludeFromShare: false,
+			Hidden:           false,
 		},
 	}
 

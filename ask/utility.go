@@ -16,11 +16,13 @@ type (
 	}
 )
 
-func PromptForUtility(utils []objects.UtilityPod) string {
+func PromptForUtility(utils []objects.UtilityPod, showHidden bool) string {
 
 	var utilArray []string
 	for _, v := range utils {
-		utilArray = append(utilArray, v.Name)
+		if !v.Hidden || showHidden {
+			utilArray = append(utilArray, v.Name)
+		}
 	}
 	sort.Strings(utilArray)
 
