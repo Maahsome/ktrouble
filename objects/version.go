@@ -66,7 +66,7 @@ func (v *Version) ToTEXT(noHeaders bool) string {
 	}
 
 	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(true)
+	table.SetAutoFormatHeaders(false)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
 	table.SetColumnSeparator("")
