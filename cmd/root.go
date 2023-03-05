@@ -45,6 +45,8 @@ var (
 	c        = &config.Config{}
 	utilMap  map[string]objects.UtilityPod
 	utilDefs []objects.UtilityPod
+	sizeMap  map[string]objects.ResourceSize
+	sizeDefs []objects.ResourceSize
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -155,6 +157,8 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Warn("Failed to read viper config file.")
 	}
+
+	// Utility Definitions
 	err := viper.UnmarshalKey("utilityDefinitions", &utilDefs)
 	if err != nil {
 		logrus.Fatal("Error unmarshalling utility defs...")
@@ -171,6 +175,26 @@ func initConfig() {
 		utilMap = make(map[string]objects.UtilityPod, len(utilDefs))
 		for _, v := range utilDefs {
 			utilMap[v.Name] = v
+		}
+	}
+
+	// Size Definitions
+	serr := viper.UnmarshalKey("resourceSizing", &sizeDefs)
+	if serr != nil {
+		logrus.Fatal("Error unmarshalling resource sizing...")
+	}
+	if len(sizeDefs) == 0 {
+		logrus.Warn("Adding default resource sizing to config.yaml")
+		seedSizes := defaultResourceSizingList()
+		viper.Set("resourceSizing", seedSizes)
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	} else {
+		sizeMap = make(map[string]objects.ResourceSize, len(sizeDefs))
+		for _, v := range sizeDefs {
+			sizeMap[v.Name] = v
 		}
 	}
 }
@@ -192,6 +216,11 @@ func createRestrictedConfigFile(fileName string) {
 		defaultLabels := defaultLabelList()
 		logrus.Warn("Writing default labels to config.yaml...")
 		viper.Set("nodeSelectorLabels", defaultLabels)
+
+		defaultSizes := defaultResourceSizingList()
+		logrus.Warn("Writing default sizes to config.yaml...")
+		viper.Set("resourceSizing", defaultSizes)
+
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
@@ -201,6 +230,107 @@ func createRestrictedConfigFile(fileName string) {
 
 func Commands() []*cobra.Command {
 	return rootCmd.Commands()
+}
+
+func defaultUtilityDefinitions() []objects.UtilityPod {
+
+	return []objects.UtilityPod{
+		{
+			Name:        "dnsutils",
+			Repository:  "gcr.io/kubernetes-e2e-test-images/dnsutils:1.3",
+			ExecCommand: "/bin/sh",
+		},
+		{
+			Name:        "psql-curl",
+			Repository:  "barrypiccinni/psql-curl:latest",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "psqlutils15",
+			Repository:  "postgres:15-bullseye",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "psqlutils14",
+			Repository:  "postgres:14-bullseye",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "awscli",
+			Repository:  "amazon/aws-cli:latest",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "gcloudutils",
+			Repository:  "google/cloud-sdk:latest",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "azutils",
+			Repository:  "mcr.microsoft.com/azure-cli",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "mysqlutils5",
+			Repository:  "mysql:5.7.40-debian",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "mysqlutils8",
+			Repository:  "mysql:8-debian",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "redis6",
+			Repository:  "cmaahs/redis-cli:6.2",
+			ExecCommand: "/bin/bash",
+		},
+		{
+			Name:        "curl",
+			Repository:  "curlimages/curl:latest",
+			ExecCommand: "/bin/sh",
+		},
+		{
+			Name:        "basic-tools",
+			Repository:  "cmaahs/basic-tools:v0.0.1",
+			ExecCommand: "/bin/bash",
+		},
+	}
+
+}
+
+func defaultResourceSizingList() []objects.ResourceSize {
+
+	return []objects.ResourceSize{
+		{
+			Name:       "Small",
+			LimitsCPU:  "250m",
+			LimitsMEM:  "2Gi",
+			RequestCPU: "100m",
+			RequestMEM: "512Mi",
+		},
+		{
+			Name:       "Medium",
+			LimitsCPU:  "500m",
+			LimitsMEM:  "4Gi",
+			RequestCPU: "200m",
+			RequestMEM: "1Gi",
+		},
+		{
+			Name:       "Large",
+			LimitsCPU:  "1000m",
+			LimitsMEM:  "8Gi",
+			RequestCPU: "500m",
+			RequestMEM: "2Gi",
+		},
+		{
+			Name:       "XLarge",
+			LimitsCPU:  "10000m",
+			LimitsMEM:  "30Gi",
+			RequestCPU: "6000m",
+			RequestMEM: "2Gi",
+		},
+	}
 }
 
 func defaultLabelList() []string {

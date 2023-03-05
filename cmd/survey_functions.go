@@ -126,13 +126,12 @@ func askForServiceAccount(sasList *v1.ServiceAccountList) string {
 	return saAnswer.ServiceAccount
 }
 
-func askForResourceSize() map[string]string {
+func askForResourceSize() string {
 
-	rsArray := []string{
-		"Small",
-		"Medium",
-		"Large",
-		"XLarge",
+	rsArray := []string{}
+
+	for _, v := range sizeDefs {
+		rsArray = append(rsArray, v.Name)
 	}
 
 	var rsSurvey = []*survey.Question{
@@ -152,43 +151,7 @@ func askForResourceSize() map[string]string {
 		common.Logger.WithError(err).Fatal("No resource size selected")
 	}
 
-	switch rsAnswer.ResourceSize {
-	case "Small":
-		return map[string]string{
-			"limitsCpu":  "250m",
-			"limitsMem":  "2Gi",
-			"requestCpu": "100m",
-			"requestMem": "512Mi",
-		}
-	case "Medium":
-		return map[string]string{
-			"limitsCpu":  "500m",
-			"limitsMem":  "4Gi",
-			"requestCpu": "200m",
-			"requestMem": "1Gi",
-		}
-	case "Large":
-		return map[string]string{
-			"limitsCpu":  "1000m",
-			"limitsMem":  "8Gi",
-			"requestCpu": "500m",
-			"requestMem": "2Gi",
-		}
-	case "XLarge":
-		return map[string]string{
-			"limitsCpu":  "10000m",
-			"limitsMem":  "30Gi",
-			"requestCpu": "6000m",
-			"requestMem": "2Gi",
-		}
-	}
-
-	return map[string]string{
-		"limitsCpu":  "250m",
-		"limitsMem":  "2Gi",
-		"requestCpu": "100m",
-		"requestMem": "512Mi",
-	}
+	return rsAnswer.ResourceSize
 }
 
 func askForPod(podList *v1.PodList) PodDetail {
