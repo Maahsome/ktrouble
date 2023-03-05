@@ -3,6 +3,8 @@
 ## TOC
 
 - [_main_](#ktrouble)
+- [add](#add)
+- [add utility](#add-utility)
 - [delete](#delete)
 - [get](#get)
 - [get namespace](#get-namespace)
@@ -33,6 +35,7 @@ Usage:
   ktrouble [command]
 
 Available Commands:
+  add         
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
   genhelp     Output help from all the sub commands
@@ -50,6 +53,55 @@ Flags:
   -o, --output string      output types: json, text, yaml, gron, raw
 
 Use "ktrouble [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## add
+
+```plaintext
+EXAMPLES
+	ktrouble add utility
+
+Usage:
+  ktrouble add [flags]
+  ktrouble add [command]
+
+Available Commands:
+  utility     
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+
+Use "ktrouble add [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## add utility
+
+```plaintext
+Usage:
+  ktrouble add utility [flags]
+
+Flags:
+  -c, --cmd string          Default shell/command to use when 'exec'ing into the POD (default "/bin/sh")
+  -e, --exclude             Exclude from 'push' to central repository
+  -u, --name string         Unique name for your utility pod
+  -r, --repository string   Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
 ```
 
 [TOC](#TOC)
