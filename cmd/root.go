@@ -22,6 +22,10 @@ import (
 	// "sigs.k8s.io/yaml"
 )
 
+const (
+	uniqIdLength = 6
+)
+
 type (
 	Project struct {
 		ID     int    `json:"id"`
@@ -39,6 +43,7 @@ var (
 	buildDate string
 
 	c        = &config.Config{}
+	utilMap  map[string]objects.UtilityPod
 	utilDefs []objects.UtilityPod
 )
 
@@ -81,6 +86,7 @@ var rootCmd = &cobra.Command{
 		c.VersionDetail.BuildDate = buildDate
 		c.VersionDetail.GitCommit = gitCommit
 		c.VersionDetail.GitRef = gitRef
+		c.EnableBashLinks = viper.GetBool("enableBashLinks")
 		c.VersionJSON = fmt.Sprintf("{\"SemVer\": \"%s\", \"BuildDate\": \"%s\", \"GitCommit\": \"%s\", \"GitRef\": \"%s\"}", semVer, buildDate, gitCommit, gitRef)
 		if c.OutputFormat != "" {
 			c.FormatOverridden = true
@@ -160,6 +166,11 @@ func initConfig() {
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
+		}
+	} else {
+		utilMap = make(map[string]objects.UtilityPod, len(utilDefs))
+		for _, v := range utilDefs {
+			utilMap[v.Name] = v
 		}
 	}
 }

@@ -53,9 +53,9 @@ func podDataToString(podData objects.PodList, raw string) string {
 	case "yaml":
 		return podData.ToYAML()
 	case "text", "table":
-		return podData.ToTEXT(c.NoHeaders)
+		return podData.ToTEXT(c.NoHeaders, c.EnableBashLinks, utilMap, uniqIdLength)
 	default:
-		return podData.ToTEXT(c.NoHeaders)
+		return podData.ToTEXT(c.NoHeaders, c.EnableBashLinks, utilMap, uniqIdLength)
 	}
 }
 

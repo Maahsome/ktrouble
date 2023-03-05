@@ -64,7 +64,7 @@ var defaultCmd = &cobra.Command{
 		if selector == "\"-none-\"" {
 			hasSelector = "false"
 		}
-		shortUniq := randSeq(6)
+		shortUniq := randSeq(uniqIdLength)
 		tc := &TemplateConfig{
 			Parameters: map[string]string{
 				"name":           fmt.Sprintf("%s-%s", utility, shortUniq),

@@ -17,6 +17,7 @@ type (
 		CACert           string
 		CABundle         string
 		Namespace        string
+		EnableBashLinks  bool
 	}
 	Outputtable interface {
 		ToJSON() string
