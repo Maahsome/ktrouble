@@ -16,6 +16,7 @@
 - [get sizes](#get-sizes)
 - [get utilities](#get-utilities)
 - [launch](#launch)
+- [pull](#pull)
 - [remove](#remove)
 - [remove utility](#remove-utility)
 - [update](#update)
@@ -48,6 +49,7 @@ Available Commands:
   get         Get various internal configuration and kubernetes resource listings
   help        Help about any command
   launch      launch a kubernetes troubleshooting pod
+  pull        Pull utility definitions from git
   remove      
   update      
   version     Express the 'version' of ktrouble.
@@ -442,6 +444,28 @@ Usage:
 
 Aliases:
   launch, create, apply, pod, l
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+```
+
+[TOC](#TOC)
+
+## pull
+
+```plaintext
+EXAMPLE:
+  > ktrouble pull
+
+Usage:
+  ktrouble pull [flags]
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)

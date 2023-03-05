@@ -24,9 +24,9 @@ jira readme
 - [ ] KT-10:  Fix a bug where the utilitydefinitions are detected as empty, and defaults are written to config.yaml
 - [ ] KT-16:  Start adding godoc comments (In Progress)
 - [ ] KT-18:  Add command line parameters to the launch command
-- [ ] KT-24:  Add a pull command to display a list of utilities that are on the upstream source, but not downloaded locally, allow an "All" or "multi-select" to choose which to pull
 - [ ] KT-25:  Add a push command to push items that are not marked as "excludeFromShare"
 - [ ] KT-26:  Add a status command that will compare your local config.yaml definitions with the upstream source
+- [ ] KT-28:  Add set gituser, set gittokenvar, and set gittoken to facilitate setting these config.yaml settings for interation with git
 
 ### Done
 
@@ -47,3 +47,4 @@ jira readme
 - [x] KT-22:  Add a local property "excludeFromShare" to exclude an item from being pushed
 - [x] KT-23:  Add a "source" property, indicating if a utility object is from the upstream source
 - [x] KT-20:  Add an update command to update an existing utility definition
+- [x] KT-24:  Add a pull command to display a list of utilities that are on the upstream source, but not downloaded locally, allow an "All" or "multi-select" to choose which to pull
