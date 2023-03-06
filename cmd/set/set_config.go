@@ -12,6 +12,7 @@ type gitUserParam struct {
 	Name     string
 	TokenVar string
 	Token    string
+	GitURL   string
 }
 
 var p gitUserParam
@@ -53,6 +54,9 @@ func saveConfig() error {
 	if len(p.Token) > 0 {
 		viper.Set("gitToken", p.Token)
 	}
+	if len(p.GitURL) > 0 {
+		viper.Set("gitURL", p.GitURL)
+	}
 	verr := viper.WriteConfig()
 	if verr != nil {
 		common.Logger.WithError(verr).Info("Failed to write config")
@@ -67,4 +71,5 @@ func init() {
 	gitconfigCmd.Flags().StringVarP(&p.Name, "user", "u", "", "Set your git username")
 	gitconfigCmd.Flags().StringVar(&p.TokenVar, "tokenvar", "", "Set the name of the ENV VAR that contains your git personal token")
 	gitconfigCmd.Flags().StringVar(&p.Token, "token", "", "Set your git personal token")
+	gitconfigCmd.Flags().StringVar(&p.GitURL, "giturl", "", "Set the URL for the repository for upstream utils")
 }

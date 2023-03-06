@@ -23,15 +23,17 @@ type GitUpstream interface {
 }
 
 type gitUpstream struct {
-	User  string
-	Token string
+	User   string
+	Token  string
+	GitURL string
 }
 
-func New(user string, token string) GitUpstream {
+func New(user string, token string, url string) GitUpstream {
 
 	return &gitUpstream{
-		User:  user,
-		Token: token,
+		User:   user,
+		Token:  token,
+		GitURL: url,
 	}
 }
 
@@ -44,7 +46,7 @@ func (gu *gitUpstream) GetUpstreamDefs() (objects.UtilityPodList, map[string]obj
 	fs = memfs.New()
 
 	_, err := git.Clone(storer, fs, &git.CloneOptions{
-		URL: "https://git.alteryx.com/futurama/farnsworth/tools/ktrouble-utils.git",
+		URL: gu.GitURL,
 		Auth: &gitHttp.BasicAuth{
 			Username: gu.User,
 			Password: gu.Token,
@@ -96,7 +98,7 @@ func (gu *gitUpstream) GetNewUpstreamDefs(localDefs objects.UtilityPodList) (obj
 		if missingLocally(def.Name, localDefs) {
 			missingDefs = append(missingDefs, def)
 		}
-			allDefsMap[def.Name] = def
+		allDefsMap[def.Name] = def
 	}
 	return missingDefs, allDefsMap
 }
@@ -110,7 +112,7 @@ func (gu *gitUpstream) PushLocals(localDefs objects.UtilityPodList) bool {
 	fs = memfs.New()
 
 	repo, err := git.Clone(storer, fs, &git.CloneOptions{
-		URL: "https://git.alteryx.com/futurama/farnsworth/tools/ktrouble-utils.git",
+		URL: gu.GitURL,
 		Auth: &gitHttp.BasicAuth{
 			Username: gu.User,
 			Password: gu.Token,
