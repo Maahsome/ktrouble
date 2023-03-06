@@ -33,6 +33,7 @@ type (
 		GitUser            string
 		GitToken           string
 		GitUpstream        gitupstream.GitUpstream
+		GitURL             string
 	}
 
 	Outputtable interface {

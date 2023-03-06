@@ -116,12 +116,16 @@ var RootCmd = &cobra.Command{
 				}
 				gitToken = os.Getenv(gitTokenVar)
 			}
+			gitURL := viper.GetString("gitURL")
+			if len(gitURL) == 0 {
+				common.Logger.Fatal("gitURL is not set, use 'ktrouble set config --help'")
+			}
 
 			if len(gitToken) == 0 {
 				common.Logger.Fatalf("no git token set, gitToken or %s ENV VAR is not set, use 'ktrouble set config --help'", gitTokenVar)
 			}
 
-			c.GitUpstream = gitupstream.New(gitUser, gitToken)
+			c.GitUpstream = gitupstream.New(gitUser, gitToken, gitURL)
 		}
 		if os.Args[1] != "version" {
 			c.Client = kubernetes.New()
@@ -218,6 +222,11 @@ func initConfig() {
 		logrus.Warn("Adding default utility definitions to config.yaml")
 		seedDefs := defaults.UtilityDefinitions()
 		viper.Set("utilityDefinitions", seedDefs)
+		c.UtilDefs = defaults.UtilityDefinitions()
+		c.UtilMap = make(map[string]objects.UtilityPod, len(c.UtilDefs))
+		for _, v := range c.UtilDefs {
+			c.UtilMap[v.Name] = v
+		}
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
@@ -251,6 +260,11 @@ func initConfig() {
 		logrus.Warn("Adding default resource sizing to config.yaml")
 		seedSizes := defaults.ResourceSizingList()
 		viper.Set("resourceSizing", seedSizes)
+		c.SizeDefs = defaults.ResourceSizingList()
+		c.SizeMap = make(map[string]objects.ResourceSize, len(c.SizeDefs))
+		for _, v := range c.SizeDefs {
+			c.SizeMap[v.Name] = v
+		}
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
@@ -271,6 +285,7 @@ func initConfig() {
 		logrus.Warn("Adding default node selector labels to config.yaml")
 		seedLabels := defaults.Labels()
 		viper.Set("nodeSelectorLabels", seedLabels)
+		c.NodeSelectorLabels = defaults.Labels()
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
@@ -283,6 +298,7 @@ func initConfig() {
 	} else {
 		// Set the default
 		viper.Set("uniqIdLength", 6)
+		c.UniqIdLength = 6
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
@@ -295,6 +311,19 @@ func initConfig() {
 	} else {
 		// Set the default
 		viper.Set("enableBashLinks", false)
+		c.EnableBashLinks = false
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	}
+	// GitURL
+	if viper.IsSet("gitURL") {
+		c.GitURL = viper.GetString("gitURL")
+	} else {
+		// Set the default
+		viper.Set("gitURL", defaults.GitURL())
+		c.GitURL = defaults.GitURL()
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")
