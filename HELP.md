@@ -613,6 +613,7 @@ Usage:
   ktrouble set config [flags]
 
 Flags:
+      --giturl string     Set the URL for the repository for upstream utils
       --token string      Set your git personal token
       --tokenvar string   Set the name of the ENV VAR that contains your git personal token
   -u, --user string       Set your git username
