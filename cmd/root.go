@@ -146,7 +146,7 @@ func buildRootCmd() *cobra.Command {
 	RootCmd.PersistentFlags().StringVarP(&c.Namespace, "namespace", "n", "", "Specify the namespace to run in, ENV NAMESPACE then -n for preference")
 	RootCmd.PersistentFlags().BoolVarP(&c.ShowHidden, "show-hidden", "s", false, "Show entries with the 'hidden' property set to 'true'")
 	RootCmd.PersistentFlags().StringSliceVarP(&c.Fields, "fields", "f", []string{}, "Specify an array of field names: eg, --fields 'NAME,REPOSITORY'")
-
+	RootCmd.PersistentFlags().StringVarP(&c.TemplateFile, "template", "t", "default", "Specify the template file to use to render the POD manifest")
 	return RootCmd
 }
 
@@ -179,25 +179,26 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	home, herr := os.UserHomeDir()
+	cobra.CheckErr(herr)
+	confDir := fmt.Sprintf("%s/.config/ktrouble", home)
+	tmplDir := fmt.Sprintf("%s/.config/ktrouble/templates", home)
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		workDir := fmt.Sprintf("%s/.config/ktrouble", home)
-		if _, err := os.Stat(workDir); err != nil {
+		if _, err := os.Stat(tmplDir); err != nil {
 			if os.IsNotExist(err) {
-				mkerr := os.MkdirAll(workDir, os.ModePerm)
+				mkerr := os.MkdirAll(tmplDir, os.ModePerm)
 				if mkerr != nil {
-					logrus.Fatal("Error creating ~/.config/ktrouble directory", mkerr)
+					logrus.WithError(mkerr).Fatal("Error creating ~/.config/ktrouble/templates directory")
 				}
 			}
 		}
-		if stat, err := os.Stat(workDir); err == nil && stat.IsDir() {
-			configFile := fmt.Sprintf("%s/%s", workDir, "config.yaml")
+		if stat, err := os.Stat(confDir); err == nil && stat.IsDir() {
+			configFile := fmt.Sprintf("%s/%s", confDir, "config.yaml")
 			createRestrictedConfigFile(configFile)
 			viper.SetConfigFile(configFile)
 		} else {
@@ -356,6 +357,11 @@ func initConfig() {
 			logrus.WithError(verr).Info("Failed to write config")
 		}
 	}
+
+	// Create 'default' template in the config templates directory
+	templateFile := fmt.Sprintf("%s/default", tmplDir)
+	createDefaultTemplateFile(templateFile)
+
 }
 
 // whichSource returns 'ktrouble-utils' if the utility name is in the default list
@@ -373,6 +379,25 @@ func whichSource(defList []objects.UtilityPod, name string) string {
 	}
 
 	return source
+}
+
+func createDefaultTemplateFile(fileName string) {
+	if _, err := os.Stat(fileName); err != nil {
+		if os.IsNotExist(err) {
+			file, ferr := os.Create(fileName)
+			if ferr != nil {
+				logrus.Fatalf("Unable to create the default template file: %s", fileName)
+			}
+			mode := int(0600)
+			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
+				logrus.Error("Chmod for default template file failed, please set the mode to 0600.")
+			}
+			_, werr := file.WriteString(defaults.DefaultTemplate())
+			if werr != nil {
+				logrus.Error("failed to write the default template")
+			}
+		}
+	}
 }
 
 func createRestrictedConfigFile(fileName string) {

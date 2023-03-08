@@ -1,4 +1,4 @@
-time="2023-03-07T23:01:04-06:00" level=error msg="Failed to build KUBECONFIG" error="invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable"
+time="2023-03-08T08:28:40-06:00" level=error msg="Failed to build KUBECONFIG" error="invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable"
 # ktrouble help for all commands
 
 ## TOC
@@ -71,6 +71,7 @@ Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble [command] --help" for more information about a command.
 ```
@@ -99,6 +100,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble add [command] --help" for more information about a command.
 ```
@@ -126,6 +128,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -151,6 +154,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -172,6 +176,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -223,6 +228,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble get [command] --help" for more information about a command.
 ```
@@ -252,6 +258,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -279,6 +286,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -306,6 +314,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -342,6 +351,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -375,6 +385,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -402,6 +413,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -429,6 +441,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -466,6 +479,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -491,6 +505,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -513,6 +528,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -539,6 +555,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble remove [command] --help" for more information about a command.
 ```
@@ -565,6 +582,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -591,6 +609,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble set [command] --help" for more information about a command.
 ```
@@ -618,6 +637,7 @@ Usage:
   ktrouble set config [flags]
 
 Flags:
+      --bashlinks         Toggle the use of Bash Links for iTerm2
       --configs           Toggle the Prompt for ConfigMaps default
       --giturl string     Set the URL for the repository for upstream utils
       --secrets           Toggle the Prompt for Secrets default
@@ -634,6 +654,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -656,6 +677,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -682,6 +704,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble update [command] --help" for more information about a command.
 ```
@@ -710,6 +733,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -731,6 +755,7 @@ Global Flags:
       --no-headers         Suppress header output in Text output
   -o, --output string      output types: json, text, yaml, gron, raw
   -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
