@@ -29,7 +29,7 @@ metadata:
     app: ktrouble
 spec:
   containers:
-  - name: {{ $.Parameters.name}}
+  - name: {{ $.Parameters.name }}
     image: {{ $.Parameters.registry }}
     command:
       - sleep
@@ -42,10 +42,27 @@ spec:
       requests:
         cpu: {{ $.Parameters.requestCpu }}
         memory: {{ $.Parameters.requestMem }}
+    {{- if $.Secrets }}
+    volumeMounts:
+    {{- range $.Secrets }}
+    - mountPath: "/secrets/{{ . }}"
+      name: ktrouble-{{ . }}
+      readOnly: true
+    {{- end }}
+    {{- end }}
   {{- if eq $.Parameters.hasSelector "true" }}
   nodeSelector:
     {{ $.Parameters.selector }}
   {{- end }}
   serviceAccount: {{ $.Parameters.serviceAccount}}
   restartPolicy: Always
+  {{- if $.Secrets }}
+  volumes:
+  {{- range $.Secrets }}
+  - name: ktrouble-{{ . }}
+    secret:
+      defaultMode: 420
+      secretName: {{ . }}
+  {{- end }}
+  {{- end }}
 `))

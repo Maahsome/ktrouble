@@ -34,6 +34,7 @@ type (
 		GitToken           string
 		GitUpstream        gitupstream.GitUpstream
 		GitURL             string
+		PromptForSecrets   bool
 	}
 
 	Outputtable interface {
