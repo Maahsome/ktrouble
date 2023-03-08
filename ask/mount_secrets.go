@@ -38,7 +38,7 @@ func PromptForSecrets(secretList *v1.SecretList) []string {
 
 	secretAnswer := &MountSecretsAnswer{}
 	if err := survey.Ask(secretSurvey, secretAnswer, opts); err != nil {
-		common.Logger.WithError(err).Fatal("No service account selected")
+		common.Logger.WithError(err).Fatal("No secrets selected")
 	}
 	return secretAnswer.Secret
 }

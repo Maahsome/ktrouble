@@ -10,31 +10,32 @@ import (
 
 type (
 	Config struct {
-		VersionDetail      objects.Version
-		VersionJSON        string
-		OutputFormat       string
-		FormatOverridden   bool
-		NoHeaders          bool
-		CACert             string
-		CABundle           string
-		LogLevel           string
-		LogFile            string
-		Namespace          string
-		EnableBashLinks    bool
-		UniqIdLength       int
-		ShowHidden         bool
-		UtilMap            map[string]objects.UtilityPod
-		UtilDefs           objects.UtilityPodList
-		SizeMap            map[string]objects.ResourceSize
-		SizeDefs           objects.ResourceSizeList
-		NodeSelectorLabels []string
-		Client             kubernetes.KubernetesClient
-		Fields             []string
-		GitUser            string
-		GitToken           string
-		GitUpstream        gitupstream.GitUpstream
-		GitURL             string
-		PromptForSecrets   bool
+		VersionDetail       objects.Version
+		VersionJSON         string
+		OutputFormat        string
+		FormatOverridden    bool
+		NoHeaders           bool
+		CACert              string
+		CABundle            string
+		LogLevel            string
+		LogFile             string
+		Namespace           string
+		EnableBashLinks     bool
+		UniqIdLength        int
+		ShowHidden          bool
+		UtilMap             map[string]objects.UtilityPod
+		UtilDefs            objects.UtilityPodList
+		SizeMap             map[string]objects.ResourceSize
+		SizeDefs            objects.ResourceSizeList
+		NodeSelectorLabels  []string
+		Client              kubernetes.KubernetesClient
+		Fields              []string
+		GitUser             string
+		GitToken            string
+		GitUpstream         gitupstream.GitUpstream
+		GitURL              string
+		PromptForSecrets    bool
+		PromptForConfigMaps bool
 	}
 
 	Outputtable interface {

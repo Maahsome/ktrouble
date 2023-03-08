@@ -23,6 +23,7 @@ type KubernetesClient interface {
 	GetNodes() *v1.NodeList
 	GetServiceAccounts(namespace string) *v1.ServiceAccountList
 	GetSecrets(namespace string) *v1.SecretList
+	GetConfigMaps(namespace string) *v1.ConfigMapList
 	DeletePod(pod ask.PodDetail) error
 	DetermineNamespace(nsParam string) string
 }

@@ -42,11 +42,20 @@ spec:
       requests:
         cpu: {{ $.Parameters.requestCpu }}
         memory: {{ $.Parameters.requestMem }}
-    {{- if $.Secrets }}
+    {{- if or $.Secrets $.ConfigMaps }}
     volumeMounts:
+    {{- end }}
+    {{- if $.Secrets }}
     {{- range $.Secrets }}
     - mountPath: "/secrets/{{ . }}"
       name: ktrouble-{{ . }}
+      readOnly: true
+    {{- end }}
+    {{- end }}
+    {{- if $.ConfigMaps }}
+    {{- range $.ConfigMaps }}
+    - mountPath: "/configmaps/{{ .}}"
+      name: ktrouble-cm-{{ . }}
       readOnly: true
     {{- end }}
     {{- end }}
@@ -56,13 +65,23 @@ spec:
   {{- end }}
   serviceAccount: {{ $.Parameters.serviceAccount}}
   restartPolicy: Always
-  {{- if $.Secrets }}
+  {{- if or $.Secrets $.ConfigMaps }}
   volumes:
+  {{- end }}
+  {{- if $.Secrets }}
   {{- range $.Secrets }}
   - name: ktrouble-{{ . }}
     secret:
       defaultMode: 420
       secretName: {{ . }}
+  {{- end }}
+  {{- end }}
+  {{- if $.ConfigMaps }}
+  {{- range $.ConfigMaps }}
+  - name: ktrouble-cm-{{ .}}
+    configMap:
+      defaultMode: 420
+      name: {{ . }}
   {{- end }}
   {{- end }}
 `))
