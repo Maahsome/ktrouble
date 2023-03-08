@@ -100,6 +100,9 @@ jira readme
 - [ ] KT-35:  Add modify alias to the update command
 - [ ] KT-36:  Allow the ability to pass in a set of labels to set for the POD
 - [ ] KT-37:  On genhelp, don't require kube context to be configured
+- [ ] KT-42:  Add edit config
+- [ ] KT-43:  Add edit template
+- [ ] KT-44:  Add KTROUBLE_CONFIG ENV variable override of config.yaml file
 
 ### Done
 
@@ -129,4 +132,4 @@ jira readme
 - [x] KT-39:  Add the ability to prompt for mounting multiple secrets with "--secrets"
 - [x] KT-40:  Add the ability to prompt for mounting multiple configmaps with "--configs"
 - [x] KT-33:  Fix the conflict between global -f/--fields and genhelp specific -f/--format
-
+- [x] KT-41:  Improve template feature

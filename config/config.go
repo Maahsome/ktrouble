@@ -36,6 +36,7 @@ type (
 		GitURL              string
 		PromptForSecrets    bool
 		PromptForConfigMaps bool
+		TemplateFile        string
 	}
 
 	Outputtable interface {

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
 	"math/rand"
 
@@ -19,12 +18,6 @@ type launchParam struct {
 }
 
 var p launchParam
-
-type TemplateConfig struct {
-	Parameters map[string]string
-	Secrets    []string
-	ConfigMaps []string
-}
 
 var letters = []rune("abcdef0987654321")
 
@@ -97,7 +90,7 @@ EXAMPLE:
 			}
 
 			shortUniq := randSeq(c.UniqIdLength)
-			tc := &TemplateConfig{
+			tc := &template.TemplateConfig{
 				Parameters: map[string]string{
 					"name":           fmt.Sprintf("%s-%s", utility, shortUniq),
 					"serviceAccount": sa,
@@ -114,13 +107,9 @@ EXAMPLE:
 				ConfigMaps: selectedConfigMaps,
 			}
 
-			var tpl bytes.Buffer
-			if err := template.ApplicationsTemplate.Execute(&tpl, tc); err != nil {
-				common.Logger.WithError(err).Error("unable to generate the template data")
-			}
-
-			podManifest := tpl.String()
-
+			common.Logger.Debugf("Template file: %s", c.TemplateFile)
+			tp := template.New(c.TemplateFile)
+			podManifest := tp.RenderTemplate(tc)
 			common.Logger.Debugf("Manifest: \n%s\n", podManifest)
 			c.Client.CreatePod(podManifest, namespace)
 
