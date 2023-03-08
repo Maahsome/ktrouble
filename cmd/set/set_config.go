@@ -9,11 +9,12 @@ import (
 )
 
 type configUserParam struct {
-	Name             string
-	TokenVar         string
-	Token            string
-	GitURL           string
-	PromptForSecrets bool
+	Name                string
+	TokenVar            string
+	Token               string
+	GitURL              string
+	PromptForSecrets    bool
+	PromptForConfigMaps bool
 }
 
 var p configUserParam
@@ -71,6 +72,15 @@ func saveConfig() error {
 			common.Logger.Info("The promptForSecrets default has been set to true")
 		}
 	}
+	if p.PromptForConfigMaps {
+		if c.PromptForConfigMaps {
+			viper.Set("promptForConfigMaps", false)
+			common.Logger.Info("The promptForConfigMaps default has been set to false")
+		} else {
+			viper.Set("promptForConfigMaps", true)
+			common.Logger.Info("The promptForConfigMaps default has been set to true")
+		}
+	}
 	verr := viper.WriteConfig()
 	if verr != nil {
 		common.Logger.WithError(verr).Info("Failed to write config")
@@ -87,4 +97,5 @@ func init() {
 	gitconfigCmd.Flags().StringVar(&p.Token, "token", "", "Set your git personal token")
 	gitconfigCmd.Flags().StringVar(&p.GitURL, "giturl", "", "Set the URL for the repository for upstream utils")
 	gitconfigCmd.Flags().BoolVar(&p.PromptForSecrets, "secrets", false, "Toggle the Prompt for Secrets default")
+	gitconfigCmd.Flags().BoolVar(&p.PromptForConfigMaps, "configs", false, "Toggle the Prompt for ConfigMaps default")
 }

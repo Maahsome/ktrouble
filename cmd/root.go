@@ -344,6 +344,18 @@ func initConfig() {
 		}
 	}
 
+	// PromptForConfigMaps
+	if viper.IsSet("promptForConfigMaps") {
+		c.PromptForConfigMaps = viper.GetBool("promptForConfigMaps")
+	} else {
+		// Set the default
+		viper.Set("promptForConfigMaps", false)
+		c.PromptForConfigMaps = false
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	}
 }
 
 // whichSource returns 'ktrouble-utils' if the utility name is in the default list
