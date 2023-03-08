@@ -66,7 +66,7 @@ var RootCmd = &cobra.Command{
 
 		logFile, _ := cmd.Flags().GetString("log-file")
 		logLevel, _ := cmd.Flags().GetString("log-level")
-		ll := "Warning"
+		ll := "Info"
 		switch strings.ToLower(logLevel) {
 		case "trace":
 			ll = "Trace"
@@ -317,6 +317,7 @@ func initConfig() {
 			logrus.WithError(verr).Info("Failed to write config")
 		}
 	}
+
 	// GitURL
 	if viper.IsSet("gitURL") {
 		c.GitURL = viper.GetString("gitURL")
@@ -324,6 +325,19 @@ func initConfig() {
 		// Set the default
 		viper.Set("gitURL", defaults.GitURL())
 		c.GitURL = defaults.GitURL()
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	}
+
+	// PromptForSecrets
+	if viper.IsSet("promptForSecrets") {
+		c.PromptForSecrets = viper.GetBool("promptForSecrets")
+	} else {
+		// Set the default
+		viper.Set("promptForSecrets", false)
+		c.PromptForSecrets = false
 		verr := viper.WriteConfig()
 		if verr != nil {
 			logrus.WithError(verr).Info("Failed to write config")

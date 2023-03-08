@@ -13,8 +13,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type launchParam struct {
+	PromptForSecrets bool
+}
+
+var p launchParam
+
 type TemplateConfig struct {
 	Parameters map[string]string
+	Secrets    []string
 }
 
 var letters = []rune("abcdef0987654321")
@@ -70,6 +77,15 @@ EXAMPLE:
 			if selector == "\"-none-\"" {
 				hasSelector = "false"
 			}
+
+			selectedSecrets := []string{}
+			// p.PromptForSecrets is the local command param --secrets
+			// c.PromptForSecrets is the config.yaml promptForSecrets setting
+			if p.PromptForSecrets || c.PromptForSecrets {
+				secrets := c.Client.GetSecrets(namespace)
+				selectedSecrets = ask.PromptForSecrets(secrets)
+			}
+
 			shortUniq := randSeq(c.UniqIdLength)
 			tc := &TemplateConfig{
 				Parameters: map[string]string{
@@ -84,6 +100,7 @@ EXAMPLE:
 					"hasSelector":    hasSelector,
 					"selector":       selector,
 				},
+				Secrets: selectedSecrets,
 			}
 
 			var tpl bytes.Buffer
@@ -93,6 +110,7 @@ EXAMPLE:
 
 			podManifest := tpl.String()
 
+			common.Logger.Warnf("Manifest: \n%s\n", podManifest)
 			c.Client.CreatePod(podManifest, namespace)
 
 			fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
@@ -113,4 +131,5 @@ func randSeq(n int) string {
 
 func init() {
 	RootCmd.AddCommand(launchCmd)
+	launchCmd.Flags().BoolVar(&p.PromptForSecrets, "secrets", false, "Use this switch to prompt to mount secrets in the POD")
 }

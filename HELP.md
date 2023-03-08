@@ -1,3 +1,4 @@
+time="2023-03-07T22:11:30-06:00" level=error msg="Failed to build KUBECONFIG" error="invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable"
 # ktrouble help for all commands
 
 ## TOC
@@ -452,6 +453,9 @@ Usage:
 Aliases:
   launch, create, apply, pod, l
 
+Flags:
+      --secrets   Use this switch to prompt to mount secrets in the POD
+
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
   -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
@@ -614,6 +618,7 @@ Usage:
 
 Flags:
       --giturl string     Set the URL for the repository for upstream utils
+      --secrets           Toggle the Prompt for Secrets default
       --token string      Set your git personal token
       --tokenvar string   Set the name of the ENV VAR that contains your git personal token
   -u, --user string       Set your git username
