@@ -99,10 +99,9 @@ jira readme
 - [ ] KT-34:  Make the delete command MUTLI_SELECT
 - [ ] KT-35:  Add modify alias to the update command
 - [ ] KT-36:  Allow the ability to pass in a set of labels to set for the POD
-- [ ] KT-37:  On genhelp, don't require kube context to be configured
 - [ ] KT-42:  Add edit config
 - [ ] KT-43:  Add edit template
-- [ ] KT-44:  Add KTROUBLE_CONFIG ENV variable override of config.yaml file
+- [ ] KT-45:  Add a "defaultTemplate" setting in the config.yaml, and default to "default", and use that as the template when no --template/-t is provided
 
 ### Done
 
@@ -133,3 +132,5 @@ jira readme
 - [x] KT-40:  Add the ability to prompt for mounting multiple configmaps with "--configs"
 - [x] KT-33:  Fix the conflict between global -f/--fields and genhelp specific -f/--format
 - [x] KT-41:  Improve template feature
+- [x] KT-44:  Add KTROUBLE_CONFIG ENV variable override of config.yaml file
+- [x] KT-37:  On genhelp, don't require kube context to be configured

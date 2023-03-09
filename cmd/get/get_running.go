@@ -2,6 +2,7 @@ package get
 
 import (
 	"ktrouble/common"
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -10,7 +11,7 @@ import (
 // runningCmd represents the running command
 var runningCmd = &cobra.Command{
 	Use:     "running",
-	Aliases: []string{"pods", "pod"},
+	Aliases: defaults.GetRunningAliases,
 	Short:   "Get a list of running pods",
 	Long: `EXAMPLE:
   Get a list of PODs that are currently running on the current context kubernetes

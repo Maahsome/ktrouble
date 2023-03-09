@@ -2,6 +2,7 @@ package get
 
 import (
 	"ktrouble/common"
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -10,7 +11,7 @@ import (
 // namespaceCmd represents the namespace command
 var namespaceCmd = &cobra.Command{
 	Use:     "namespace",
-	Aliases: []string{"namespaces", "ns"},
+	Aliases: defaults.GetNamespacesAliases,
 	Short:   "Get a list of namespaces",
 	Long: `EXAMPLE:
   Return a list of kubernetes namespaces for the current context cluster
