@@ -1,6 +1,7 @@
 package get
 
 import (
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -9,7 +10,7 @@ import (
 // utilitiesCmd represents the utilities command
 var utilitiesCmd = &cobra.Command{
 	Use:     "utilities",
-	Aliases: []string{"utility", "utils", "util", "container", "containers", "image", "images"},
+	Aliases: defaults.GetUtilitesAliases,
 	Short:   "Get a list of supported utility container images",
 	Long: `EXAMPLE:
   Display a list of utilities defined in the configuration file

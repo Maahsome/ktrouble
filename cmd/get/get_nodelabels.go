@@ -1,6 +1,7 @@
 package get
 
 import (
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -9,7 +10,7 @@ import (
 // nodelabelsCmd represents the nodelabels command
 var nodelabelsCmd = &cobra.Command{
 	Use:     "nodelabels",
-	Aliases: []string{"nodelabel", "nl", "labels"},
+	Aliases: defaults.GetNodeLabelsAliases,
 	Short:   "Get a list of defined node labels in config.yaml",
 	Long: `EXAMPLE:
   Show the list of node labels in the configuration file

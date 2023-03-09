@@ -2,6 +2,7 @@ package get
 
 import (
 	"ktrouble/common"
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -10,7 +11,7 @@ import (
 // nodeCmd represents the node command
 var nodeCmd = &cobra.Command{
 	Use:     "node",
-	Aliases: []string{"nodes"},
+	Aliases: defaults.GetNodesAliases,
 	Short:   "Get a list of node labels",
 	Long: `EXAMPLE:
   Get a list of nodes for the current context cluster

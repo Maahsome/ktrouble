@@ -2,6 +2,7 @@ package get
 
 import (
 	"ktrouble/common"
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -10,7 +11,7 @@ import (
 // serviceaccountCmd represents the serviceaccount command
 var serviceaccountCmd = &cobra.Command{
 	Use:     "serviceaccount",
-	Aliases: []string{"serviceaccounts", "sa"},
+	Aliases: defaults.GetServiceAccountsAliases,
 	Short:   "Get a list of K8s ServiceAccount(s) in a Namespace",
 	Long: `EXAMPLE:
   Return a list of kubernetes service accounts for a namespace

@@ -127,13 +127,43 @@ var RootCmd = &cobra.Command{
 
 			c.GitUpstream = gitupstream.New(gitUser, gitToken, gitURL)
 		}
-		if os.Args[1] != "version" {
+		subCmd := ""
+		if len(os.Args) > 2 {
+			subCmd = os.Args[2]
+		}
+		if needKubernetes(os.Args[1], subCmd) {
 			c.Client = kubernetes.New()
-			// if c.Client == nil {
-			// 	common.Logger.Warn("failed to create a kubernetes context")
-			// }
 		}
 	},
+}
+
+func containsAlias(v string, a []string) bool {
+	for _, i := range a {
+		if i == v {
+			return true
+		}
+	}
+	return false
+}
+
+func needKubernetes(arg string, sub string) bool {
+
+	if arg == "get" {
+		switch sub {
+		case "utilities", "sizes":
+			return false
+		}
+		switch {
+		case containsAlias(sub, defaults.GetSizesAliases), containsAlias(sub, defaults.GetUtilitesAliases):
+			return false
+		}
+	}
+
+	switch arg {
+	case "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update":
+		return false
+	}
+	return true
 }
 
 func buildRootCmd() *cobra.Command {
@@ -183,27 +213,34 @@ func initConfig() {
 	cobra.CheckErr(herr)
 	confDir := fmt.Sprintf("%s/.config/ktrouble", home)
 	tmplDir := fmt.Sprintf("%s/.config/ktrouble/templates", home)
-
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
+	envCfgFile := os.Getenv("KTROUBLE_CONFIG")
+	if envCfgFile != "" {
+		logrus.Debug("Using KTROUBLE_CONFIG")
+		configFile := fmt.Sprintf("%s/%s", confDir, envCfgFile)
+		createRestrictedConfigFile(configFile)
+		viper.SetConfigFile(configFile)
 	} else {
-		// Find home directory.
-		if _, err := os.Stat(tmplDir); err != nil {
-			if os.IsNotExist(err) {
-				mkerr := os.MkdirAll(tmplDir, os.ModePerm)
-				if mkerr != nil {
-					logrus.WithError(mkerr).Fatal("Error creating ~/.config/ktrouble/templates directory")
+		if cfgFile != "" {
+			// Use config file from the flag.
+			viper.SetConfigFile(cfgFile)
+		} else {
+			// Find home directory.
+			if _, err := os.Stat(tmplDir); err != nil {
+				if os.IsNotExist(err) {
+					mkerr := os.MkdirAll(tmplDir, os.ModePerm)
+					if mkerr != nil {
+						logrus.WithError(mkerr).Fatal("Error creating ~/.config/ktrouble/templates directory")
+					}
 				}
 			}
-		}
-		if stat, err := os.Stat(confDir); err == nil && stat.IsDir() {
-			configFile := fmt.Sprintf("%s/%s", confDir, "config.yaml")
-			createRestrictedConfigFile(configFile)
-			viper.SetConfigFile(configFile)
-		} else {
-			logrus.Info("The ~/.config/ktrouble path is a file and not a directory, please remove the 'ktrouble' file.")
-			os.Exit(1)
+			if stat, err := os.Stat(confDir); err == nil && stat.IsDir() {
+				configFile := fmt.Sprintf("%s/%s", confDir, "config.yaml")
+				createRestrictedConfigFile(configFile)
+				viper.SetConfigFile(configFile)
+			} else {
+				logrus.Info("The ~/.config/ktrouble path is a file and not a directory, please remove the 'ktrouble' file.")
+				os.Exit(1)
+			}
 		}
 	}
 
