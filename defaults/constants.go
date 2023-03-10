@@ -7,3 +7,4 @@ var GetNodeLabelsAliases = []string{"nodelabel", "nl", "labels"}
 var GetRunningAliases = []string{"pods", "pod"}
 var GetServiceAccountsAliases = []string{"serviceaccounts", "sa"}
 var GetSizesAliases = []string{"size", "requests", "request", "limit", "limits"}
+var ChangelogAliases = []string{"cl", "changes"}

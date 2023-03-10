@@ -27,6 +27,8 @@ jobs:
           echo "COPY ./changelog/v0.0.0-NEXT.md to ./vRELEASE.md"
           cp ./changelog/v0.0.0-NEXT.md ./vRELEASE.md
           sed -i "s/^## v0.0.0-NEXT$/## ${RELEASE_TAG}/" ./vRELEASE.md
+          mkdir cmd/changelog
+          cp ./vRELEASE.md ./cmd/changelog/${RELEASE_TAG}.md
       -
           name: CAT TAG File
           run: |
