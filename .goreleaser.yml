@@ -9,10 +9,10 @@ before:
 builds:
   - id: general
     ldflags: &build-ldflags
-      - -X github.com/maahsome/ktrouble/cmd.semVer=v{{ .Version }}
-      - -X github.com/maahsome/ktrouble/cmd.buildDate={{ .CommitDate }}
-      - -X github.com/maahsome/ktrouble/cmd.gitCommit={{ .Commit }}
-      - -X github.com/maahsome/ktrouble/cmd.gitRef=refs/tags/{{ .Tag }}
+      - -X ktrouble/cmd.semVer=v{{ .Version }}
+      - -X ktrouble/cmd.buildDate={{ .CommitDate }}
+      - -X ktrouble/cmd.gitCommit={{ .Commit }}
+      - -X ktrouble/cmd.gitRef=refs/tags/{{ .Tag }}
     goos:
       - linux
       - windows

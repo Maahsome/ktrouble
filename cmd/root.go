@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"ktrouble/cmd/add"
+	"ktrouble/cmd/edit"
 	"ktrouble/cmd/get"
 	"ktrouble/cmd/remove"
 	"ktrouble/cmd/set"
@@ -151,7 +152,7 @@ func needKubernetes(arg string, sub string) bool {
 
 	if arg == "get" {
 		switch sub {
-		case "utilities", "sizes":
+		case "utilities", "sizes", "templates":
 			return false
 		}
 		switch {
@@ -161,7 +162,7 @@ func needKubernetes(arg string, sub string) bool {
 	}
 
 	switch arg {
-	case "changelog", "changes", "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update":
+	case "edit", "changelog", "changes", "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update":
 		return false
 	}
 	return true
@@ -187,6 +188,7 @@ func addSubCommands() {
 		// <package>.InitSubCommands(c),
 		get.InitSubCommands(c),
 		add.InitSubCommands(c),
+		edit.InitSubCommands(c),
 		remove.InitSubCommands(c),
 		update.InitSubCommands(c),
 		set.InitSubCommands(c),
