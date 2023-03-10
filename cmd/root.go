@@ -35,11 +35,12 @@ type (
 )
 
 var (
-	cfgFile   string
-	semVer    string
-	gitCommit string
-	gitRef    string
-	buildDate string
+	cfgFile      string
+	semVer       string
+	gitCommit    string
+	gitRef       string
+	buildDate    string
+	changelogURL string
 
 	// semVerReg - gets the semVer portion only, cutting off any other release details
 	semVerReg = regexp.MustCompile(`(v[0-9]+\.[0-9]+\.[0-9]+).*`)
@@ -160,7 +161,7 @@ func needKubernetes(arg string, sub string) bool {
 	}
 
 	switch arg {
-	case "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update":
+	case "changelog", "changes", "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update":
 		return false
 	}
 	return true

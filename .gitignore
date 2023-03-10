@@ -5,6 +5,7 @@
 *.so
 *.dylib
 ktrouble
+cmd/changelog/*
 
 # Test binary, built with `go test -c`
 *.test
