@@ -99,10 +99,8 @@ jira readme
 - [ ] KT-34:  Make the delete command MUTLI_SELECT
 - [ ] KT-35:  Add modify alias to the update command
 - [ ] KT-36:  Allow the ability to pass in a set of labels to set for the POD
-- [ ] KT-42:  Add edit config
 - [ ] KT-45:  Add a "defaultTemplate" setting in the config.yaml, and default to "default", and use that as the template when no --template/-t is provided
 - [ ] KT-47:  Remove -n from the description of the --name parameter for add utility
-- [ ] KT-48:  Fix pipeline to include the latest changelog file
 
 ### Done
 
@@ -137,4 +135,6 @@ jira readme
 - [x] KT-37:  On genhelp, don't require kube context to be configured
 - [x] KT-46:  Add a compile time variable to hold the git address where the CHANGELOG entries are. Add a changelog command, this command will fetch the related vN.N.N.md file and spit it out. Also will take --version vN.N.N and --select to prompt
 - [x] KT-43:  Add edit template
+- [x] KT-48:  Fix pipeline to include the latest changelog file
+- [x] KT-42:  Add edit config
 

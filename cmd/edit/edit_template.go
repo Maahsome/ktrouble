@@ -13,10 +13,6 @@ import (
 	"k8s.io/kubectl/pkg/cmd/util/editor"
 )
 
-const (
-	chunksize int = 1024
-)
-
 // templateCmd represents the template command
 var templateCmd = &cobra.Command{
 	Use:   "template",

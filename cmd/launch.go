@@ -113,7 +113,11 @@ EXAMPLE:
 			common.Logger.Debugf("Manifest: \n%s\n", podManifest)
 			c.Client.CreatePod(podManifest, namespace)
 
-			fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+			if c.EnableBashLinks {
+				fmt.Printf("<bash:kubectl -n %s exec -it %s -- %s>\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+			} else {
+				fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+			}
 		} else {
 			common.Logger.Warn("Cannot launch a pod, no valid kubernetes context")
 		}

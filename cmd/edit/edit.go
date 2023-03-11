@@ -6,6 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	chunksize int = 1024
+)
+
 var editCmd = &cobra.Command{
 	Use:   "edit",
 	Args:  cobra.MinimumNArgs(1),
