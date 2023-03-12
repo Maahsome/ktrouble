@@ -41,7 +41,7 @@ func checkAddUtilityParams() bool {
 	allParamsSet := true
 	if len(utilityParam.Name) == 0 {
 		allParamsSet = false
-		common.Logger.Warn("The --name/-n parameter must be set")
+		common.Logger.Warn("The --name/-u parameter must be set")
 	}
 	if len(utilityParam.Repository) == 0 {
 		allParamsSet = false
