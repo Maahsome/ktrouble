@@ -2,14 +2,16 @@ package update
 
 import (
 	"ktrouble/config"
+	"ktrouble/defaults"
 
 	"github.com/spf13/cobra"
 )
 
 var updateCmd = &cobra.Command{
-	Use:   "update",
-	Args:  cobra.MinimumNArgs(1),
-	Short: "",
+	Use:     "update",
+	Aliases: defaults.UpdateAliases,
+	Args:    cobra.MinimumNArgs(1),
+	Short:   "",
 	Long: `EXAMPLES
 	ktrouble update utility`,
 	Run: func(cmd *cobra.Command, args []string) {},
