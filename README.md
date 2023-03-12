@@ -97,10 +97,7 @@ jira readme
 - [ ] KT-31:  Sort the LISTS, all of them
 - [ ] KT-32:  Add a description/tools field, to house what tools/operation the utility definition is meant to solve
 - [ ] KT-34:  Make the delete command MUTLI_SELECT
-- [ ] KT-35:  Add modify alias to the update command
-- [ ] KT-36:  Allow the ability to pass in a set of labels to set for the POD
 - [ ] KT-45:  Add a "defaultTemplate" setting in the config.yaml, and default to "default", and use that as the template when no --template/-t is provided
-- [ ] KT-47:  Remove -n from the description of the --name parameter for add utility
 
 ### Done
 
@@ -137,4 +134,7 @@ jira readme
 - [x] KT-43:  Add edit template
 - [x] KT-48:  Fix pipeline to include the latest changelog file
 - [x] KT-42:  Add edit config
+- [x] KT-36:  Allow the ability to pass in a set of labels to set for the POD
+- [x] KT-47:  Remove -n from the description of the --name parameter for add utility
+- [x] KT-35:  Add modify alias to the update command
 

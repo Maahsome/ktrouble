@@ -1,4 +1,3 @@
-time="2023-03-08T08:28:40-06:00" level=error msg="Failed to build KUBECONFIG" error="invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable"
 # ktrouble help for all commands
 
 ## TOC
@@ -6,15 +5,21 @@ time="2023-03-08T08:28:40-06:00" level=error msg="Failed to build KUBECONFIG" er
 - [_main_](#ktrouble)
 - [add](#add)
 - [add utility](#add-utility)
+- [changelog](#changelog)
 - [delete](#delete)
+- [edit](#edit)
+- [edit config](#edit-config)
+- [edit template](#edit-template)
 - [fields](#fields)
 - [get](#get)
+- [get configs](#get-configs)
 - [get namespace](#get-namespace)
 - [get node](#get-node)
 - [get nodelabels](#get-nodelabels)
 - [get running](#get-running)
 - [get serviceaccount](#get-serviceaccount)
 - [get sizes](#get-sizes)
+- [get templates](#get-templates)
 - [get utilities](#get-utilities)
 - [launch](#launch)
 - [pull](#pull)
@@ -47,8 +52,10 @@ Usage:
 
 Available Commands:
   add         
+  changelog   Express the 'version' of ktrouble.
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
+  edit        Edit all the things
   fields      Display a list of valid fields to use with the --fields/-f parameter for each command
   genhelp     Output help from all the sub commands
   get         Get various internal configuration and kubernetes resource listings
@@ -133,6 +140,35 @@ Global Flags:
 
 [TOC](#TOC)
 
+## changelog
+
+```plaintext
+Express the 'version' of ktrouble.
+
+Usage:
+  ktrouble changelog [flags]
+
+Aliases:
+  changelog, cl, changes
+
+Flags:
+      --all              Specify this switch to show ALL of the changelog entries
+      --version string   Sepecify the version to display the changelog for
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
 ## delete
 
 ```plaintext
@@ -144,6 +180,82 @@ EXAMPLE:
 
 Usage:
   ktrouble delete [flags]
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## edit
+
+```plaintext
+EXAMPLES
+	ktrouble edit template
+
+Usage:
+  ktrouble edit [flags]
+  ktrouble edit [command]
+
+Available Commands:
+  config      Edit the default config, or specified in KTROUBLE_CONFIG
+  template    Edit the default template, or specified one via --template/-t
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+
+Use "ktrouble edit [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## edit config
+
+```plaintext
+EXAMPLE
+  > ktrouble edit config
+
+Usage:
+  ktrouble edit config [flags]
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## edit template
+
+```plaintext
+EXAMPLE
+  > ktrouble edit template --template christmas
+
+Usage:
+  ktrouble edit template [flags]
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -211,12 +323,14 @@ Usage:
   ktrouble get [command]
 
 Available Commands:
+  configs        Get a list of configs
   namespace      Get a list of namespaces
   node           Get a list of node labels
   nodelabels     Get a list of defined node labels in config.yaml
   running        Get a list of running pods
   serviceaccount Get a list of K8s ServiceAccount(s) in a Namespace
   sizes          Get a list of defined sizes
+  templates      Get a list of templates
   utilities      Get a list of supported utility container images
 
 Global Flags:
@@ -231,6 +345,32 @@ Global Flags:
   -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble get [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## get configs
+
+```plaintext
+EXAMPLE:
+  > ktrouble get configs
+
+Usage:
+  ktrouble get configs [flags]
+
+Aliases:
+  configs, size, requests, request, limit, limits
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -403,6 +543,32 @@ Usage:
 
 Aliases:
   sizes, size, requests, request, limit, limits
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## get templates
+
+```plaintext
+EXAMPLE:
+  > ktrouble get templates
+
+Usage:
+  ktrouble get templates [flags]
+
+Aliases:
+  templates, size, requests, request, limit, limits
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -691,6 +857,9 @@ EXAMPLES
 Usage:
   ktrouble update [flags]
   ktrouble update [command]
+
+Aliases:
+  update, modify
 
 Available Commands:
   utility     

@@ -162,7 +162,7 @@ func needKubernetes(arg string, sub string) bool {
 	}
 
 	switch arg {
-	case "edit", "changelog", "changes", "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update":
+	case "edit", "changelog", "changes", "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update", "modify":
 		return false
 	}
 	return true
