@@ -96,7 +96,6 @@ jira readme
 - [ ] KT-29:  Add rebase command to pull ALL remote items, overwriting local versions
 - [ ] KT-31:  Sort the LISTS, all of them
 - [ ] KT-32:  Add a description/tools field, to house what tools/operation the utility definition is meant to solve
-- [ ] KT-34:  Make the delete command MUTLI_SELECT
 - [ ] KT-45:  Add a "defaultTemplate" setting in the config.yaml, and default to "default", and use that as the template when no --template/-t is provided
 
 ### Done
@@ -137,4 +136,4 @@ jira readme
 - [x] KT-36:  Allow the ability to pass in a set of labels to set for the POD
 - [x] KT-47:  Remove -n from the description of the --name parameter for add utility
 - [x] KT-35:  Add modify alias to the update command
-
+- [x] KT-34:  Make the delete command MUTLI_SELECT

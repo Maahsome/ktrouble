@@ -21,10 +21,17 @@ var deleteCmd = &cobra.Command{
 		if c.Client != nil {
 			podList := c.Client.GetCreatedPods()
 
-			if len(podList.Items) > 0 {
+			switch count := len(podList.Items); {
+			case count == 1:
 				selectedPod := ask.PromptForPod(podList)
 
 				c.Client.DeletePod(selectedPod)
+			case count > 1:
+				selectedPods := ask.PromptForPodList(podList)
+
+				for _, p := range selectedPods {
+					c.Client.DeletePod(p)
+				}
 			}
 		} else {
 			common.Logger.Warn("Cannot delete a pod, no valid kubernetes context")
