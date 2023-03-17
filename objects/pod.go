@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 
 	"ktrouble/common"
 
 	"github.com/maahsome/gron"
+	"github.com/muesli/termenv"
 	"github.com/olekukonko/tablewriter"
 	"gopkg.in/yaml.v2"
 )
@@ -58,8 +60,9 @@ func (p *PodList) ToYAML() string {
 
 func (p *PodList) ToTEXT(to TextOptions) string {
 
+	termFormatter := termenv.NewOutput(os.Stdout)
 	noHeaders := to.NoHeaders
-	showExec := to.ShowExec
+	bashLinks := to.BashLinks
 	utilMap := to.UtilMap
 	uniqIdLength := to.UniqIdLength
 
@@ -68,12 +71,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "STATUS"}
-		if showExec {
-			headerText = append(headerText, "EXEC")
-		} else {
-			headerText = append(headerText, "SHELL")
-		}
+		headerText := []string{"NAME", "NAMESPACE", "STATUS", "SHELL"}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
@@ -89,28 +87,17 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 	table.SetTablePadding("\t") // pad with tabs
 	table.SetNoWhiteSpace(true)
 
-	displayOptions := 0
-	if showExec {
-		displayOptions += 1
-	}
-
 	for _, v := range *p {
 		baseTool := v.Name[0 : len(v.Name)-(uniqIdLength+1)]
-		switch displayOptions {
-		case 0:
-			row = []string{
-				v.Name,
-				v.Namespace,
-				v.Status,
-				utilMap[baseTool].ExecCommand,
-			}
-		case 1:
-			row = []string{
-				v.Name,
-				v.Namespace,
-				v.Status,
-				fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", v.Namespace, v.Name, utilMap[baseTool].ExecCommand),
-			}
+		shellText := utilMap[baseTool].ExecCommand
+		if bashLinks {
+			shellText = termFormatter.Hyperlink(fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", v.Namespace, v.Name, utilMap[baseTool].ExecCommand), utilMap[baseTool].ExecCommand)
+		}
+		row = []string{
+			v.Name,
+			v.Namespace,
+			v.Status,
+			shellText,
 		}
 		table.Append(row)
 	}

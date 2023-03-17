@@ -47,7 +47,7 @@ var runningCmd = &cobra.Command{
 
 			c.OutputData(&podData, objects.TextOptions{
 				NoHeaders:    c.NoHeaders,
-				ShowExec:     c.EnableBashLinks,
+				BashLinks:    c.EnableBashLinks,
 				UtilMap:      c.UtilMap,
 				UniqIdLength: c.UniqIdLength,
 			})

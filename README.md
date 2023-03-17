@@ -97,6 +97,10 @@ jira readme
 - [ ] KT-31:  Sort the LISTS, all of them
 - [ ] KT-32:  Add a description/tools field, to house what tools/operation the utility definition is meant to solve
 - [ ] KT-45:  Add a "defaultTemplate" setting in the config.yaml, and default to "default", and use that as the template when no --template/-t is provided
+- [ ] KT-49:  Add create volume, with a --dir or --file parameter to populate
+- [ ] KT-50:  Add populate volume with a --dir or --file parameter
+- [ ] KT-51:  Add --volumes to the launch command to list volumes with app=ktrouble label
+- [ ] KT-52:  Examine the exec parameter in kubectl code, can we use that?
 
 ### Done
 
@@ -137,3 +141,4 @@ jira readme
 - [x] KT-47:  Remove -n from the description of the --name parameter for add utility
 - [x] KT-35:  Add modify alias to the update command
 - [x] KT-34:  Make the delete command MUTLI_SELECT
+- [x] KT-53:  switch to explicit hyperlnks
