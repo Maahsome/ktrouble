@@ -3,12 +3,14 @@ package cmd
 import (
 	"fmt"
 	"math/rand"
+	"os"
 
 	"ktrouble/ask"
 	"ktrouble/common"
 	"ktrouble/objects"
 	"ktrouble/template"
 
+	"github.com/muesli/termenv"
 	"github.com/spf13/cobra"
 )
 
@@ -39,6 +41,7 @@ EXAMPLE:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		termFormatter := termenv.NewOutput(os.Stdout)
 		if c.Client != nil {
 			utilMap := make(map[string]objects.UtilityPod)
 			for _, v := range c.UtilDefs {
@@ -114,7 +117,9 @@ EXAMPLE:
 			c.Client.CreatePod(podManifest, namespace)
 
 			if c.EnableBashLinks {
-				fmt.Printf("<bash:kubectl -n %s exec -it %s -- %s>\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+				hl := fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+				tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+				fmt.Println(termFormatter.Hyperlink(hl, tx))
 			} else {
 				fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
 			}

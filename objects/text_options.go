@@ -3,7 +3,7 @@ package objects
 type (
 	TextOptions struct {
 		NoHeaders        bool
-		ShowExec         bool
+		BashLinks        bool
 		UtilMap          map[string]UtilityPod
 		UniqIdLength     int
 		ShowHidden       bool
