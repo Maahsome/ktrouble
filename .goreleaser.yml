@@ -39,8 +39,7 @@ snapshot:
   name_template: "{{ incpatch .Tag }}-next"
 
 brews:
-  - id: ktrouble
-    name: ktrouble
+  - name: ktrouble
     ids:
       - general
     goarm: "6"
@@ -52,7 +51,7 @@ brews:
     commit_author:
       name: Christopher Maahs
       email: cmaahs@gmail.com
-    folder: Formula
+    directory: Formula
     homepage: "https://github.com/maahsome/ktrouble/"
     description: "A CLI tool built to help with troubleshooting inside kubernetes"
     test: |
