@@ -16,10 +16,8 @@ import (
 // templateCmd represents the template command
 var templateCmd = &cobra.Command{
 	Use:   "template",
-	Short: "Edit the default template, or specified one via --template/-t",
-	Long: `EXAMPLE
-  > ktrouble edit template --template christmas
-`,
+	Short: editTemplateHelp.Short(),
+	Long: editTemplateHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		editTemplate()
 	},

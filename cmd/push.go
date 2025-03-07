@@ -13,10 +13,8 @@ import (
 // pushCmd represents the push command
 var pushCmd = &cobra.Command{
 	Use:   "push",
-	Short: "Push local objects to upstream repository",
-	Long: `EXAMPLE:
-  > ktrouble push
-`,
+	Short: pushHelp.Short(),
+	Long:  pushHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		pushLocalDefinitions()
 	},

@@ -10,13 +10,8 @@ import (
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete PODs that have been created by ktrouble",
-	Long: `EXAMPLE:
-  Delete a running POD.  This will prompt with a list of PODs that are running
-  and were launched using ktrouble
-
-  > ktrouble delete
-`,
+	Short: deleteHelp.Short(),
+	Long:  deleteHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		if c.Client != nil {
 			podList := c.Client.GetCreatedPods()

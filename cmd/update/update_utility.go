@@ -15,7 +15,8 @@ var utilityParam objects.UtilityPod
 // utilityCmd represents the utility command
 var utilityCmd = &cobra.Command{
 	Use:   "utility",
-	Short: "",
+	Short: updateUtilityHelp.Short(),
+	Long:  updateUtilityHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		u, err := updateUtility()
 		if err != nil {

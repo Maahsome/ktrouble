@@ -14,10 +14,8 @@ import (
 var configsCmd = &cobra.Command{
 	Use:     "configs",
 	Aliases: defaults.GetSizesAliases,
-	Short:   "Get a list of configs",
-	Long: `EXAMPLE:
-  > ktrouble get configs
-`,
+	Short:   getConfigsHelp.Short(),
+	Long:    getConfigsHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		home, herr := os.UserHomeDir()
 		if herr != nil {

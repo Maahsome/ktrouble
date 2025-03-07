@@ -19,6 +19,8 @@ import (
 	"ktrouble/kubernetes"
 	"ktrouble/objects"
 
+	"ktrouble/help"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -48,6 +50,16 @@ var (
 
 	c = &config.Config{}
 )
+
+var deleteHelp = help.DeleteCmd{}
+var launchHelp = help.LaunchCmd{}
+var pullHelp = help.PullCmd{}
+var pushHelp = help.PushCmd{}
+var statusHelp = help.StatusCmd{}
+var changelogHelp = help.ChangelogCmd{}
+var fieldsHelp = help.FieldsCmd{}
+var genhelpHelp = help.GenHelpCmd{}
+var versionHelp = help.VersionCmd{}
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{

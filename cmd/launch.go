@@ -27,18 +27,8 @@ var letters = []rune("abcdef0987654321")
 var launchCmd = &cobra.Command{
 	Use:     "launch",
 	Aliases: []string{"create", "apply", "pod", "l"},
-	Short:   "launch a kubernetes troubleshooting pod",
-	Long: `EXAMPLE:
-  Just running kubectl launch will prompt for all the things required to run
-
-  > kubectl launch
-
-EXAMPLE:
-  TODO: add command line parameters that can be used to set all the options
-  for launching a POD
-
-  > kubectl launch (...)
-`,
+	Short:   launchHelp.Short(),
+	Long:    launchHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		termFormatter := termenv.NewOutput(os.Stdout)
@@ -118,7 +108,7 @@ EXAMPLE:
 
 			if c.EnableBashLinks {
 				hl := fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
-				tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+				tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
 				fmt.Println(termFormatter.Hyperlink(hl, tx))
 			} else {
 				fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)

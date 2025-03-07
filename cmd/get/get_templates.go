@@ -13,10 +13,8 @@ import (
 var templatesCmd = &cobra.Command{
 	Use:     "templates",
 	Aliases: defaults.GetSizesAliases,
-	Short:   "Get a list of templates",
-	Long: `EXAMPLE:
-  > ktrouble get templates
-`,
+	Short:   getTemplatesHelp.Short(),
+	Long:    getTemplatesHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		home, herr := os.UserHomeDir()
 		if herr != nil {

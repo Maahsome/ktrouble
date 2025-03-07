@@ -12,18 +12,8 @@ import (
 var serviceaccountCmd = &cobra.Command{
 	Use:     "serviceaccount",
 	Aliases: defaults.GetServiceAccountsAliases,
-	Short:   "Get a list of K8s ServiceAccount(s) in a Namespace",
-	Long: `EXAMPLE:
-  Return a list of kubernetes service accounts for a namespace
-
-  > ktrouble get serviceaccount -n myspace
-
-EXAMPLE:
-  If you do not specify a namespace with '-n <namespace>', you will be prompted
-  to select one
-
-  > ktrouble get sa
-`,
+	Short:   getServiceAccountHelp.Short(),
+	Long:    getServiceAccountHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		if c.Client != nil {
 			namespace := c.Client.DetermineNamespace(c.Namespace)

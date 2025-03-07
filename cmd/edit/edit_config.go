@@ -13,10 +13,8 @@ import (
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Edit the default config, or specified in KTROUBLE_CONFIG",
-	Long: `EXAMPLE
-  > ktrouble edit config
-`,
+	Short: editConfigHelp.Short(),
+	Long: editConfigHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		editConfig()
 	},

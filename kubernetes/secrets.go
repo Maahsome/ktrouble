@@ -8,6 +8,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// TODO: Add a label parameter, and ONLY return secrets with matchhing labels
 func (k *kubernetesClient) GetSecrets(namespace string) *v1.SecretList {
 	ss := k.Client.CoreV1().Secrets(namespace)
 	secretList, err := ss.List(context.TODO(), metav1.ListOptions{})

@@ -10,19 +10,8 @@ import (
 // genhelpCmd represents the genhelp command
 var genhelpCmd = &cobra.Command{
 	Use:   "genhelp",
-	Short: "Output help from all the sub commands",
-	Long: `EXAMPLE:
-  This command will generate markdown for all of the cobra commands ktrouble
-  supports.
-
-  > ktrouble genhelp > HELP.md
-
-EXAMPLE:
-  This command will generate a wiki compatible file that can be submitted to
-  confluence via the REST api.  See the 'scruffy publish' command.
-
-  > ktrouble genhelp --format confluence > HELP.cf
-`,
+	Short: genhelpHelp.Short(),
+	Long:  genhelpHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		format, _ := cmd.Flags().GetString("format")

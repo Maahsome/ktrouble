@@ -11,12 +11,8 @@ import (
 var utilitiesCmd = &cobra.Command{
 	Use:     "utilities",
 	Aliases: defaults.GetUtilitesAliases,
-	Short:   "Get a list of supported utility container images",
-	Long: `EXAMPLE:
-  Display a list of utilities defined in the configuration file
-
-  > ktrouble get utilities
-`,
+	Short:   getUtilitiesHelp.Short(),
+	Long:    getUtilitiesHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		c.OutputData(&c.UtilDefs, objects.TextOptions{
