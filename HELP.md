@@ -67,7 +67,7 @@ Available Commands:
   set         Set various objects for ktrouble
   status      Get a comparison of the local utility definitions with the upstream one
   update      Update various objects for ktrouble
-  version     Express the 'version' of ktrouble.
+  version     Express the 'version' of ktrouble
 
 Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -1037,7 +1037,8 @@ Global Flags:
 ## version
 
 ```plaintext
-Express the 'version' of ktrouble.
+EXAMPLE: 
+    > ktrouble version
 
 Usage:
   ktrouble version [flags]
