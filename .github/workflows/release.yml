@@ -44,8 +44,8 @@ jobs:
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: latest
-          args: release --rm-dist --release-notes=vRELEASE.md
+          version: v2
+          args: release --release-notes=vRELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAAHSOME_PAT: ${{ secrets.MAAHSOME_PAT }}
