@@ -101,4 +101,3 @@ jira readme
 - [ ] KT-50:  Add populate volume with a --dir or --file parameter
 - [ ] KT-51:  Add --volumes to the launch command to list volumes with app=ktrouble label
 - [ ] KT-52:  Examine the exec parameter in kubectl code, can we use that?
-
