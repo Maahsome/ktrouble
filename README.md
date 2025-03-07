@@ -70,9 +70,7 @@ I figure there may as well be an easy way to share definitions.  So some command
 will be added to assist with CRUD operations on the local `config.yaml` file for
 utility definitions.  Then `push|pull|status` commands will be added that will
 interact with a git repository where a list of utility pod definitions will be
-stored.  The initial population of the `config.yaml` utility definitions will
-also attempt to pull from the central repository before defaulting to the defaults
-in the `defaults` package in the code.
+stored.  
 
 ## PERSONAL JIRA LIST
 

@@ -384,6 +384,34 @@ func initConfig() {
 		}
 	}
 
+	// GitUser
+	if viper.IsSet("gitUser") {
+		c.GitUser = viper.GetString("gitUser")
+	} else {
+		// Set the default
+		viper.Set("gitUser", os.Getenv("USER"))
+		c.GitUser = os.Getenv("USER")
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	}
+
+	// GitTokenVar
+	if !viper.IsSet("GitTokenVar") {
+		tokenVar := defaults.GitTokenVar()
+		tv := os.Getenv(tokenVar)
+		if len(tv) == 0 {
+			tokenVar = "GIT_TOKEN"
+		}
+		// Set the default
+		viper.Set("GitTokenVar", tokenVar)
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	}
+
 	// PromptForSecrets
 	if viper.IsSet("promptForSecrets") {
 		c.PromptForSecrets = viper.GetBool("promptForSecrets")
