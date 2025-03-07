@@ -23,21 +23,8 @@ var p configUserParam
 // gitconfigCmd represents the gituser command
 var gitconfigCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Set git configuration options",
-	Long: `EXAMPLE:
-  If you store your git personal access token in an ENV variable, you can specify
-  the variable name.
-
-  > ktrouble set config --user christopher.maahs --tokenvar GLA_TOKEN
-
-EXAMPLE:
-  If you don't store your personal access token in an ENV variable, it can be
-  stored directly in the config.yaml file.  Don't forgot to add a 'space' in
-  front of running this next command so the token doesn't end up in your
-  history file, if you have that option set in your shell
-
-  > ktrouble set config --user christopher.maahs --token <your token>
-`,
+	Short: setConfigHelp.Short(),
+	Long:  setConfigHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		err := saveConfig()
 		if err != nil {

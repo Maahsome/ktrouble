@@ -51,22 +51,22 @@ Usage:
   ktrouble [command]
 
 Available Commands:
-  add         
-  changelog   Express the 'version' of ktrouble.
+  add         Add various objects for ktrouble
+  changelog   Get changelog information
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
-  edit        Edit all the things
+  edit        Edit various objects for ktrouble
   fields      Display a list of valid fields to use with the --fields/-f parameter for each command
   genhelp     Output help from all the sub commands
   get         Get various internal configuration and kubernetes resource listings
   help        Help about any command
-  launch      launch a kubernetes troubleshooting pod
+  launch      Launch a kubernetes troubleshooting pod
   pull        Pull utility definitions from git
-  push        Push local objects to upstream repository
-  remove      
-  set         
+  push        Push local objects to upstream git repository
+  remove      Remove various objects for ktrouble
+  set         Set various objects for ktrouble
   status      Get a comparison of the local utility definitions with the upstream one
-  update      
+  update      Update various objects for ktrouble
   version     Express the 'version' of ktrouble.
 
 Flags:
@@ -88,15 +88,17 @@ Use "ktrouble [command] --help" for more information about a command.
 ## add
 
 ```plaintext
-EXAMPLES
-	ktrouble add utility
+EXAMPLE:
+  Use the "add utility" command to add a new utility definition to your 'config.yaml'
+
+    > ktrouble add utility --help
 
 Usage:
   ktrouble add [flags]
   ktrouble add [command]
 
 Available Commands:
-  utility     
+  utility     Add a utility definition to the ktrouble configuration
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -117,6 +119,12 @@ Use "ktrouble add [command] --help" for more information about a command.
 ## add utility
 
 ```plaintext
+EXAMPLE:
+  Use 'add utility' command to add a new utility definition to your 'config.yaml'
+  file
+
+    > ktrouble add utility -u helm-kubectl311 -c "/bin/bash" -r "dtzar/helm-kubectl:3.11"
+
 Usage:
   ktrouble add utility [flags]
 
@@ -143,7 +151,15 @@ Global Flags:
 ## changelog
 
 ```plaintext
-Express the 'version' of ktrouble.
+EXAMPLE:
+  Get just the latest changelog entry
+
+    > ktrouble changelog
+
+EXAMPLE:
+  Get all the changelog entries
+
+    > ktrouble changelog --all
 
 Usage:
   ktrouble changelog [flags]
@@ -174,9 +190,9 @@ Global Flags:
 ```plaintext
 EXAMPLE:
   Delete a running POD.  This will prompt with a list of PODs that are running
-  and were launched using ktrouble
+  and were launched using ktrouble.
 
-  > ktrouble delete
+    > ktrouble delete
 
 Usage:
   ktrouble delete [flags]
@@ -198,8 +214,10 @@ Global Flags:
 ## edit
 
 ```plaintext
-EXAMPLES
-	ktrouble edit template
+EXAMPLE:
+
+    > ktrouble edit config --help
+    > ktrouble edit template --help
 
 Usage:
   ktrouble edit [flags]
@@ -228,8 +246,16 @@ Use "ktrouble edit [command] --help" for more information about a command.
 ## edit config
 
 ```plaintext
-EXAMPLE
-  > ktrouble edit config
+EXAMPLE:
+  The default config can be hand edited
+  
+    > ktrouble edit config
+
+EXAMPLE:
+  Edit a secondary NON default config file
+
+    > export KTROUBLE_CONFIG=cmaahs-config.yaml
+    > ktrouble edit config
 
 Usage:
   ktrouble edit config [flags]
@@ -251,8 +277,9 @@ Global Flags:
 ## edit template
 
 ```plaintext
-EXAMPLE
-  > ktrouble edit template --template christmas
+EXAMPLE:
+  
+    > ktrouble edit template --template christmas
 
 Usage:
   ktrouble edit template [flags]
@@ -274,7 +301,11 @@ Global Flags:
 ## fields
 
 ```plaintext
-Display a list of valid fields to use with the --fields/-f parameter for each command
+EXAMPLE:
+  The 'fields' command will list the valid fields that can be used with various
+  commands that accept the --fields/-f parameter.
+
+    > ktrouble fields
 
 Usage:
   ktrouble fields [flags]
@@ -301,8 +332,15 @@ EXAMPLE:
   Allowing a display of various items stored in config.yaml and listing various
   kubernetes resources.
 
-  > ktrouble get namespaces
-  > ktrouble get utilities
+    > ktrouble get configs --help
+    > ktrouble get namespaces --help
+    > ktrouble get node --help
+    > ktrouble get nodelabels --help
+    > ktrouble get running --help
+    > ktrouble get serviceaccount --help
+    > ktrouble get sizes --help
+    > ktrouble get templates --help
+    > ktrouble get utilities --help
 
 EXAMPLE:
   Get a list of PODs that are currently running on the current context kubernetes
@@ -310,13 +348,13 @@ EXAMPLE:
   config.yaml setting is 'true', a '<bash: ... >' command will be displayed,
   otherwise the SHELL path will be displayed.
 
-  > ktrouble get pods
+    > ktrouble get pods
 
-    NAME                NAMESPACE       STATUS   EXEC
-    basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
+      NAME                NAMESPACE       STATUS   EXEC
+      basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
 
-    NAME                NAMESPACE       STATUS   SHELL
-    basic-tools-e1df2f  common-tooling  Running  /bin/bash
+      NAME                NAMESPACE       STATUS   SHELL
+      basic-tools-e1df2f  common-tooling  Running  /bin/bash
 
 Usage:
   ktrouble get [flags]
@@ -353,7 +391,19 @@ Use "ktrouble get [command] --help" for more information about a command.
 
 ```plaintext
 EXAMPLE:
-  > ktrouble get configs
+  The ktrouble utility can support multiple config files, either with the
+  '--config <config path>' or by setting the environment variable
+  'KTROUBLE_CONFIG' to just the name of the config file, which will need to
+  reside in the '$HOME/.config/ktrouble' directory
+
+    > ktrouble get configs
+
+      CONFIG
+      alteryx-config.yaml
+      cmaahs-config.yaml
+      config.yaml
+
+    > export KTROUBLE_CONFIG=cmaahs-config.yaml
 
 Usage:
   ktrouble get configs [flags]
@@ -381,7 +431,7 @@ Global Flags:
 EXAMPLE:
   Return a list of kubernetes namespaces for the current context cluster
 
-  > ktrouble get ns
+    > ktrouble get ns
 
 Usage:
   ktrouble get namespace [flags]
@@ -409,7 +459,7 @@ Global Flags:
 EXAMPLE:
   Get a list of nodes for the current context cluster
 
-  > ktrouble get node
+    > ktrouble get node
 
 Usage:
   ktrouble get node [flags]
@@ -437,7 +487,7 @@ Global Flags:
 EXAMPLE:
   Show the list of node labels in the configuration file
 
-  > ktrouble get nodelabels
+    > ktrouble get nodelabels
 
 Usage:
   ktrouble get nodelabels [flags]
@@ -468,13 +518,18 @@ EXAMPLE:
   config.yaml setting is 'true', a '<bash: ... >' command will be displayed,
   otherwise the SHELL path will be displayed.
 
-  > ktrouble get running
+    > ktrouble get running
 
-    NAME                NAMESPACE       STATUS   EXEC
-    basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
+      NAME                NAMESPACE       STATUS   EXEC
+      basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
 
-    NAME                NAMESPACE       STATUS   SHELL
-    basic-tools-e1df2f  common-tooling  Running  /bin/bash
+      NAME                NAMESPACE       STATUS   SHELL
+      basic-tools-e1df2f  common-tooling  Running  /bin/bash
+
+EXAMPLE:
+  You can use the subcommand 'pods' in place of 'running'
+
+    > ktrouble get pods
 
 Usage:
   ktrouble get running [flags]
@@ -502,13 +557,13 @@ Global Flags:
 EXAMPLE:
   Return a list of kubernetes service accounts for a namespace
 
-  > ktrouble get serviceaccount -n myspace
+    > ktrouble get serviceaccount -n myspace
 
 EXAMPLE:
   If you do not specify a namespace with '-n <namespace>', you will be prompted
   to select one
 
-  > ktrouble get sa
+    > ktrouble get sa
 
 Usage:
   ktrouble get serviceaccount [flags]
@@ -536,7 +591,7 @@ Global Flags:
 EXAMPLE:
   Display a list of POD size options from the configuration file
 
-  > ktrouble get sizes
+    > ktrouble get sizes
 
 Usage:
   ktrouble get sizes [flags]
@@ -562,7 +617,10 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-  > ktrouble get templates
+  The 'get templates' command will output a list of templates in the templates
+  directory
+
+    > ktrouble get templates
 
 Usage:
   ktrouble get templates [flags]
@@ -590,7 +648,7 @@ Global Flags:
 EXAMPLE:
   Display a list of utilities defined in the configuration file
 
-  > ktrouble get utilities
+    > ktrouble get utilities
 
 Usage:
   ktrouble get utilities [flags]
@@ -616,15 +674,22 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-  Just running kubectl launch will prompt for all the things required to run
+  Just running ktrouble launch will prompt for all the things required to run
 
-  > kubectl launch
+    > ktrouble launch
+
+EXAMPLE:
+  As an option, ktrouble can prompt with a list of kubernetes secrets from the
+  namespace selected.  The chosen secrets will all be mounted under '/secrets/'
+  directory, with each key as a file inside a directory named for the secret.
+
+    > ktrouble launch --secrets
 
 EXAMPLE:
   TODO: add command line parameters that can be used to set all the options
   for launching a POD
 
-  > kubectl launch (...)
+    > ktrouble launch (...)
 
 Usage:
   ktrouble launch [flags]
@@ -654,7 +719,16 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-  > ktrouble pull
+  The 'pull' command will prompt to choose from a list of utilities that are
+  missing from your local 'config.yaml' utility defintions.
+
+    > ktrouble pull
+
+EXAMPLE:
+  Items that you have that are local, but have different setting, can be pulled,
+  and overwritten by adding a '-a' switch to the command.
+
+    > ktrouble pull -a
 
 Usage:
   ktrouble pull [flags]
@@ -680,7 +754,12 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-  > ktrouble push
+  The 'push' command allows you to push your local utility definitions into a
+  common repository in 'futurama/farnsworth/tools/ktrouble-utils'.  The command
+  will prompt you to choose a list of utilities to push to the repository.
+  Utilities marked 'exclude from push' will not appear on the selection list.
+
+    > ktrouble push
 
 Usage:
   ktrouble push [flags]
@@ -702,8 +781,8 @@ Global Flags:
 ## remove
 
 ```plaintext
-EXAMPLES
-	ktrouble remove utility
+EXAMPLE:
+    > ktrouble remove utility --help
 
 Usage:
   ktrouble remove [flags]
@@ -731,7 +810,11 @@ Use "ktrouble remove [command] --help" for more information about a command.
 ## remove utility
 
 ```plaintext
-Remove a utility from the config file, or HIDE it if it is an upstream definition
+EXAMPLE:
+  The 'remove utility' command will prompt to select a utility definition to
+  remove from your local 'config.yaml' file
+
+    > ktrouble remove utility
 
 Usage:
   ktrouble remove utility [flags]
@@ -756,15 +839,15 @@ Global Flags:
 ## set
 
 ```plaintext
-EXAMPLES
-	ktrouble set gituser
+EXAMPLE:
+    > ktrouble set config --help
 
 Usage:
   ktrouble set [flags]
   ktrouble set [command]
 
 Available Commands:
-  config      Set git configuration options
+  config      Set configuration options for ktrouble
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -789,7 +872,7 @@ EXAMPLE:
   If you store your git personal access token in an ENV variable, you can specify
   the variable name.
 
-  > ktrouble set config --user christopher.maahs --tokenvar GLA_TOKEN
+    > ktrouble set config --user christopher.maahs --tokenvar GLA_TOKEN
 
 EXAMPLE:
   If you don't store your personal access token in an ENV variable, it can be
@@ -797,7 +880,31 @@ EXAMPLE:
   front of running this next command so the token doesn't end up in your
   history file, if you have that option set in your shell
 
-  > ktrouble set config --user christopher.maahs --token <your token>
+    > ktrouble set config --user christopher.maahs --token <your token>
+
+EXAMPLE:
+  If you want to point 'ktrouble' to a different git repository for upstream
+  storage of utility pod definitions
+
+    > ktrouble set config --giturl "https://github.com/cmaahs/ktrouble-utils.git"
+
+EXAMPLE:
+  If you would like 'ktrouble launch' to prompt for secret selection on every
+  run, rather than just when you use the '--secrets' switch
+
+    > ktrouble set config --secrets
+
+EXAMPLE:
+  If you would like 'ktrouble launch' to prompt for configmap selection on every
+  run, rather than just when you use the '--configs' switch
+
+    > ktrouble set config --configs
+
+EXAMPLE:
+  If you use dynamic hyperlinking in your terminal software, you can enable output
+  with '<bash: >' decorations
+
+    > ktrouble set config --bashlinks
 
 Usage:
   ktrouble set config [flags]
@@ -829,7 +936,11 @@ Global Flags:
 
 ```plaintext
 EXAMPLE:
-  > ktrouble status
+  The 'status' command will list the disposition of your local 'config.yaml'
+  file 'utilities' definitions against the 'futurama/farnsworth/tools/ktrouble-utils'
+  repostory.
+
+    > ktrouble status
 
 Usage:
   ktrouble status [flags]
@@ -851,8 +962,9 @@ Global Flags:
 ## update
 
 ```plaintext
-EXAMPLES
-	ktrouble update utility
+EXAMPLE:
+
+    > ktrouble update utility --help
 
 Usage:
   ktrouble update [flags]
@@ -862,7 +974,7 @@ Aliases:
   update, modify
 
 Available Commands:
-  utility     
+  utility     Update an existing utility pod definition in the local config.yaml file
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -883,6 +995,21 @@ Use "ktrouble update [command] --help" for more information about a command.
 ## update utility
 
 ```plaintext
+EXAMPLE:
+  Toggle the 'exclude from push' flag for a utility definition.
+
+    > ktrouble update utility -u helm-kubectl311 --toggle-exclude
+
+EXAMPLE:
+  Toggle the 'hidden' flag for an existing utility pod definition
+
+    > ktrouble update utility -u alpine3 --toggle-hidden
+
+EXAMPLE:
+  Change the 'command' the utility will run
+
+    > ktrouble update utility -u helm-kubectl311 -c '/bin/sh'
+
 Usage:
   ktrouble update utility [flags]
 
@@ -928,4 +1055,3 @@ Global Flags:
 ```
 
 [TOC](#TOC)
-

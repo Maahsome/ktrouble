@@ -18,10 +18,8 @@ var pullParam = PullParam{}
 // pullCmd represents the pull command
 var pullCmd = &cobra.Command{
 	Use:   "pull",
-	Short: "Pull utility definitions from git",
-	Long: `EXAMPLE:
-  > ktrouble pull
-`,
+	Short: pullHelp.Short(),
+	Long:  pullHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		pullUtilityDefinitions()
 	},

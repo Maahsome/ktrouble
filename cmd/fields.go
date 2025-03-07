@@ -9,7 +9,8 @@ import (
 // fieldsCmd represents the fields command
 var fieldsCmd = &cobra.Command{
 	Use:   "fields",
-	Short: "Display a list of valid fields to use with the --fields/-f parameter for each command",
+	Short: fieldsHelp.Short(),
+	Long:  fieldsHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		displayFieldHelp()
 	},

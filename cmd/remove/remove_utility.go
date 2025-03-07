@@ -15,7 +15,8 @@ var utilityParam objects.UtilityPod
 // utilityCmd represents the utility command
 var utilityCmd = &cobra.Command{
 	Use:   "utility",
-	Short: "Remove a utility from the config file, or HIDE it if it is an upstream definition",
+	Short: removeUtilityHelp.Short(),
+	Long:  removeUtilityHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(utilityParam.Name) > 0 {
 			err := removeOrHideUtility()

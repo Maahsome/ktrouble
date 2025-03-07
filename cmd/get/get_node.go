@@ -12,12 +12,8 @@ import (
 var nodeCmd = &cobra.Command{
 	Use:     "node",
 	Aliases: defaults.GetNodesAliases,
-	Short:   "Get a list of node labels",
-	Long: `EXAMPLE:
-  Get a list of nodes for the current context cluster
-
-  > ktrouble get node
-`,
+	Short:   getNodeHelp.Short(),
+	Long:    getNodeHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if c.Client != nil {

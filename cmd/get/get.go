@@ -2,37 +2,28 @@ package get
 
 import (
 	"ktrouble/config"
+	help "ktrouble/help/get"
 
 	"github.com/spf13/cobra"
 )
 
+var getHelp = help.GetCmd{}
+var getConfigsHelp = help.GetConfigsCmd{}
+var getRunningHelp = help.GetRunningCmd{}
+var getTemplatesHelp = help.GetTemplatesCmd{}
+var getNamespaceHelp = help.GetNamespaceCmd{}
+var getNodeHelp = help.GetNodeCmd{}
+var getNodeLabelsHelp = help.GetNodeLabelsCmd{}
+var getServiceAccountHelp = help.GetServiceAccountCmd{}
+var getSizesHelp = help.GetSizesCmd{}
+var getUtilitiesHelp = help.GetUtilitiesCmd{}
+
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Args:  cobra.MinimumNArgs(1),
-	Short: "Get various internal configuration and kubernetes resource listings",
-	Long: `EXAMPLE:
-  These are mostly utility commands to review things important to running ktrouble.
-  Allowing a display of various items stored in config.yaml and listing various
-  kubernetes resources.
-
-  > ktrouble get namespaces
-  > ktrouble get utilities
-
-EXAMPLE:
-  Get a list of PODs that are currently running on the current context kubernetes
-  cluster that were created with the ktrouble utility.  If the 'enableBashLinks'
-  config.yaml setting is 'true', a '<bash: ... >' command will be displayed,
-  otherwise the SHELL path will be displayed.
-
-  > ktrouble get pods
-
-    NAME                NAMESPACE       STATUS   EXEC
-    basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
-
-    NAME                NAMESPACE       STATUS   SHELL
-    basic-tools-e1df2f  common-tooling  Running  /bin/bash
-`,
-	Run: func(cmd *cobra.Command, args []string) {},
+	Short: getHelp.Short(),
+	Long:  getHelp.Long(),
+	Run:   func(cmd *cobra.Command, args []string) {},
 }
 
 var c *config.Config

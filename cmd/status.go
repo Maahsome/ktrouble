@@ -10,10 +10,8 @@ import (
 // statusCmd represents the status command
 var statusCmd = &cobra.Command{
 	Use:   "status",
-	Short: "Get a comparison of the local utility definitions with the upstream one",
-	Long: `EXAMPLE:
-  > ktrouble status
-`,
+	Short: statusHelp.Short(),
+	Long:  statusHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		status := UtilityDefinitionStatus()
 		c.OutputData(&status, objects.TextOptions{

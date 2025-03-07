@@ -12,12 +12,8 @@ import (
 var namespaceCmd = &cobra.Command{
 	Use:     "namespace",
 	Aliases: defaults.GetNamespacesAliases,
-	Short:   "Get a list of namespaces",
-	Long: `EXAMPLE:
-  Return a list of kubernetes namespaces for the current context cluster
-
-  > ktrouble get ns
-`,
+	Short:   getNamespaceHelp.Short(),
+	Long:    getNamespaceHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if c.Client != nil {

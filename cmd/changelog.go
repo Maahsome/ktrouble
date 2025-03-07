@@ -29,7 +29,8 @@ var (
 var changelogCmd = &cobra.Command{
 	Use:     "changelog",
 	Aliases: defaults.ChangelogAliases,
-	Short:   "Express the 'version' of ktrouble.",
+	Short:   changelogHelp.Short(),
+	Long:    changelogHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if clp.ShowAll {

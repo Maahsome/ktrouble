@@ -11,12 +11,8 @@ import (
 var nodelabelsCmd = &cobra.Command{
 	Use:     "nodelabels",
 	Aliases: defaults.GetNodeLabelsAliases,
-	Short:   "Get a list of defined node labels in config.yaml",
-	Long: `EXAMPLE:
-  Show the list of node labels in the configuration file
-
-  > ktrouble get nodelabels
-`,
+	Short:   getNodeLabelsHelp.Short(),
+	Long:    getNodeLabelsHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		nodeLabels := objects.NodeLabels{}
 		nodeLabels = c.NodeSelectorLabels

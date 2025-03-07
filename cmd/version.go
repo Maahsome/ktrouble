@@ -13,7 +13,8 @@ import (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Express the 'version' of ktrouble.",
+	Short: versionHelp.Short(),
+	Long:  versionHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		version, err := expressVersion()
 		if err != nil {

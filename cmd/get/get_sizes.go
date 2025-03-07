@@ -11,12 +11,8 @@ import (
 var sizesCmd = &cobra.Command{
 	Use:     "sizes",
 	Aliases: defaults.GetSizesAliases,
-	Short:   "Get a list of defined sizes",
-	Long: `EXAMPLE:
-  Display a list of POD size options from the configuration file
-
-  > ktrouble get sizes
-`,
+	Short:   getSizesHelp.Short(),
+	Long:    getSizesHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		c.OutputData(&c.SizeDefs, objects.TextOptions{NoHeaders: c.NoHeaders})
