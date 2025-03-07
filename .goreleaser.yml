@@ -1,3 +1,6 @@
+# .goreleaser.yaml
+version: 2
+
 env:
   - CGO_ENABLED=0
   - GO111MODULE=on
@@ -6,102 +9,54 @@ env:
 before:
   hooks:
     - go mod download
+
 builds:
   - id: general
-    ldflags: &build-ldflags
+    ldflags:
       - -X ktrouble/cmd.semVer=v{{ .Version }}
       - -X ktrouble/cmd.buildDate={{ .CommitDate }}
       - -X ktrouble/cmd.gitCommit={{ .Commit }}
       - -X ktrouble/cmd.gitRef=refs/tags/{{ .Tag }}
-    goos:
-      - linux
-      - windows
-      - darwin
+    targets:
+      - linux_amd64
+      - windows_amd64
+      - darwin_amd64
+
 archives:
   - id: general
     builds:
       - general
+    format: tar.gz
     wrap_in_directory: true
-    name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
+    files:
+      - none*  # This preserves the old behavior of only including the binary
+
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
+
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  name_template: "{{ incpatch .Tag }}-next"
 
 brews:
-  - name: ktrouble
+  - id: ktrouble
+    name: ktrouble
     ids:
       - general
-
-    goarm: 6
-
-    # NOTE: make sure the url_template, the token and given repo (github or gitlab) owner and name are from the
-    # same kind. We will probably unify this in the next major version like it is done with scoop.
-
-    # GitHub/GitLab repository to push the formula to
-    # Gitea is not supported yet, but the support coming
-    tap:
+    goarm: "6"
+    repository:
       owner: maahsome
       name: homebrew-tap
-      # Optionally a token can be provided, if it differs from the token provided to GoReleaser
       token: "{{ .Env.MAAHSOME_PAT }}"
-
-    # Template for the url which is determined by the given Token (github or gitlab)
-    # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
-    # Default for gitea is "https://gitea.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     url_template: "https://github.com/maahsome/ktrouble/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    # Allows you to set a custom download strategy. Note that you'll need
-    # to implement the strategy and add it to your tap repository.
-    # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
-    # Default is empty.
-    # download_strategy: CurlDownloadStrategy.
-
-    # Allows you to add a custom require_relative at the top of the formula template
-    # Default is empty
-    # custom_require: custom_download_strategy
-
-    # Git author used to commit to the repository.
-    # Defaults are shown.
     commit_author:
       name: Christopher Maahs
       email: cmaahs@gmail.com
-
-    # Folder inside the repository to put the formula.
-    # Default is the root folder.
     folder: Formula
-
-    # Caveats for the user of your binary.
-    # Default is empty.
-    # caveats: ""
-
-    # Your app's homepage.
-    # Default is empty.
     homepage: "https://github.com/maahsome/ktrouble/"
-
-    # Your app's description.
-    # Default is empty.
-    description: "CLI tool to reduce reliance on GUI interactions, initially driven by wanting to grep through TRACE output of pipeline jobs"
-
-    # SPDX identifier of your app's license.
-    # Default is empty.
-    # license: "MIT"
-
-    # Setting this will prevent goreleaser to actually try to commit the updated
-    # formula - instead, the formula file will be stored on the dist folder only,
-    # leaving the responsibility of publishing it to the user.
-    # If set to auto, the release will not be uploaded to the homebrew tap
-    # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
-    # Default is false.
-    # skip_upload: true
-
-    # So you can `brew test` your formula.
-    # Default is empty.
+    description: "A CLI tool built to help with troubleshooting inside kubernetes"
     test: |
       system "#{bin}/ktrouble --help"
-
-    # Custom install script for brew.
-    # Default is 'bin.install "program"'.
     install: |
       bin.install "ktrouble"
 
