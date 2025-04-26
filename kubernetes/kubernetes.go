@@ -33,6 +33,8 @@ type KubernetesClient interface {
 	DeleteAssociatedService(pod ask.PodDetail) error
 	DeleteAssociatedIngress(pod ask.PodDetail) error
 	DetermineNamespace(nsParam string) string
+	GetCreatedIngresses(all bool) *networkingv1.IngressList
+	GetCreatedServices(all bool) *v1.ServiceList
 }
 
 type kubernetesClient struct {

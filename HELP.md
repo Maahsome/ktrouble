@@ -14,11 +14,13 @@
 - [fields](#fields)
 - [get](#get)
 - [get configs](#get-configs)
+- [get ingresses](#get-ingresses)
 - [get namespace](#get-namespace)
 - [get node](#get-node)
 - [get nodelabels](#get-nodelabels)
 - [get running](#get-running)
 - [get serviceaccount](#get-serviceaccount)
+- [get services](#get-services)
 - [get sizes](#get-sizes)
 - [get templates](#get-templates)
 - [get utilities](#get-utilities)
@@ -416,11 +418,13 @@ Usage:
 
 Available Commands:
   configs        Get a list of configs
+  ingresses      Get a list of ktrouble installed ingresses
   namespace      Get a list of namespaces
   node           Get a list of node labels
   nodelabels     Get a list of defined node labels in config.yaml
   running        Get a list of running pods
   serviceaccount Get a list of K8s ServiceAccount(s) in a Namespace
+  services       Get a list of ktrouble installed services
   sizes          Get a list of defined sizes
   templates      Get a list of templates
   utilities      Get a list of supported utility container images
@@ -466,6 +470,39 @@ Usage:
 
 Aliases:
   configs, size, requests, request, limit, limits
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## get ingresses
+
+```plaintext
+EXAMPLE
+Get a list of ingresses that are installed by ktrouble
+
+  > ktrouble get ingresses
+
+Usage:
+  ktrouble get ingresses [flags]
+
+Aliases:
+  ingresses, ingress, ing
+
+Flags:
+  -a, --all   List installed ingreses from ALL users
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -639,6 +676,39 @@ Usage:
 
 Aliases:
   serviceaccount, serviceaccounts, sa
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## get services
+
+```plaintext
+EXAMPLE
+Get a list of services that are installed by ktrouble
+
+  > ktrouble get services
+
+Usage:
+  ktrouble get services [flags]
+
+Aliases:
+  services, service, svc
+
+Flags:
+  -a, --all   List installed services from ALL users
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)

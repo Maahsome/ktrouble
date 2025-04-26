@@ -64,3 +64,24 @@ func (k *kubernetesClient) CreateService(serviceJSON string, namespace string) {
 		common.Logger.WithError(cerr).Fatal("Failed to create service")
 	}
 }
+
+func (k *kubernetesClient) GetCreatedServices(all bool) *v1.ServiceList {
+	labelSelector := fmt.Sprintf("app=ktrouble,launchedby=%s", os.Getenv("USER"))
+	if all {
+		labelSelector = "app=ktrouble"
+	}
+	listOptions := metav1.ListOptions{
+		LabelSelector: labelSelector,
+	}
+	serviceList, err := k.Client.CoreV1().Services("").List(context.TODO(), listOptions)
+
+	if err != nil {
+		common.Logger.WithError(err).Error("could not get list of services")
+		return &v1.ServiceList{}
+	}
+	if len(serviceList.Items) == 0 {
+		common.Logger.Tracef("no services with labels %s were found on this cluster", labelSelector)
+		return &v1.ServiceList{}
+	}
+	return serviceList
+}
