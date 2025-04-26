@@ -84,7 +84,6 @@ jira readme
 ### In Flight
 
 - [ ] KT-16:  Start adding godoc comments (In Progress)
-- [ ] KT-62:  Add "requireSecret", "requireConfigmap", and "containerHint" as YAML fields in the utility definitions
 
 ### To Do
 
@@ -113,3 +112,8 @@ jira readme
 - [ ] KT-72:  Add the ability to change the "sleep" list from the CLI
 - [ ] KT-73:  Add --build-cmd switch for launch and attach
 - [ ] KT-74:  Add environment support to support same images in different registries
+
+### Completed
+
+- [x] KT-62:  Add "requireSecret", "requireConfigmap", and "containerHint" as YAML fields in the utility definitions
+- [x] KT-66:  Fix: volume names can only be 63 characters long
