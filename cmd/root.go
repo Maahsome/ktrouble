@@ -194,6 +194,8 @@ func buildRootCmd() *cobra.Command {
 	RootCmd.PersistentFlags().BoolVarP(&c.ShowHidden, "show-hidden", "s", false, "Show entries with the 'hidden' property set to 'true'")
 	RootCmd.PersistentFlags().StringSliceVarP(&c.Fields, "fields", "f", []string{}, "Specify an array of field names: eg, --fields 'NAME,REPOSITORY'")
 	RootCmd.PersistentFlags().StringVarP(&c.TemplateFile, "template", "t", "default", "Specify the template file to use to render the POD manifest")
+	RootCmd.PersistentFlags().StringVar(&c.ServiceTemplateFile, "service-template", "default-service", "Specify the service template file to use to render the SERVICE manifest, for --create-ingress option")
+	RootCmd.PersistentFlags().StringVar(&c.IngressTemplateFile, "ingress-template", "default-ingress", "Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option")
 	return RootCmd
 }
 
@@ -445,6 +447,13 @@ func initConfig() {
 	templateFile := fmt.Sprintf("%s/default", tmplDir)
 	createDefaultTemplateFile(templateFile)
 
+	// Create 'default' service template in the config templates directory
+	serviceTemplateFile := fmt.Sprintf("%s/default-service", tmplDir)
+	createDefaultServiceTemplateFile(serviceTemplateFile)
+
+	// Create 'default' ingress template in the config templates directory
+	ingressTemplateFile := fmt.Sprintf("%s/default-ingress", tmplDir)
+	createDefaultIngressTemplateFile(ingressTemplateFile)
 }
 
 // whichSource returns 'ktrouble-utils' if the utility name is in the default list
@@ -507,6 +516,102 @@ func createDefaultTemplateFile(fileName string) {
 			_, werr := file.WriteString(defaults.DefaultTemplate())
 			if werr != nil {
 				logrus.Error("failed to write the default template")
+			}
+		}
+	}
+}
+
+func createDefaultServiceTemplateFile(fileName string) {
+	if _, err := os.Stat(fileName); err != nil {
+		if os.IsNotExist(err) {
+			file, ferr := os.Create(fileName)
+			if ferr != nil {
+				logrus.Fatalf("Unable to create the default service template file: %s", fileName)
+			}
+			mode := int(0600)
+			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
+				logrus.Error("Chmod for default service template file failed, please set the mode to 0600.")
+			}
+			_, werr := file.WriteString(defaults.DefaultServiceTemplate())
+			if werr != nil {
+				logrus.Error("failed to write the default template")
+			}
+		}
+	} else {
+		// determine if we can update this file
+		currentTemplateData, rerr := os.ReadFile(fileName)
+		if rerr != nil {
+			logrus.Fatal("Unable to read from the existing service template file, permission issue?")
+		}
+
+		if string(currentTemplateData) != defaults.DefaultServiceTemplate() {
+			backupFile := fmt.Sprintf("%s.saved-%s", fileName, time.Now().Format("20060102150405"))
+			logrus.Warnf("current default service template has been updated, the previous has been saved as %s.", backupFile)
+			// create the backup
+			if fileExists(backupFile) {
+				logrus.Fatalf("The backup file, %s, already exists, we cannot proceed since an update to the default service template is needed.  Please remove the file.", backupFile)
+			}
+			mode := int(0600)
+			os.WriteFile(backupFile, currentTemplateData, os.FileMode(mode))
+			// overwrite the current file
+			file, ferr := os.Create(fileName)
+			if ferr != nil {
+				logrus.Fatalf("Unable to create the default service template file: %s", fileName)
+			}
+			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
+				logrus.Error("Chmod for default service template file failed, please set the mode to 0600.")
+			}
+			_, werr := file.WriteString(defaults.DefaultServiceTemplate())
+			if werr != nil {
+				logrus.Error("failed to write the default service template")
+			}
+		}
+	}
+}
+
+func createDefaultIngressTemplateFile(fileName string) {
+	if _, err := os.Stat(fileName); err != nil {
+		if os.IsNotExist(err) {
+			file, ferr := os.Create(fileName)
+			if ferr != nil {
+				logrus.Fatalf("Unable to create the default ingress template file: %s", fileName)
+			}
+			mode := int(0600)
+			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
+				logrus.Error("Chmod for default template file failed, please set the mode to 0600.")
+			}
+			_, werr := file.WriteString(defaults.DefaultIngressTemplate())
+			if werr != nil {
+				logrus.Error("failed to write the default ingress template")
+			}
+		}
+	} else {
+		// determine if we can update this file
+		currentTemplateData, rerr := os.ReadFile(fileName)
+		if rerr != nil {
+			logrus.Fatal("Unable to read from the existing ingress template file, permission issue?")
+		}
+
+		if string(currentTemplateData) != defaults.DefaultIngressTemplate() {
+			backupFile := fmt.Sprintf("%s.saved-%s", fileName, time.Now().Format("20060102150405"))
+			logrus.Warnf("current default ingress template has been updated, the previous has been saved as %s.", backupFile)
+			// create the backup
+			if fileExists(backupFile) {
+				logrus.Fatalf("The backup file, %s, already exists, we cannot proceed since an update to the default ingress template is needed.  Please remove the file.", backupFile)
+			}
+			mode := int(0600)
+			os.WriteFile(backupFile, currentTemplateData, os.FileMode(mode))
+			// overwrite the current file
+			file, ferr := os.Create(fileName)
+			if ferr != nil {
+				logrus.Fatalf("Unable to create the default ingress template file: %s", fileName)
+			}
+			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
+				logrus.Error("Chmod for default ingress template file failed, please set the mode to 0600.")
+			}
+			_, werr := file.WriteString(defaults.DefaultIngressTemplate())
+			if werr != nil {
+				logrus.Error("failed to write the default ingress template")
 			}
 		}
 	}

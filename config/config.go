@@ -37,6 +37,8 @@ type (
 		PromptForSecrets    bool
 		PromptForConfigMaps bool
 		TemplateFile        string
+		ServiceTemplateFile string
+		IngressTemplateFile string
 	}
 
 	Outputtable interface {

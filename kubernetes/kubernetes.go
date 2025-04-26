@@ -9,6 +9,7 @@ import (
 
 	homedir "github.com/mitchellh/go-homedir"
 	v1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 	kofficial "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -18,13 +19,19 @@ type KubernetesClient interface {
 	// GetProperty(property string) string
 	// SetProperty(property string, value string) string
 	CreatePod(podJSON string, namespace string)
+	CreateService(serviceJSON string, namespace string)
+	CreateIngress(ingressJSON string, namespace string)
 	GetCreatedPods(all bool) *v1.PodList
 	GetNamespaces() *v1.NamespaceList
 	GetNodes() *v1.NodeList
 	GetServiceAccounts(namespace string) *v1.ServiceAccountList
 	GetSecrets(namespace string) *v1.SecretList
 	GetConfigMaps(namespace string) *v1.ConfigMapList
+	GetAssociatedService(pod ask.PodDetail) *v1.ServiceList
+	GetAssociatedIngress(pod ask.PodDetail) *networkingv1.IngressList
 	DeletePod(pod ask.PodDetail) error
+	DeleteAssociatedService(pod ask.PodDetail) error
+	DeleteAssociatedIngress(pod ask.PodDetail) error
 	DetermineNamespace(nsParam string) string
 }
 
