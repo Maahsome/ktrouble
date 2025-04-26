@@ -117,7 +117,7 @@ var RootCmd = &cobra.Command{
 			}
 		}
 
-		if os.Args[1] == "pull" || os.Args[1] == "push" || os.Args[1] == "status" {
+		if os.Args[1] == "pull" || os.Args[1] == "push" || os.Args[1] == "status" || os.Args[1] == "diff" {
 			gitUser := viper.GetString("gitUser")
 			if len(gitUser) == 0 {
 				common.Logger.Fatal("gitUser is not set, use 'ktrouble set config --help'")
@@ -163,6 +163,9 @@ func containsAlias(v string, a []string) bool {
 
 func needKubernetes(arg string, sub string) bool {
 
+	if arg == "diff" {
+		return false
+	}
 	if arg == "get" {
 		switch sub {
 		case "utilities", "sizes", "templates":

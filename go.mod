@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
 	github.com/coreos/go-semver v0.3.0
+	github.com/fatih/color v1.13.0
 	github.com/go-git/go-billy/v5 v5.4.1
 	github.com/go-git/go-git/v5 v5.6.0
 	github.com/maahsome/gron v0.1.0
@@ -12,10 +13,12 @@ require (
 	github.com/muesli/termenv v0.15.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pkg/errors v0.9.1
+	github.com/pmezard/go-difflib v1.0.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.26.2
 	k8s.io/apimachinery v0.26.2
 	k8s.io/client-go v0.26.2
@@ -36,7 +39,6 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/evanphx/json-patch v4.12.0+incompatible // indirect
 	github.com/exponent-io/jsonpath v0.0.0-20151013193312-d6023ce2651d // indirect
-	github.com/fatih/color v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
@@ -106,7 +108,6 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/cli-runtime v0.26.2 // indirect
 	k8s.io/component-base v0.26.2 // indirect
 	k8s.io/klog/v2 v2.80.1 // indirect

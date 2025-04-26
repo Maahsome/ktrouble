@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
+	"ktrouble/common"
+	"ktrouble/internal"
 	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
@@ -55,10 +58,29 @@ func UtilityDefinitionStatus() objects.StatusList {
 }
 
 func compareDefs(local objects.UtilityPod, remote objects.UtilityPod) string {
-	if local.ExecCommand == remote.ExecCommand {
-		if local.Repository == remote.Repository {
-			return "same"
-		}
+
+	localYaml := "UtilityDefinition: \n  - " + unmarshallUtilityDefinition(local)
+	remoteYaml := "UtilityDefinition: \n  - " + unmarshallUtilityDefinition(remote)
+
+	origReader := bytes.NewReader([]byte(localYaml))
+	origBuffer := new(bytes.Buffer)
+	editReader := bytes.NewReader([]byte(remoteYaml))
+	editBuffer := new(bytes.Buffer)
+
+	serr := internal.SortYAML(origReader, origBuffer, 2)
+	if serr != nil {
+		common.Logger.WithError(serr).Error("Error sorting original yaml")
+	}
+	serr = internal.SortYAML(editReader, editBuffer, 2)
+	if serr != nil {
+		common.Logger.WithError(serr).Error("Error sorting edit yaml")
+	}
+
+	sortedOriginal := origBuffer.String()
+	sortedEdit := editBuffer.String()
+
+	if sortedOriginal == sortedEdit {
+		return "same"
 	}
 	return "different"
 }
