@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"ktrouble/defaults"
 	"math/rand"
 
 	"github.com/spf13/cobra"
@@ -23,7 +24,7 @@ var letters = []rune("abcdef0987654321")
 // launchCmd represents the default command
 var launchCmd = &cobra.Command{
 	Use:     "launch",
-	Aliases: []string{"create", "apply", "pod", "l"},
+	Aliases: defaults.LaunchAliases,
 	Short:   launchHelp.Short(),
 	Long:    launchHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {

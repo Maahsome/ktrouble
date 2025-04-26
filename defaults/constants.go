@@ -12,3 +12,7 @@ var GetSizesAliases = []string{"size", "requests", "request", "limit", "limits"}
 var ChangelogAliases = []string{"cl", "changes"}
 var UpdateAliases = []string{"modify"}
 var DeleteAliases = []string{"del"}
+var GetAttachmentsAliases = []string{"attach", "att", "attachment"}
+var AttachAliases = []string{"att", "attachment", "a"}
+var LaunchAliases = []string{"create", "apply", "pod", "l"}
+var GetSleepAliases = []string{"ephemeral_sleep", "uptime"}

@@ -44,12 +44,13 @@ var runningCmd = &cobra.Command{
 					servicePort = fmt.Sprintf("%d", service.Items[0].Spec.Ports[0].TargetPort.IntVal)
 				}
 				podData = append(podData, objects.Pod{
-					Name:        v.Name,
-					Namespace:   v.Namespace,
-					Status:      status,
-					LaunchedBy:  v.Labels["launchedby"],
-					Service:     serviceName,
-					ServicePort: servicePort,
+					Name:          v.Name,
+					Namespace:     v.Namespace,
+					Status:        status,
+					LaunchedBy:    v.Labels["launchedby"],
+					Service:       serviceName,
+					ServicePort:   servicePort,
+					ContainerName: "",
 				})
 			}
 

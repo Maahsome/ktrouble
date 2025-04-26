@@ -334,6 +334,31 @@ func initConfig() {
 		}
 	}
 
+	// Ephemeral Sleep Definitions
+	eserr := viper.UnmarshalKey("ephemeralSleep", &c.EphemeralSleepDefs)
+	if eserr != nil {
+		logrus.Fatal("Error unmarshalling ephemeral sleep...")
+	}
+	if len(c.EphemeralSleepDefs) == 0 {
+		logrus.Warn("Adding default ephemeral sleep to config.yaml")
+		seedEphemeralSleep := defaults.EphemeralSleepList()
+		viper.Set("ephemeralSleep", seedEphemeralSleep)
+		c.EphemeralSleepDefs = defaults.EphemeralSleepList()
+		c.EphemeralSleepMap = make(map[string]objects.EphemeralSleep, len(c.EphemeralSleepDefs))
+		for _, v := range c.EphemeralSleepDefs {
+			c.EphemeralSleepMap[v.Name] = v
+		}
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	} else {
+		c.EphemeralSleepMap = make(map[string]objects.EphemeralSleep, len(c.EphemeralSleepDefs))
+		for _, v := range c.EphemeralSleepDefs {
+			c.EphemeralSleepMap[v.Name] = v
+		}
+	}
+
 	// Node Selector Labels
 	nerr := viper.UnmarshalKey("nodeSelectorLabels", &c.NodeSelectorLabels)
 	if nerr != nil {

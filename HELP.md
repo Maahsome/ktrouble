@@ -5,6 +5,7 @@
 - [_main_](#ktrouble)
 - [add](#add)
 - [add utility](#add-utility)
+- [attach](#attach)
 - [changelog](#changelog)
 - [delete](#delete)
 - [diff](#diff)
@@ -13,6 +14,7 @@
 - [edit template](#edit-template)
 - [fields](#fields)
 - [get](#get)
+- [get attachments](#get-attachments)
 - [get configs](#get-configs)
 - [get ingresses](#get-ingresses)
 - [get namespace](#get-namespace)
@@ -22,6 +24,7 @@
 - [get serviceaccount](#get-serviceaccount)
 - [get services](#get-services)
 - [get sizes](#get-sizes)
+- [get sleep](#get-sleep)
 - [get templates](#get-templates)
 - [get utilities](#get-utilities)
 - [launch](#launch)
@@ -55,6 +58,7 @@ Usage:
 
 Available Commands:
   add         Add various objects for ktrouble
+  attach      attach a kubernetes troubleshooting container to a running pod
   changelog   Get changelog information
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
@@ -144,6 +148,49 @@ Flags:
   -r, --repository string    Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
       --require-configmaps   Set the Utilty to always prompt for configmaps
       --require-secrets      Set the Utilty to always prompt for secrets
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## attach
+
+```plaintext
+EXAMPLE:
+  Just running ktrouble attach will prompt for all the things required to run.
+  Attaching a container to an existing pod is done through the Ephemeral
+  Container feature of Kubernetes.  This feature is only available in
+  Kubernetes 1.16 and later, and must be enabled in the cluster.  The way that
+  Ephemeral Containers work is that a new container is created in the same
+  namespace as the pod, and the new container is attached to the pod's network
+  namespace.  This allows the new container to see the same network as the pod.
+  These Ephemeral Containers are not persisted, and are removed when the primary
+  command that starts the container exits.  From the command line, you launch a
+  new container and after you exit the container, the Ephemeral Container is
+  terminated.  In order to allow us to attach a container and also be able to
+  exec and exit the container without it terminating, we simply run the "sleep"
+  command, and when that sleep duration is over, the container will exit.  There
+  is NO other way to remove an Ephemeral Container definition from a pod.
+
+  > ktrouble attach
+
+Usage:
+  ktrouble attach [flags]
+
+Aliases:
+  attach, att, attachment, a
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -417,6 +464,7 @@ Usage:
   ktrouble get [command]
 
 Available Commands:
+  attachments    Get a list of attached containers
   configs        Get a list of configs
   ingresses      Get a list of ktrouble installed ingresses
   namespace      Get a list of namespaces
@@ -426,6 +474,7 @@ Available Commands:
   serviceaccount Get a list of K8s ServiceAccount(s) in a Namespace
   services       Get a list of ktrouble installed services
   sizes          Get a list of defined sizes
+  sleep          Get a list of sleep times for ephemeral containers
   templates      Get a list of templates
   utilities      Get a list of supported utility container images
 
@@ -443,6 +492,49 @@ Global Flags:
   -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble get [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## get attachments
+
+```plaintext
+EXAMPLE:
+  Get a list of utility containers that are attached to existing PODS that are
+  currently running on the current context kubernetes cluster that were attached
+  with the ktrouble utility.  If the 'enableBashLinks' config.yaml setting is
+  'true', a '<bash: ... >' command will be displayed, otherwise the SHELL path
+  will be displayed.
+
+  > ktrouble get attachments
+
+    NAME                NAMESPACE       STATUS   EXEC
+    basic-tools-e1df2f  common-tooling  Running  <bash:kubectl -n common-tooling exec -it basic-tools-e1df2f -- /bin/bash>
+
+    NAME                NAMESPACE       STATUS   SHELL
+    basic-tools-e1df2f  common-tooling  Running  /bin/bash
+
+Usage:
+  ktrouble get attachments [flags]
+
+Aliases:
+  attachments, attach, att, attachment
+
+Flags:
+  -a, --all   List attached containers for ALL users
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -739,6 +831,36 @@ Usage:
 
 Aliases:
   sizes, size, requests, request, limit, limits
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## get sleep
+
+```plaintext
+EXAMPLE:
+  Display a list of sleep times for ephemeral containers
+
+  > ktrouble get sleep
+
+Usage:
+  ktrouble get sleep [flags]
+
+Aliases:
+  sleep, ephemeral_sleep, uptime
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)

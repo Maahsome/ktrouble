@@ -37,7 +37,6 @@ func standardLaunch(utility string, sa string) {
 			fmt.Println(utilMap[utility].Hint)
 		}
 
-		// Detect GAR and prompt for lowers/uppers
 		utilRepository := utilMap[utility].Repository
 
 		namespace := c.Client.DetermineNamespace(c.Namespace)
@@ -120,7 +119,7 @@ func standardLaunch(utility string, sa string) {
 
 		if c.EnableBashLinks {
 			hl := fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
-			tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
+			tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)
 			fmt.Println(termFormatter.Hyperlink(hl, tx))
 		} else {
 			fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)

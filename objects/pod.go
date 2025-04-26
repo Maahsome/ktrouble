@@ -18,12 +18,13 @@ import (
 type PodList []Pod
 
 type Pod struct {
-	Name        string `json:"name"`
-	Namespace   string `json:"namespace"`
-	Status      string `json:"status"`
-	LaunchedBy  string `json:"launchedby"`
-	Service     string `json:"service"`
-	ServicePort string `json:"servicePort"`
+	Name          string `json:"name"`
+	Namespace     string `json:"namespace"`
+	Status        string `json:"status"`
+	LaunchedBy    string `json:"launchedby"`
+	Service       string `json:"service"`
+	ServicePort   string `json:"servicePort"`
+	ContainerName string `json:"containerName"`
 }
 
 // ToJSON - Write the output as JSON
@@ -74,7 +75,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "SHELL/SERVICE"}
+		headerText := []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "UTILITY", "SHELL/SERVICE"}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
@@ -92,9 +93,14 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 
 	for _, v := range *p {
 		baseTool := v.Name[0 : len(v.Name)-(uniqIdLength+1)]
+		containerParam := ""
+		if v.ContainerName != "" {
+			containerParam = fmt.Sprintf("-c %s", v.ContainerName)
+			baseTool = v.ContainerName[0 : len(v.ContainerName)-(uniqIdLength+1)]
+		}
 		shellText := utilMap[baseTool].ExecCommand
 		if bashLinks {
-			shellText = termFormatter.Hyperlink(fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", v.Namespace, v.Name, utilMap[baseTool].ExecCommand), utilMap[baseTool].ExecCommand)
+			shellText = termFormatter.Hyperlink(fmt.Sprintf("<bash:kubectl -n %s exec -it %s %s -- %s>", v.Namespace, containerParam, v.Name, utilMap[baseTool].ExecCommand), utilMap[baseTool].ExecCommand)
 			if v.Service != "" {
 				shellText = shellText + " " + termFormatter.Hyperlink(fmt.Sprintf("<bash:kubectl -n %s port-forward svc/%s %s:443>", v.Namespace, v.Service, v.ServicePort), fmt.Sprintf("%s:443", v.ServicePort))
 			}
@@ -108,6 +114,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 			v.Namespace,
 			v.Status,
 			v.LaunchedBy,
+			baseTool,
 			shellText,
 		}
 		table.Append(row)

@@ -24,13 +24,13 @@ var deleteCmd = &cobra.Command{
 
 			switch count := len(podList.Items); {
 			case count == 1:
-				selectedPod := ask.PromptForPod(podList)
+				selectedPod := ask.PromptForPod(podList, "Choose a pod to delete:")
 
 				c.Client.DeletePod(selectedPod)
 				c.Client.DeleteAssociatedService(selectedPod)
 				c.Client.DeleteAssociatedIngress(selectedPod)
 			case count > 1:
-				selectedPods := ask.PromptForPodList(podList)
+				selectedPods := ask.PromptForPodList(podList, "Choose a pod to delete:")
 
 				for _, p := range selectedPods {
 					c.Client.DeletePod(p)
