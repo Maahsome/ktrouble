@@ -63,3 +63,24 @@ func (k *kubernetesClient) CreateIngress(serviceJSON string, namespace string) {
 		common.Logger.WithError(cerr).Fatal("Failed to create ingress")
 	}
 }
+
+func (k *kubernetesClient) GetCreatedIngresses(all bool) *networkingv1.IngressList {
+	labelSelector := fmt.Sprintf("app=ktrouble,launchedby=%s", os.Getenv("USER"))
+	if all {
+		labelSelector = "app=ktrouble"
+	}
+	listOptions := metav1.ListOptions{
+		LabelSelector: labelSelector,
+	}
+	ingressList, err := k.Client.NetworkingV1().Ingresses("").List(context.TODO(), listOptions)
+
+	if err != nil {
+		common.Logger.WithError(err).Error("could not get list of services")
+		return &networkingv1.IngressList{}
+	}
+	if len(ingressList.Items) == 0 {
+		common.Logger.Tracef("no ingresses with labels %s were found on this cluster", labelSelector)
+		return &networkingv1.IngressList{}
+	}
+	return ingressList
+}
