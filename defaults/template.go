@@ -31,7 +31,7 @@ spec:
     {{- if $.Secrets }}
     {{- range $.Secrets }}
     - mountPath: "/secrets/{{ . }}"
-      name: ktrouble-{{ . }}
+      name: {{ printf "ktrouble-%.53s" . }}
       readOnly: true
     {{- end }}
     {{- end }}
@@ -53,7 +53,7 @@ spec:
   {{- end }}
   {{- if $.Secrets }}
   {{- range $.Secrets }}
-  - name: ktrouble-{{ . }}
+  - name: {{ printf "ktrouble-%.53s" . }}
     secret:
       defaultMode: 420
       secretName: {{ . }}
