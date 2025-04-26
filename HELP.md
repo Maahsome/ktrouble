@@ -129,10 +129,13 @@ Usage:
   ktrouble add utility [flags]
 
 Flags:
-  -c, --cmd string          Default shell/command to use when 'exec'ing into the POD (default "/bin/sh")
-  -e, --exclude             Exclude from 'push' to central repository
-  -u, --name string         Unique name for your utility pod
-  -r, --repository string   Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
+  -c, --cmd string           Default shell/command to use when 'exec'ing into the POD (default "/bin/sh")
+  -e, --exclude              Exclude from 'push' to central repository
+      --hint-file string     Specify a file containing the hint text
+  -u, --name string          Unique name for your utility pod
+  -r, --repository string    Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
+      --require-configmaps   Set the Utilty to always prompt for configmaps
+      --require-secrets      Set the Utilty to always prompt for secrets
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -196,6 +199,9 @@ EXAMPLE:
 
 Usage:
   ktrouble delete [flags]
+
+Flags:
+  -a, --all   Choose from a list of running PODs from ALL users
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
@@ -537,6 +543,9 @@ Usage:
 Aliases:
   running, pods, pod
 
+Flags:
+  -a, --all   List running PODs from ALL users
+
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
   -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
@@ -700,6 +709,7 @@ Aliases:
 Flags:
       --configs   Use this switch to prompt to mount configmaps in the POD
       --secrets   Use this switch to prompt to mount secrets in the POD
+      --volumes   Use this switch to prompt to mount volumes in the POD
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)

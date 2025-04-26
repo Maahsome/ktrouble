@@ -2,6 +2,8 @@ package kubernetes
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"strings"
 
 	"ktrouble/ask"
@@ -12,9 +14,13 @@ import (
 	k8sYaml "k8s.io/apimachinery/pkg/util/yaml"
 )
 
-func (k *kubernetesClient) GetCreatedPods() *v1.PodList {
+func (k *kubernetesClient) GetCreatedPods(all bool) *v1.PodList {
+	labelSelector := fmt.Sprintf("app=ktrouble,launchedby=%s", os.Getenv("USER"))
+	if all {
+		labelSelector = "app=ktrouble"
+	}
 	listOptions := metav1.ListOptions{
-		LabelSelector: "app=ktrouble",
+		LabelSelector: labelSelector,
 	}
 	podList, err := k.Client.CoreV1().Pods("").List(context.TODO(), listOptions)
 

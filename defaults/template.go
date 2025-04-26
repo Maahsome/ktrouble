@@ -9,6 +9,7 @@ metadata:
   namespace: {{ $.Parameters.namespace }}
   labels:
     app: ktrouble
+    launchedby: {{ $.Parameters.launchedby }}
 spec:
   containers:
   - name: {{ $.Parameters.name }}

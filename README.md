@@ -49,8 +49,10 @@ ktrouble pull
 ktrouble status
 # to pull items that are listed as "different"
 ktrouble pull -a
+# to push one of your local utility definitions up to the common repository
+ktrouble push
 # to get a verbose listing of definitions
-ktrouble get util -f ktrouble get util -f name,repository,exec,hidden,excluded,source
+ktrouble get util -f name,repository,exec,hidden,excluded,source
 
 # and or course
 ktrouble --help
@@ -70,7 +72,7 @@ I figure there may as well be an easy way to share definitions.  So some command
 will be added to assist with CRUD operations on the local `config.yaml` file for
 utility definitions.  Then `push|pull|status` commands will be added that will
 interact with a git repository where a list of utility pod definitions will be
-stored.  
+stored.
 
 ## PERSONAL JIRA LIST
 
@@ -82,6 +84,7 @@ jira readme
 ### In Flight
 
 - [ ] KT-16:  Start adding godoc comments (In Progress)
+- [ ] KT-62:  Add "requireSecret", "requireConfigmap", and "containerHint" as YAML fields in the utility definitions
 
 ### To Do
 
@@ -99,3 +102,14 @@ jira readme
 - [ ] KT-50:  Add populate volume with a --dir or --file parameter
 - [ ] KT-51:  Add --volumes to the launch command to list volumes with app=ktrouble label
 - [ ] KT-52:  Examine the exec parameter in kubectl code, can we use that?
+- [ ] KT-57:  Create docker image: aws+basic-tools
+- [ ] KT-58:  Create docker image: gcloud+basic-tools
+- [ ] KT-59:  Create docker image: azure+basic-tools
+- [ ] KT-60:  Create docker image:helm+kubectl+basic-tools
+- [ ] KT-63:  Add "get hint" and then prompt for the utility
+- [ ] KT-65:  Add config for handling dynamic GAR and other repositories.
+- [ ] KT-67:  Add a Utility definition to handle fsGroup, runAsUser, and runAsGroup
+- [ ] KT-70:  When mounting configmaps with a `.` in the name, a naming error occurs
+- [ ] KT-72:  Add the ability to change the "sleep" list from the CLI
+- [ ] KT-73:  Add --build-cmd switch for launch and attach
+- [ ] KT-74:  Add environment support to support same images in different registries
