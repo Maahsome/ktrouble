@@ -1,6 +1,8 @@
 package get
 
 import (
+	"fmt"
+	"ktrouble/ask"
 	"ktrouble/common"
 	"ktrouble/defaults"
 	"ktrouble/objects"
@@ -31,11 +33,23 @@ var runningCmd = &cobra.Command{
 				if v.DeletionTimestamp != nil {
 					status = "Terminating"
 				}
+				service := c.Client.GetAssociatedService(ask.PodDetail{
+					Name:      v.Name,
+					Namespace: v.Namespace,
+				})
+				serviceName := ""
+				servicePort := ""
+				if len(service.Items) > 0 {
+					serviceName = service.Items[0].Name
+					servicePort = fmt.Sprintf("%d", service.Items[0].Spec.Ports[0].TargetPort.IntVal)
+				}
 				podData = append(podData, objects.Pod{
-					Name:       v.Name,
-					Namespace:  v.Namespace,
-					Status:     status,
-					LaunchedBy: v.Labels["launchedby"],
+					Name:        v.Name,
+					Namespace:   v.Namespace,
+					Status:      status,
+					LaunchedBy:  v.Labels["launchedby"],
+					Service:     serviceName,
+					ServicePort: servicePort,
 				})
 			}
 

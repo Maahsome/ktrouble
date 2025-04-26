@@ -9,14 +9,22 @@ metadata:
   namespace: {{ $.Parameters.namespace }}
   labels:
     app: ktrouble
+    app.kubernetes.io/name: {{ $.Parameters.name }}
     launchedby: {{ $.Parameters.launchedby }}
 spec:
   containers:
   - name: {{ $.Parameters.name }}
     image: {{ $.Parameters.registry }}
+    {{- if eq $.Parameters.ingressEnabled "false" }}
     command:
       - sleep
       - "86400"
+    {{- end }}
+    env:
+    - name: APPLICATION_BASE_PATH
+      value: {{ $.Parameters.path }}
+    - name: LISTEN_PORT
+      value: {{ $.Parameters.targetPort }}
     imagePullPolicy: Always
     resources:
       limits:

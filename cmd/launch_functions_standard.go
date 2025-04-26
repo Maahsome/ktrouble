@@ -88,6 +88,11 @@ func standardLaunch(utility string, sa string) {
 				"hasSelector":    hasSelector,
 				"selector":       selector,
 				"launchedby":     osUser,
+				"ingressEnabled": fmt.Sprintf("%t", p.CreateIngress),
+				"host":           p.Host,
+				"targetPort":     fmt.Sprintf("%d", p.Port),
+				"path":           p.Path,
+				"associatedPod":  fmt.Sprintf("%s-%s", utility, shortUniq),
 			},
 			Secrets:    selectedSecrets,
 			ConfigMaps: selectedConfigMaps,
@@ -98,6 +103,20 @@ func standardLaunch(utility string, sa string) {
 		podManifest := tp.RenderTemplate(tc)
 		common.Logger.Debugf("Manifest: \n%s\n", podManifest)
 		c.Client.CreatePod(podManifest, namespace)
+
+		if p.CreateIngress {
+			common.Logger.Debugf("Service Template file: %s", c.ServiceTemplateFile)
+			tps := template.New(c.ServiceTemplateFile)
+			serviceManifest := tps.RenderTemplate(tc)
+			common.Logger.Debugf("Manifest: \n%s\n", serviceManifest)
+			c.Client.CreateService(serviceManifest, namespace)
+
+			common.Logger.Debugf("Ingress Template file: %s", c.IngressTemplateFile)
+			tpi := template.New(c.IngressTemplateFile)
+			ingressManifest := tpi.RenderTemplate(tc)
+			common.Logger.Debugf("Manifest: \n%s\n", ingressManifest)
+			c.Client.CreateIngress(ingressManifest, namespace)
+		}
 
 		if c.EnableBashLinks {
 			hl := fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utility, shortUniq), utilMap[utility].ExecCommand)

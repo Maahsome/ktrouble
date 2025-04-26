@@ -18,10 +18,12 @@ import (
 type PodList []Pod
 
 type Pod struct {
-	Name       string `json:"name"`
-	Namespace  string `json:"namespace"`
-	Status     string `json:"status"`
-	LaunchedBy string `json:"launchedby"`
+	Name        string `json:"name"`
+	Namespace   string `json:"namespace"`
+	Status      string `json:"status"`
+	LaunchedBy  string `json:"launchedby"`
+	Service     string `json:"service"`
+	ServicePort string `json:"servicePort"`
 }
 
 // ToJSON - Write the output as JSON
@@ -72,7 +74,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "SHELL"}
+		headerText := []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "SHELL/SERVICE"}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
@@ -93,6 +95,13 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 		shellText := utilMap[baseTool].ExecCommand
 		if bashLinks {
 			shellText = termFormatter.Hyperlink(fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", v.Namespace, v.Name, utilMap[baseTool].ExecCommand), utilMap[baseTool].ExecCommand)
+			if v.Service != "" {
+				shellText = shellText + " " + termFormatter.Hyperlink(fmt.Sprintf("<bash:kubectl -n %s port-forward svc/%s %s:443>", v.Namespace, v.Service, v.ServicePort), fmt.Sprintf("%s:443", v.ServicePort))
+			}
+		} else {
+			if v.Service != "" {
+				shellText = shellText + fmt.Sprintf(" svc/%s %s:443", v.Service, v.ServicePort)
+			}
 		}
 		row = []string{
 			v.Name,

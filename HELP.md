@@ -72,15 +72,17 @@ Available Commands:
   version     Express the 'version' of ktrouble
 
 Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble [command] --help" for more information about a command.
 ```
@@ -103,15 +105,17 @@ Available Commands:
   utility     Add a utility definition to the ktrouble configuration
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble add [command] --help" for more information about a command.
 ```
@@ -140,15 +144,17 @@ Flags:
       --require-secrets      Set the Utilty to always prompt for secrets
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -177,15 +183,17 @@ Flags:
       --version string   Sepecify the version to display the changelog for
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -206,15 +214,17 @@ Flags:
   -a, --all   Choose from a list of running PODs from ALL users
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -232,15 +242,17 @@ Usage:
   ktrouble diff [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -262,15 +274,17 @@ Available Commands:
   template    Edit the default template, or specified one via --template/-t
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble edit [command] --help" for more information about a command.
 ```
@@ -295,15 +309,17 @@ Usage:
   ktrouble edit config [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -319,15 +335,17 @@ Usage:
   ktrouble edit template [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -345,15 +363,17 @@ Usage:
   ktrouble fields [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -406,15 +426,17 @@ Available Commands:
   utilities      Get a list of supported utility container images
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble get [command] --help" for more information about a command.
 ```
@@ -446,15 +468,17 @@ Aliases:
   configs, size, requests, request, limit, limits
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -474,15 +498,17 @@ Aliases:
   namespace, namespaces, ns
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -502,15 +528,17 @@ Aliases:
   node, nodes
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -530,15 +558,17 @@ Aliases:
   nodelabels, nodelabel, nl, labels
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -575,15 +605,17 @@ Flags:
   -a, --all   List running PODs from ALL users
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -609,15 +641,17 @@ Aliases:
   serviceaccount, serviceaccounts, sa
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -637,15 +671,17 @@ Aliases:
   sizes, size, requests, request, limit, limits
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -666,15 +702,17 @@ Aliases:
   templates, size, requests, request, limit, limits
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -694,15 +732,17 @@ Aliases:
   utilities, utility, utils, util, container, containers, image, images
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -723,6 +763,17 @@ EXAMPLE:
     > ktrouble launch --secrets
 
 EXAMPLE:
+  Launch a container that has nginx setup to consume two environment variables;
+  'APPLICATION_BASE_PATH' and 'LISTEN_PORT'.  The 'APPLICATION_BASE_PATH' is the
+  path that the application is served from, and 'LISTEN_PORT' is the port that
+  the application listens on.  This will also create a service and ingress for
+  the POD.  The host and path for the ingress can be specified with the --host
+  and --path flags.  The port that the POD listens on can be specified with the
+  --port flag.
+
+    > ktrouble launch --port 8080 --host myservice.example.com --path service-myservice --ingress
+
+EXAMPLE:
   TODO: add command line parameters that can be used to set all the options
   for launching a POD
 
@@ -735,20 +786,26 @@ Aliases:
   launch, create, apply, pod, l
 
 Flags:
-      --configs   Use this switch to prompt to mount configmaps in the POD
-      --secrets   Use this switch to prompt to mount secrets in the POD
-      --volumes   Use this switch to prompt to mount volumes in the POD
+      --configs       Use this switch to prompt to mount configmaps in the POD
+      --host string   Specify the host that the ingress will listen on, for configuration of ingress-nginx (default "flexo.bender.rocks")
+      --ingress       Use this switch to enable creating a service and ingress for the POD
+      --path string   Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes (default "service-futurama")
+      --port int      Specify the port that the POD listens on, used in the service and ingress settings (default 8080)
+      --secrets       Use this switch to prompt to mount secrets in the POD
+      --volumes       Use this switch to prompt to mount volumes in the POD
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -775,15 +832,17 @@ Flags:
   -a, --all   Specify --all to list locally modified definitions as pull selections
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -803,15 +862,17 @@ Usage:
   ktrouble push [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -830,15 +891,17 @@ Available Commands:
   utility     Remove a utility from the config file, or HIDE it if it is an upstream definition
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble remove [command] --help" for more information about a command.
 ```
@@ -861,15 +924,17 @@ Flags:
   -u, --name string   Unique name for your utility pod
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -888,15 +953,17 @@ Available Commands:
   config      Set configuration options for ktrouble
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble set [command] --help" for more information about a command.
 ```
@@ -957,15 +1024,17 @@ Flags:
   -u, --user string       Set your git username
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -984,15 +1053,17 @@ Usage:
   ktrouble status [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -1015,15 +1086,17 @@ Available Commands:
   utility     Update an existing utility pod definition in the local config.yaml file
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble update [command] --help" for more information about a command.
 ```
@@ -1059,15 +1132,17 @@ Flags:
       --toggle-hidden       Switch the current 'hidden' flag for the utility definition
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -1082,15 +1157,17 @@ Usage:
   ktrouble version [flags]
 
 Global Flags:
-      --config string      config file (default is $HOME/.splicectl/config.yml)
-  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
-      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
-  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
-      --no-headers         Suppress header output in Text output
-  -o, --output string      output types: json, text, yaml, gron, raw
-  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
-  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)

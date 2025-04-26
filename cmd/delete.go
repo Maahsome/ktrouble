@@ -27,11 +27,15 @@ var deleteCmd = &cobra.Command{
 				selectedPod := ask.PromptForPod(podList)
 
 				c.Client.DeletePod(selectedPod)
+				c.Client.DeleteAssociatedService(selectedPod)
+				c.Client.DeleteAssociatedIngress(selectedPod)
 			case count > 1:
 				selectedPods := ask.PromptForPodList(podList)
 
 				for _, p := range selectedPods {
 					c.Client.DeletePod(p)
+					c.Client.DeleteAssociatedService(p)
+					c.Client.DeleteAssociatedIngress(p)
 				}
 			}
 		} else {

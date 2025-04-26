@@ -31,6 +31,17 @@ func (l *LaunchCmd) Long() string {
 	longText = fmt.Sprintf("%s\n    > %s\n\n", longText, yellow(`ktrouble launch --secrets`))
 
 	longText += `EXAMPLE:
+  Launch a container that has nginx setup to consume two environment variables;
+  'APPLICATION_BASE_PATH' and 'LISTEN_PORT'.  The 'APPLICATION_BASE_PATH' is the
+  path that the application is served from, and 'LISTEN_PORT' is the port that
+  the application listens on.  This will also create a service and ingress for
+  the POD.  The host and path for the ingress can be specified with the --host
+  and --path flags.  The port that the POD listens on can be specified with the
+  --port flag.
+`
+	longText = fmt.Sprintf("%s\n    > %s\n\n", longText, yellow(`ktrouble launch --port 8080 --host myservice.example.com --path service-myservice --ingress`))
+
+	longText += `EXAMPLE:
   TODO: add command line parameters that can be used to set all the options
   for launching a POD
 `
