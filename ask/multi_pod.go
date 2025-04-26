@@ -16,7 +16,7 @@ type (
 	}
 )
 
-func PromptForPodList(podList *v1.PodList) []PodDetail {
+func PromptForPodList(podList *v1.PodList, prompt string) []PodDetail {
 
 	podArray := make(map[string]PodDetail, len(podList.Items))
 

@@ -21,6 +21,7 @@ type KubernetesClient interface {
 	CreatePod(podJSON string, namespace string)
 	CreateService(serviceJSON string, namespace string)
 	CreateIngress(ingressJSON string, namespace string)
+	GetNamespacePods(namespace string) *v1.PodList
 	GetCreatedPods(all bool) *v1.PodList
 	GetNamespaces() *v1.NamespaceList
 	GetNodes() *v1.NodeList
@@ -35,6 +36,9 @@ type KubernetesClient interface {
 	DetermineNamespace(nsParam string) string
 	GetCreatedIngresses(all bool) *networkingv1.IngressList
 	GetCreatedServices(all bool) *v1.ServiceList
+	AttachContainerToPod(namespace string, podName string, containerName string, image string, sleep string, mounts []v1.VolumeMount) error
+	GetAttachedContainers(all bool) *v1.PodList
+	GetPodMounts(namespace string, podName string) []v1.VolumeMount
 }
 
 type kubernetesClient struct {

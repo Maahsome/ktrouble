@@ -21,7 +21,7 @@ type (
 	}
 )
 
-func PromptForPod(podList *v1.PodList) PodDetail {
+func PromptForPod(podList *v1.PodList, prompt string) PodDetail {
 
 	podArray := make(map[string]PodDetail, len(podList.Items))
 
@@ -48,7 +48,7 @@ func PromptForPod(podList *v1.PodList) PodDetail {
 		{
 			Name: "podname",
 			Prompt: &survey.Select{
-				Message: "Choose a pod to delete:",
+				Message: prompt,
 				Options: podNames,
 			},
 		},
