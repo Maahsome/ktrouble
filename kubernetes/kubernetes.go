@@ -18,7 +18,7 @@ type KubernetesClient interface {
 	// GetProperty(property string) string
 	// SetProperty(property string, value string) string
 	CreatePod(podJSON string, namespace string)
-	GetCreatedPods() *v1.PodList
+	GetCreatedPods(all bool) *v1.PodList
 	GetNamespaces() *v1.NamespaceList
 	GetNodes() *v1.NodeList
 	GetServiceAccounts(namespace string) *v1.ServiceAccountList

@@ -1,8 +1,10 @@
 package add
 
 import (
+	"fmt"
 	"ktrouble/common"
 	"ktrouble/objects"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -33,6 +35,8 @@ var utilityCmd = &cobra.Command{
 				Fields:           c.Fields,
 				AdditionalFields: []string{"EXCLUDED"},
 			})
+		} else {
+			common.Logger.Error("Parameters passed in have failed checks.  Please review the warnings above")
 		}
 	},
 }
@@ -48,10 +52,17 @@ func checkAddUtilityParams() bool {
 		allParamsSet = false
 		common.Logger.Warn("The --repository/-r repository parameter must be set")
 	}
+	if len(utilityParam.Hint) > 0 {
+		if !fileExists(utilityParam.Hint) {
+			allParamsSet = false
+			common.Logger.Warn("The file pointed to by the --hint-file must exist")
+		}
+	}
 	if allParamsSet {
 		for _, v := range c.UtilDefs {
 			showUtil := false
 			u := objects.UtilityPodList{}
+			common.Logger.Debugf("utilityParam.Name: %s, exising: %s", utilityParam.Name, v.Name)
 			if utilityParam.Name == v.Name {
 				allParamsSet = false
 				showUtil = true
@@ -81,13 +92,36 @@ func checkAddUtilityParams() bool {
 
 func addUtility() (objects.UtilityPod, error) {
 
-	newUtil := objects.UtilityPod{
-		Name:             utilityParam.Name,
-		Repository:       utilityParam.Repository,
-		ExecCommand:      utilityParam.ExecCommand,
-		Source:           "local",
-		ExcludeFromShare: utilityParam.ExcludeFromShare,
+	appSemVer, perr := common.ParseSemver(c.VersionDetail.SemVer)
+	if perr != nil {
+		return objects.UtilityPod{}, perr
 	}
+
+	newUtil := objects.UtilityPod{
+		Name:              utilityParam.Name,
+		Repository:        utilityParam.Repository,
+		ExecCommand:       utilityParam.ExecCommand,
+		Source:            "local",
+		ExcludeFromShare:  utilityParam.ExcludeFromShare,
+		RequireSecrets:    utilityParam.RequireSecrets,
+		RequireConfigmaps: utilityParam.RequireConfigmaps,
+		Version:           fmt.Sprintf("v%d", appSemVer.Major),
+	}
+
+	hintData := []byte{}
+
+	if len(utilityParam.Hint) > 0 {
+		// read the file into hintData
+		var rerr error
+		hintData, rerr = os.ReadFile(utilityParam.Hint)
+		if rerr != nil {
+			return objects.UtilityPod{}, rerr
+		}
+
+	}
+
+	newUtil.Hint = string(hintData)
+
 	c.UtilDefs = append(c.UtilDefs, newUtil)
 	viper.Set("utilityDefinitions", c.UtilDefs)
 	verr := viper.WriteConfig()
@@ -105,4 +139,13 @@ func init() {
 	utilityCmd.Flags().StringVarP(&utilityParam.Repository, "repository", "r", "", "Repository and tag for your utility container, eg: cmaahs/basic-tools:latest")
 	utilityCmd.Flags().StringVarP(&utilityParam.ExecCommand, "cmd", "c", "/bin/sh", "Default shell/command to use when 'exec'ing into the POD")
 	utilityCmd.Flags().BoolVarP(&utilityParam.ExcludeFromShare, "exclude", "e", false, "Exclude from 'push' to central repository")
+	utilityCmd.Flags().BoolVar(&utilityParam.RequireSecrets, "require-secrets", false, "Set the Utilty to always prompt for secrets")
+	utilityCmd.Flags().BoolVar(&utilityParam.RequireConfigmaps, "require-configmaps", false, "Set the Utilty to always prompt for configmaps")
+	utilityCmd.Flags().StringVar(&utilityParam.Hint, "hint-file", "", "Specify a file containing the hint text")
+}
+
+// fileExists checks if file exists
+func fileExists(fileName string) bool {
+	_, err := os.Stat(fileName)
+	return err == nil
 }

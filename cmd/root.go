@@ -5,6 +5,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"ktrouble/cmd/add"
 	"ktrouble/cmd/edit"
@@ -174,7 +175,7 @@ func needKubernetes(arg string, sub string) bool {
 	}
 
 	switch arg {
-	case "edit", "changelog", "changes", "fields", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update", "modify":
+	case "edit", "changelog", "changes", "fields", "help", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update", "modify":
 		return false
 	}
 	return true
@@ -184,7 +185,6 @@ func buildRootCmd() *cobra.Command {
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.splicectl/config.yml)")
 	RootCmd.PersistentFlags().StringVarP(&c.OutputFormat, "output", "o", "", "output types: json, text, yaml, gron, raw")
 	RootCmd.PersistentFlags().BoolVar(&c.NoHeaders, "no-headers", false, "Suppress header output in Text output")
-	// RootCmd.PersistentFlags().BoolVar(&c., "no-headers", false, "Suppress header output in Text output")
 	RootCmd.PersistentFlags().StringVarP(&c.LogLevel, "log-level", "v", "", "Set the logging level: trace,debug,info,warning,error,fatal")
 	RootCmd.PersistentFlags().StringVar(&c.LogFile, "log-file", "", "Set the logging level: trace,debug,info,warning,error,fatal")
 	RootCmd.PersistentFlags().StringVarP(&c.Namespace, "namespace", "n", "", "Specify the namespace to run in, ENV NAMESPACE then -n for preference")
@@ -477,6 +477,35 @@ func createDefaultTemplateFile(fileName string) {
 				logrus.Error("failed to write the default template")
 			}
 		}
+	} else {
+		// determine if we can update this file
+		currentTemplateData, rerr := os.ReadFile(fileName)
+		if rerr != nil {
+			logrus.Fatal("Unable to read from the existing template file, permission issue?")
+		}
+
+		if string(currentTemplateData) != defaults.DefaultTemplate() {
+			backupFile := fmt.Sprintf("%s.saved-%s", fileName, time.Now().Format("20060102150405"))
+			logrus.Warnf("current default template has been updated, the previous has been saved as %s.", backupFile)
+			// create the backup
+			if fileExists(backupFile) {
+				logrus.Fatalf("The backup file, %s, already exists, we cannot proceed since an update to the default template is needed.  Please remove the file.", backupFile)
+			}
+			mode := int(0600)
+			os.WriteFile(backupFile, currentTemplateData, os.FileMode(mode))
+			// overwrite the current file
+			file, ferr := os.Create(fileName)
+			if ferr != nil {
+				logrus.Fatalf("Unable to create the default template file: %s", fileName)
+			}
+			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
+				logrus.Error("Chmod for default template file failed, please set the mode to 0600.")
+			}
+			_, werr := file.WriteString(defaults.DefaultTemplate())
+			if werr != nil {
+				logrus.Error("failed to write the default template")
+			}
+		}
 	}
 }
 
@@ -507,4 +536,10 @@ func ClientSemVer() (string, string) {
 		logrus.Fatalf("the semver in the current build is not valid: %s", semVer)
 	}
 	return submatches[0], submatches[1]
+}
+
+// fileExists checks if file exists
+func fileExists(fileName string) bool {
+	_, err := os.Stat(fileName)
+	return err == nil
 }

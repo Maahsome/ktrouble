@@ -18,9 +18,10 @@ import (
 type PodList []Pod
 
 type Pod struct {
-	Name      string `json:"name"`
-	Namespace string `json:"namespace"`
-	Status    string `json:"status"`
+	Name       string `json:"name"`
+	Namespace  string `json:"namespace"`
+	Status     string `json:"status"`
+	LaunchedBy string `json:"launchedby"`
 }
 
 // ToJSON - Write the output as JSON
@@ -71,7 +72,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
 	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "STATUS", "SHELL"}
+		headerText := []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "SHELL"}
 		table.SetHeader(headerText)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
@@ -97,6 +98,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 			v.Name,
 			v.Namespace,
 			v.Status,
+			v.LaunchedBy,
 			shellText,
 		}
 		table.Append(row)

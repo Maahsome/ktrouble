@@ -8,6 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type GetRunningParam struct {
+	All bool
+}
+
+var getRunningParam = GetRunningParam{}
+
 // runningCmd represents the running command
 var runningCmd = &cobra.Command{
 	Use:     "running",
@@ -17,7 +23,7 @@ var runningCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if c.Client != nil {
-			podList := c.Client.GetCreatedPods()
+			podList := c.Client.GetCreatedPods(getRunningParam.All)
 
 			podData := objects.PodList{}
 			for _, v := range podList.Items {
@@ -26,9 +32,10 @@ var runningCmd = &cobra.Command{
 					status = "Terminating"
 				}
 				podData = append(podData, objects.Pod{
-					Name:      v.Name,
-					Namespace: v.Namespace,
-					Status:    status,
+					Name:       v.Name,
+					Namespace:  v.Namespace,
+					Status:     status,
+					LaunchedBy: v.Labels["launchedby"],
 				})
 			}
 
@@ -47,4 +54,5 @@ var runningCmd = &cobra.Command{
 
 func init() {
 	getCmd.AddCommand(runningCmd)
+	runningCmd.Flags().BoolVarP(&getRunningParam.All, "all", "a", false, "List running PODs from ALL users")
 }

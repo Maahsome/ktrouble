@@ -17,12 +17,16 @@ import (
 type UtilityPodList []UtilityPod
 
 type UtilityPod struct {
-	Name             string `json:"name"`
-	Repository       string `json:"repository"`
-	ExecCommand      string `json:"execcommand"`
-	Source           string `json:"source"`
-	ExcludeFromShare bool   `json:"excludefromshare"`
-	Hidden           bool   `json:"hidden"`
+	Name              string `json:"name"`
+	Repository        string `json:"repository"`
+	ExecCommand       string `json:"execcommand"`
+	Source            string `json:"source"`
+	RequireSecrets    bool   `json:"requiresecrets"`
+	RequireConfigmaps bool   `json:"requireconfigmaps"`
+	ExcludeFromShare  bool   `json:"excludefromshare"`
+	Hidden            bool   `json:"hidden"`
+	Hint              string `json:"hint"`
+	Version           string `json:"version"`
 }
 
 // ToJSON - Write the output as JSON
@@ -128,6 +132,12 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 				row = append(row, fmt.Sprintf("%t", mapList[v].ExcludeFromShare))
 			case "SOURCE":
 				row = append(row, mapList[v].Source)
+			case "REQUIRESECRETS":
+				row = append(row, fmt.Sprintf("%t", mapList[v].RequireSecrets))
+			case "REQUIRECONFIGMAPS":
+				row = append(row, fmt.Sprintf("%t", mapList[v].RequireConfigmaps))
+			case "HINT":
+				row = append(row, mapList[v].Hint)
 			}
 		}
 		if !mapList[v].Hidden || to.ShowHidden {
