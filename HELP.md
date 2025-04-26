@@ -7,6 +7,7 @@
 - [add utility](#add-utility)
 - [changelog](#changelog)
 - [delete](#delete)
+- [diff](#diff)
 - [edit](#edit)
 - [edit config](#edit-config)
 - [edit template](#edit-template)
@@ -55,6 +56,7 @@ Available Commands:
   changelog   Get changelog information
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
+  diff        Get a context diff on each utility definition
   edit        Edit various objects for ktrouble
   fields      Display a list of valid fields to use with the --fields/-f parameter for each command
   genhelp     Output help from all the sub commands
@@ -202,6 +204,32 @@ Usage:
 
 Flags:
   -a, --all   Choose from a list of running PODs from ALL users
+
+Global Flags:
+      --config string      config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings     Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --log-file string    Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string   Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string   Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers         Suppress header output in Text output
+  -o, --output string      output types: json, text, yaml, gron, raw
+  -s, --show-hidden        Show entries with the 'hidden' property set to 'true'
+  -t, --template string    Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## diff
+
+```plaintext
+EXAMPLE:
+  The 'diff' command will list the differences between your local 'config.yaml'
+  file 'utilities' definitions and the remote repository.
+
+  > ktrouble diff
+
+Usage:
+  ktrouble diff [flags]
 
 Global Flags:
       --config string      config file (default is $HOME/.splicectl/config.yml)
