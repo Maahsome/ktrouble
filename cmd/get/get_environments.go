@@ -7,18 +7,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// utilitiesCmd represents the utilities command
-var utilitiesCmd = &cobra.Command{
-	Use:     "utilities",
-	Aliases: defaults.GetUtilitesAliases,
-	Short:   getUtilitiesHelp.Short(),
-	Long:    getUtilitiesHelp.Long(),
+// environmentsCmd represents the utilities command
+var environmentsCmd = &cobra.Command{
+	Use:     "environments",
+	Aliases: defaults.EnvironmentAliases,
+	Short:   getEnvironmentsHelp.Short(),
+	Long:    getEnvironmentsHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
+
 		additionalFields := []string{}
 		if c.ShowHidden {
 			additionalFields = append(additionalFields, []string{"HIDDEN", "REMOVE_UPSTREAM"}...)
 		}
-		c.OutputData(&c.UtilDefs, objects.TextOptions{
+		c.OutputData(&c.EnvDefs, objects.TextOptions{
 			NoHeaders:        c.NoHeaders,
 			ShowHidden:       c.ShowHidden,
 			Fields:           c.Fields,
@@ -28,5 +29,5 @@ var utilitiesCmd = &cobra.Command{
 }
 
 func init() {
-	getCmd.AddCommand(utilitiesCmd)
+	getCmd.AddCommand(environmentsCmd)
 }

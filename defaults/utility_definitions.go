@@ -31,6 +31,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["dnsutils"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "psql-curl",
@@ -42,6 +44,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["psql-curl"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "psqlutils15",
@@ -53,6 +57,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["psqlutils15"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "psqlutils14",
@@ -64,6 +70,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["psqlutils14"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "awscli",
@@ -75,6 +83,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["awscli"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "gcloudutils",
@@ -86,6 +96,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["gcloudutils"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "azutils",
@@ -97,6 +109,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["azutils"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "mysqlutils5",
@@ -108,6 +122,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["mysqlutils5"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "mysqlutils8",
@@ -119,6 +135,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["mysqlutils8"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "redis6",
@@ -130,6 +148,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["redis6"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "curl",
@@ -141,6 +161,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["curl"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 		{
 			Name:              "basic-tools",
@@ -152,6 +174,8 @@ func UtilityDefinitions() []objects.UtilityPod {
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
 			Hint:              utilityDefinitionHints["basic-tools"],
+			RemoveUpstream:    false,
+			Environments:      []string{},
 		},
 	}
 

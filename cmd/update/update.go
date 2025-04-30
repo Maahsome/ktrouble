@@ -9,6 +9,7 @@ import (
 )
 
 var updateHelp = help.UpdateCmd{}
+var updateEnvironmentHelp = help.UpdateEnvironmentCmd{}
 var updateUtilityHelp = help.UpdateUtilityCmd{}
 
 var updateCmd = &cobra.Command{

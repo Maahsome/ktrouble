@@ -22,7 +22,8 @@ func displayFieldHelp() {
 
   COMMAND: get|add|update|remove utility
 
-      FIELDS: NAME, REPOSITORY, EXEC, HIDDEN, EXCLUDED, SOURCE
+      FIELDS: NAME, REPOSITORY, EXEC, HIDDEN, EXCLUDED, SOURCE, ENVIRONMENTS,
+              REQUIRECONFIGMAPS, REQUIRESECRETS, HINT, REMOVE_UPSTREAM
 `
 
 	fmt.Println(help)

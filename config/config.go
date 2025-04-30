@@ -12,6 +12,7 @@ type (
 	Config struct {
 		VersionDetail       objects.Version
 		VersionJSON         string
+		Semver              SemverParts
 		OutputFormat        string
 		FormatOverridden    bool
 		NoHeaders           bool
@@ -23,6 +24,10 @@ type (
 		EnableBashLinks     bool
 		UniqIdLength        int
 		ShowHidden          bool
+		ConfigVersion       string
+		OutputDefaults      map[string][]string
+		EnvMap              map[string]objects.Environment
+		EnvDefs             objects.EnvironmentList
 		UtilMap             map[string]objects.UtilityPod
 		UtilDefs            objects.UtilityPodList
 		SizeMap             map[string]objects.ResourceSize

@@ -8,6 +8,63 @@ A CLI tool for launching troubleshooting docker images into a kubernetes cluster
 brew install maahsome/tap/ktrouble --formula
 ```
 
+## How everything is put together
+
+The `ktrouble` tool keeps a list of utility definitions, and some tool
+configuration in a local config file.  Each definition has a configuration that
+looks like this:
+
+```yaml
+utilitydefinitions:
+    - name: dnsutils
+      repository: gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+      execcommand: /bin/sh
+      requiresecrets: false
+      requireconfigmaps: false
+      excludefromshare: false
+      hidden: false
+      hint: Image has basic DNS investigation tools like nslookup and dig
+      environments: []
+```
+
+The `repository` property here should likely be named `image`, since it points
+to the image itself.  In order to support custom docker registries, we use an
+`environments` mechanism.  There are environments defined in the config file
+like this:
+
+```yaml
+environments:
+    - excludefromshare: false
+      hidden: false
+      name: lowers
+      repository: us-docker.pkg.dev/lowers-repo
+    - excludefromshare: false
+      hidden: false
+      name: uppers
+      repository: us-docker.pkg.dev/uppers-repo
+```
+
+This might represent dev/prod, uppers/lowers, however you like to define each
+environment. Once these  environments are defined, you can assign environments
+to a `utility definition`.  When we go to launch a POD, the utility will be
+presented multiple times, prefixed with each of the `environment` names.  The
+`image` in the POD manifest will combine the `repository` from the `environment`
+with the `repository` from the `utility` definition, separated by a `/` of
+course.
+
+### git repository
+
+As an initial version, the interaction with the defined git repository was to
+simply store each utility definition as a `.yaml` file in the root of the
+repository.  As features have been added that required a change in the config
+structures, the `v0.n.n` version of `ktrouble` maintains the list in the root of
+the repository.  When the `major` of the application `semver` changes, a new
+directory wil be created in the repository, eg: "v1" for `v1.n.n`, and "v2" for
+`v2.n.n`.  The `ktrouble` tool will prompt to perform a migration, in which it
+will read all the files from the previous directory, modify the definitions, and
+write them out to the new directory, where `ktrouble` will interact for that
+`version`.
+
 ## Getting Started
 
 Once you have `ktrouble` installed, here are the quick getting running steps:
@@ -34,12 +91,24 @@ ktrouble remove utility -u helm-kubectl311
 ktrouble remove utility -u alpine3
 ktrouble update utility -u alpine3 --toggle-hidden
 
-# Interactions with 'futurama/farnsworth/tools/ktrouble-utils' repository
+# to get a verbose listing of definitions
+ktrouble get util -f name,repository,exec,hidden,excluded,source
+
+# an example of a docker image that might live in two different registries
+ktrouble add environment -n lowers -r "us-docker.pkg.dev/lowers-repo"
+ktrouble add environment -n uppers -r "us-docker.pkg.dev/uppers-repo"
+ktrouble get environments
+ktrouble add utility -u custom-utility -r "docker/custom-utility:0.0.1" -e 'lowers,uppers' -c '/bin/bash'
+ktrouble get utility
+# show the environments for all the defined utilities
+ktrouble get utility --fields 'NAME,REPOSITORY,ENVIRONMENTS'
+
+# Interactions with 'maahsome/ktrouble-utils' repository
 # setup the git credentials
-# if you have an environment variable that contains the token, eg. GITLAB_TOKEN
-ktrouble set config --tokenvar GITHUB_TOKEN --user christopher.maahs
+# if you have an environment variable that contains the token, eg. GITHUB_TOKEN
+ktrouble set config --tokenvar GITHUB_TOKEN --user cmaahs
 # if you would rather store the token in the config.yaml file
-ktrouble set config --token "<your token>" --user christopher.maahs
+ktrouble set config --token "<your token>" --user cmaahs
 
 # once configured, you can run the commands to interact with the repository
 # to pull new items into your local config.yaml file
@@ -49,10 +118,22 @@ ktrouble pull
 ktrouble status
 # to pull items that are listed as "different"
 ktrouble pull -a
+# get a list of differences for items marked as "different" in the status
+ktrobule diff
 # to push one of your local utility definitions up to the common repository
 ktrouble push
-# to get a verbose listing of definitions
-ktrouble get util -f name,repository,exec,hidden,excluded,source
+
+# the environments can also be stored and sourced from the defined git repository.
+# we have extended the status,pull,push,diff methods to handle the environments
+# See the status of defined environments
+ktrouble status --env
+# pull environment definitions from git, this simply pulls them all
+ktrouble pull --env
+# push environments to upstream, this also pushes all environments that are not
+# set to be excluded
+ktrouble push --env
+# get a list of differences for items marked as "different" in the status
+ktrouble diff --env
 
 # and or course
 ktrouble --help
@@ -111,9 +192,17 @@ jira readme
 - [ ] KT-70:  When mounting configmaps with a `.` in the name, a naming error occurs
 - [ ] KT-72:  Add the ability to change the "sleep" list from the CLI
 - [ ] KT-73:  Add --build-cmd switch for launch and attach
-- [ ] KT-74:  Add environment support to support same images in different registries
+- [ ] KT-76:  Better defaults around git configuration
+- [ ] KT-82:  Create a PUBLIC docker image that can be used to test the ingress/service feature
+- [ ] KT-85:  fetch an environments definition from the upstream git repository, since environments will be specific.
+- [ ] KT-86:  Add the logger to the Config so it can be passed around
+- [ ] KT-87:  Need a way to DELETE an upstream utility
+- [ ] KT-88:  Need a way to DELETE an upstream environment
+- [ ] KT-89:  Add a config option to set the FIELDS to be outputted for each object type
+- [ ] KT-90:  Update ALL objects to use c.Fields to drive output fields
 
 ### Completed
 
 - [x] KT-62:  Add "requireSecret", "requireConfigmap", and "containerHint" as YAML fields in the utility definitions
 - [x] KT-66:  Fix: volume names can only be 63 characters long
+- [x] KT-74:  Add environment support to support same images in different registries

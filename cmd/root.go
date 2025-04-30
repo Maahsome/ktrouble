@@ -54,6 +54,7 @@ var (
 
 var deleteHelp = help.DeleteCmd{}
 var launchHelp = help.LaunchCmd{}
+var migrateHelp = help.MigrateCmd{}
 var pullHelp = help.PullCmd{}
 var pushHelp = help.PushCmd{}
 var statusHelp = help.StatusCmd{}
@@ -78,6 +79,8 @@ var RootCmd = &cobra.Command{
   > ktrouble launch
 `,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+
+		var err error
 
 		logFile, _ := cmd.Flags().GetString("log-file")
 		logLevel, _ := cmd.Flags().GetString("log-level")
@@ -104,6 +107,25 @@ var RootCmd = &cobra.Command{
 		c.VersionDetail.GitCommit = gitCommit
 		c.VersionDetail.GitRef = gitRef
 		c.VersionJSON = fmt.Sprintf("{\"SemVer\": \"%s\", \"BuildDate\": \"%s\", \"GitCommit\": \"%s\", \"GitRef\": \"%s\"}", semVer, buildDate, gitCommit, gitRef)
+		c.Semver, err = config.ParseSemver(semVer)
+		if err != nil {
+			common.Logger.WithError(err).Fatal("Failed to parse the semver")
+		}
+
+		// Upgrade check and upgrade config
+		if c.ConfigVersion != fmt.Sprintf("v%d", c.Semver.Major) {
+			common.Logger.Warnf("Config version %s is not the same as the current application version %s, migrating...", c.ConfigVersion, fmt.Sprintf("v%d", c.Semver.Major))
+			migrate := c.MigrateLocal(fmt.Sprintf("v%d", c.Semver.Major))
+			if migrate {
+				c.ConfigVersion = fmt.Sprintf("v%d", c.Semver.Major)
+				viper.Set("configVersion", c.ConfigVersion)
+				verr := viper.WriteConfig()
+				if verr != nil {
+					logrus.WithError(verr).Info("Failed to write config")
+				}
+			}
+		}
+
 		if c.OutputFormat != "" {
 			c.FormatOverridden = true
 			c.NoHeaders = false
@@ -117,7 +139,7 @@ var RootCmd = &cobra.Command{
 			}
 		}
 
-		if os.Args[1] == "pull" || os.Args[1] == "push" || os.Args[1] == "status" || os.Args[1] == "diff" {
+		if os.Args[1] == "pull" || os.Args[1] == "push" || os.Args[1] == "status" || os.Args[1] == "diff" || os.Args[1] == "migrate" {
 			gitUser := viper.GetString("gitUser")
 			if len(gitUser) == 0 {
 				common.Logger.Fatal("gitUser is not set, use 'ktrouble set config --help'")
@@ -140,13 +162,15 @@ var RootCmd = &cobra.Command{
 				common.Logger.Fatalf("no git token set, gitToken or %s ENV VAR is not set, use 'ktrouble set config --help'", gitTokenVar)
 			}
 
-			c.GitUpstream = gitupstream.New(gitUser, gitToken, gitURL)
+			common.Logger.Tracef("Semver.Major: %d", c.Semver.Major)
+			c.GitUpstream = gitupstream.New(gitUser, gitToken, gitURL, fmt.Sprintf("v%d", c.Semver.Major))
 		}
 		subCmd := ""
 		if len(os.Args) > 2 {
 			subCmd = os.Args[2]
 		}
 		if needKubernetes(os.Args[1], subCmd) {
+			common.Logger.Trace("Creating Kubernetes client")
 			c.Client = kubernetes.New()
 		}
 	},
@@ -163,25 +187,67 @@ func containsAlias(v string, a []string) bool {
 
 func needKubernetes(arg string, sub string) bool {
 
-	if arg == "diff" {
-		return false
+	if arg == "launch" {
+		switch {
+		case containsAlias(arg, defaults.LaunchAliases):
+			return true
+		}
+	}
+	if arg == "attach" {
+		switch {
+		case containsAlias(arg, defaults.AttachAliases):
+			return true
+		}
 	}
 	if arg == "get" {
 		switch sub {
-		case "utilities", "sizes", "templates":
+		case "attachments", "ingresses", "namespace", "node", "nodelabels", "running", "serviceaccount", "services":
 			return false
 		}
 		switch {
-		case containsAlias(sub, defaults.GetSizesAliases), containsAlias(sub, defaults.GetUtilitesAliases):
+		case containsAlias(sub, defaults.GetIngressesAliases),
+			containsAlias(sub, defaults.GetNamespacesAliases),
+			containsAlias(sub, defaults.GetNodesAliases),
+			containsAlias(sub, defaults.GetNodeLabelsAliases),
+			containsAlias(sub, defaults.GetRunningAliases),
+			containsAlias(sub, defaults.GetServiceAccountsAliases),
+			containsAlias(sub, defaults.GetServicesAliases):
 			return false
 		}
 	}
 
-	switch arg {
-	case "edit", "changelog", "changes", "fields", "help", "publish", "version", "genhelp", "pull", "push", "status", "add", "remove", "set", "update", "modify":
-		return false
-	}
-	return true
+	// if arg == "get" {
+	// 	switch sub {
+	// 	case "configs", "environments", "utilities", "sizes", "templates":
+	// 		return false
+	// 	}
+	// 	switch {
+	// 	case containsAlias(sub, defaults.EnvironmentAliases), containsAlias(sub, defaults.GetSizesAliases), containsAlias(sub, defaults.GetUtilitesAliases):
+	// 		return false
+	// 	}
+	// }
+
+	// switch arg {
+	// case "add":
+	// 	switch {
+	// 	case containsAlias(arg, defaults.AddAliases):
+	// 		return false
+	// 	}
+	// case "changelog":
+	// 	switch {
+	// 	case containsAlias(arg, defaults.ChangelogAliases):
+	// 		return false
+	// 	}
+	// case "remove":
+	// 	switch {
+	// 	case containsAlias(arg, defaults.RemoveAliases):
+	// 		return false
+	// 	}
+	// case "diff", "edit", "changes", "fields", "help", "publish", "version", "genhelp", "pull", "push", "status", "set", "update", "modify":
+	// 	return false
+	// }
+
+	return false
 }
 
 func buildRootCmd() *cobra.Command {
@@ -271,9 +337,33 @@ func initConfig() {
 		logrus.Warn("Failed to read viper config file.")
 	}
 
-	// Utility Definitions
-	err := viper.UnmarshalKey("utilityDefinitions", &c.UtilDefs)
+	// ConfigVersion
+	if viper.IsSet("configVersion") {
+		c.ConfigVersion = viper.GetString("configVersion")
+	} else {
+		viper.Set("configVersion", "v0")
+		c.ConfigVersion = "v0"
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	}
+
+	// Environment Definitions
+	err := viper.UnmarshalKey("environments", &c.EnvDefs)
 	if err != nil {
+		logrus.Fatal("Error unmarshalling environment defs...")
+	}
+	if len(c.EnvDefs) > 0 {
+		c.EnvMap = make(map[string]objects.Environment, len(c.EnvDefs))
+		for _, v := range c.EnvDefs {
+			c.EnvMap[v.Name] = v
+		}
+	}
+
+	// Utility Definitions
+	uerr := viper.UnmarshalKey("utilityDefinitions", &c.UtilDefs)
+	if uerr != nil {
 		logrus.Fatal("Error unmarshalling utility defs...")
 	}
 	if len(c.UtilDefs) == 0 {

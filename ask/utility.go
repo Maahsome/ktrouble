@@ -1,6 +1,7 @@
 package ask
 
 import (
+	"fmt"
 	"os"
 	"sort"
 
@@ -16,12 +17,20 @@ type (
 	}
 )
 
-func PromptForUtility(utils []objects.UtilityPod, showHidden bool) string {
+func PromptForUtility(utils []objects.UtilityPod, envMap map[string]objects.Environment, showHidden bool) string {
 
 	var utilArray []string
 	for _, v := range utils {
 		if !v.Hidden || showHidden {
-			utilArray = append(utilArray, v.Name)
+			if v.Environments == nil {
+				utilArray = append(utilArray, v.Name)
+			} else {
+				for _, env := range v.Environments {
+					if !envMap[env].Hidden || showHidden {
+						utilArray = append(utilArray, fmt.Sprintf("%s/%s", env, v.Name))
+					}
+				}
+			}
 		}
 	}
 	sort.Strings(utilArray)

@@ -17,28 +17,16 @@ func standardAttach(utility string, sa string) {
 
 	termFormatter := termenv.NewOutput(os.Stdout)
 	if c.Client != nil {
-		utilMap := make(map[string]objects.UtilityPod)
-		for _, v := range c.UtilDefs {
-			utilMap[v.Name] = objects.UtilityPod{
-				Name:              v.Name,
-				Repository:        v.Repository,
-				ExecCommand:       v.ExecCommand,
-				RequireSecrets:    v.RequireSecrets,
-				RequireConfigmaps: v.RequireConfigmaps,
-				Hint:              v.Hint,
-			}
-		}
+		utilMap := objects.GetUtilityMap(c.UtilDefs, c.EnvMap)
 
 		if utility == "" {
-			utility = ask.PromptForUtility(c.UtilDefs, c.ShowHidden)
+			utility = ask.PromptForUtility(c.UtilDefs, c.EnvMap, c.ShowHidden)
 		}
 
 		// Display the HINT
 		if len(utilMap[utility].Hint) > 0 {
 			fmt.Println(utilMap[utility].Hint)
 		}
-
-		utilRepository := utilMap[utility].Repository
 
 		namespace := c.Client.DetermineNamespace(c.Namespace)
 
@@ -70,7 +58,7 @@ func standardAttach(utility string, sa string) {
 		shortUniq := randSeq(c.UniqIdLength)
 		containerName := fmt.Sprintf("%s-%s", utility, shortUniq)
 		aerr := c.Client.AttachContainerToPod(namespace, selectedPod.Name, containerName,
-			utilRepository, sleepTime, selectedMounts)
+			utilMap[utility].Repository, sleepTime, selectedMounts)
 		if aerr != nil {
 			common.Logger.WithError(aerr).Fatal("Failed to attach container to pod")
 		}
