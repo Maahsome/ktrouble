@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"ktrouble/common"
 	"ktrouble/objects"
 	"sort"
@@ -9,6 +10,12 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
+
+type diffParams struct {
+	Environments bool
+}
+
+var diffP statusParams
 
 // diffCmd represents the status command
 var diffCmd = &cobra.Command{
@@ -21,8 +28,32 @@ var diffCmd = &cobra.Command{
   > ktrouble diff
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		utilityDefinitionDiffs()
+		if !c.GitUpstream.VersionDirectoryExists(fmt.Sprintf("v%d", c.Semver.Major)) {
+			if c.Semver.Major == 0 {
+				common.Logger.Error("The repository is not initialized, please create the repository usign git before running this command")
+				return
+			} else {
+				common.Logger.Error("The version directory in the repository does not exist.  Please run 'ktrouble migrate' to migrate data to the new version")
+				common.Logger.Error("The existing data will remain in the old version directory")
+				return
+			}
+		}
+		if diffP.Environments {
+			environmentDefinitionDiffs()
+		} else {
+			utilityDefinitionDiffs()
+		}
 	},
+}
+
+func unmarshallEnvDefinition(env objects.Environment) string {
+	envYAML, rerr := yaml.Marshal(env)
+	if rerr != nil {
+		return ""
+	}
+
+	return strings.Replace(string(envYAML), "\n", "\n    ", -1)
+
 }
 
 func unmarshallUtilityDefinition(util objects.UtilityPod) string {
@@ -33,6 +64,53 @@ func unmarshallUtilityDefinition(util objects.UtilityPod) string {
 
 	return strings.Replace(string(utilYAML), "\n", "\n    ", -1)
 
+}
+
+func environmentDefinitionDiffs() {
+	envsDifferent := map[string]objects.Status{}
+
+	status := EnvironmentDefinitionStatus()
+	for _, s := range status {
+		if s.Status != "different" {
+			envsDifferent[s.Name] = s
+		}
+	}
+
+	_, remoteDefsMap := c.GitUpstream.GetUpstreamEnvDefs()
+
+	envNames := []string{}
+	for _, l := range c.EnvDefs {
+		envNames = append(envNames, l.Name)
+	}
+	sort.Strings(envNames)
+
+	localDefs := "environments:\n"
+
+	for _, l := range envNames {
+		if _, ok := envsDifferent[l]; !ok {
+			eDef := c.EnvMap[l]
+			yDef := unmarshallEnvDefinition(eDef)
+			localDefs += "  - " + yDef + "\n"
+		}
+	}
+
+	remoteNames := []string{}
+	for _, r := range remoteDefsMap {
+		remoteNames = append(remoteNames, r.Name)
+	}
+	sort.Strings(remoteNames)
+
+	remoteDefs := "environments:\n"
+	for _, l := range remoteNames {
+		if _, ok := envsDifferent[l]; !ok {
+			eDef := remoteDefsMap[l]
+			yDef := unmarshallEnvDefinition(eDef)
+			remoteDefs += "  - " + yDef + "\n"
+		}
+	}
+	common.Logger.Tracef("local: %s", localDefs)
+	common.Logger.Tracef("\n\n-------------------------------\n\nremote: %s", remoteDefs)
+	common.OutputContextDiff([]byte(localDefs), []byte(remoteDefs), 5)
 }
 
 func utilityDefinitionDiffs() {
@@ -46,7 +124,7 @@ func utilityDefinitionDiffs() {
 		}
 	}
 
-	_, remoteDefsMap := c.GitUpstream.GetUpstreamDefs()
+	_, remoteDefsMap, _, _ := c.GitUpstream.GetUpstreamDefs()
 
 	utilNames := []string{}
 	for _, l := range c.UtilDefs {
@@ -85,4 +163,5 @@ func utilityDefinitionDiffs() {
 
 func init() {
 	RootCmd.AddCommand(diffCmd)
+	diffCmd.Flags().BoolVar(&diffP.Environments, "env", false, "Use this switch to operate on the environment definitions")
 }

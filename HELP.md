@@ -4,6 +4,7 @@
 
 - [_main_](#ktrouble)
 - [add](#add)
+- [add environment](#add-environment)
 - [add utility](#add-utility)
 - [attach](#attach)
 - [changelog](#changelog)
@@ -16,6 +17,7 @@
 - [get](#get)
 - [get attachments](#get-attachments)
 - [get configs](#get-configs)
+- [get environments](#get-environments)
 - [get ingresses](#get-ingresses)
 - [get namespace](#get-namespace)
 - [get node](#get-node)
@@ -28,14 +30,17 @@
 - [get templates](#get-templates)
 - [get utilities](#get-utilities)
 - [launch](#launch)
+- [migrate](#migrate)
 - [pull](#pull)
 - [push](#push)
 - [remove](#remove)
+- [remove environment](#remove-environment)
 - [remove utility](#remove-utility)
 - [set](#set)
 - [set config](#set-config)
 - [status](#status)
 - [update](#update)
+- [update environment](#update-environment)
 - [update utility](#update-utility)
 - [version](#version)
 
@@ -69,6 +74,7 @@ Available Commands:
   get         Get various internal configuration and kubernetes resource listings
   help        Help about any command
   launch      Launch a kubernetes troubleshooting pod
+  migrate     Migrate a repostiory to the current version
   pull        Pull utility definitions from git
   push        Push local objects to upstream git repository
   remove      Remove various objects for ktrouble
@@ -107,7 +113,11 @@ Usage:
   ktrouble add [flags]
   ktrouble add [command]
 
+Aliases:
+  add, mk
+
 Available Commands:
+  environment Add an environment definition to the ktrouble configuration
   utility     Add a utility definition to the ktrouble configuration
 
 Global Flags:
@@ -128,6 +138,42 @@ Use "ktrouble add [command] --help" for more information about a command.
 
 [TOC](#TOC)
 
+## add environment
+
+```plaintext
+EXAMPLE:
+  Use 'add environment' command to add a new environment definition to your 'config.yaml'
+  file
+
+    > ktrouble add environment -e 'lowers' -r 'us-docker.pkg.dev/my-lower-repo'
+
+Usage:
+  ktrouble add environment [flags]
+
+Aliases:
+  environment, env, environments
+
+Flags:
+  -x, --exclude             Exclude from 'push' to central repository
+  -e, --name string         Unique name for your environment definition
+  -r, --repository string   Repository for your environment, eg: us-docker.pkg.dev/my-lower-repo
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
 ## add utility
 
 ```plaintext
@@ -140,14 +186,19 @@ EXAMPLE:
 Usage:
   ktrouble add utility [flags]
 
+Aliases:
+  utility, utility, utils, util, container, containers, image, images
+
 Flags:
-  -c, --cmd string           Default shell/command to use when 'exec'ing into the POD (default "/bin/sh")
-  -e, --exclude              Exclude from 'push' to central repository
-      --hint-file string     Specify a file containing the hint text
-  -u, --name string          Unique name for your utility pod
-  -r, --repository string    Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
-      --require-configmaps   Set the Utilty to always prompt for configmaps
-      --require-secrets      Set the Utilty to always prompt for secrets
+  -c, --cmd string             Default shell/command to use when 'exec'ing into the POD (default "/bin/sh")
+  -e, --environments strings   Specify an array of environment names: eg, --environments 'lowers,uppers'
+  -x, --exclude                Exclude from 'push' to central repository
+      --hint-file string       Specify a file containing the hint text
+  -u, --name string            Unique name for your utility pod
+  -r, --repository string      Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
+      --require-configmaps     Set the Utilty to always prompt for configmaps
+      --require-secrets        Set the Utilty to always prompt for secrets
+      --toggle-hidden          Switch the current 'hidden' flag for the utility definition
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -289,6 +340,9 @@ EXAMPLE:
 
 Usage:
   ktrouble diff [flags]
+
+Flags:
+      --env   Use this switch to operate on the environment definitions
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -466,6 +520,7 @@ Usage:
 Available Commands:
   attachments    Get a list of attached containers
   configs        Get a list of configs
+  environments   Get a list of defined environments
   ingresses      Get a list of ktrouble installed ingresses
   namespace      Get a list of namespaces
   node           Get a list of node labels
@@ -562,6 +617,36 @@ Usage:
 
 Aliases:
   configs, size, requests, request, limit, limits
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## get environments
+
+```plaintext
+EXAMPLE:
+  Display a list of environments defined in the configuration file
+
+    > ktrouble get environments
+
+Usage:
+  ktrouble get environments [flags]
+
+Aliases:
+  environments, env, environments
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1002,6 +1087,36 @@ Global Flags:
 
 [TOC](#TOC)
 
+## migrate
+
+```plaintext
+EXAMPLE:
+  ktrouble uses a versioned directory structure to store the data.  This command
+  will create a new version directory in the repository.  The existing data will
+  remain in the old version directory.  The new version directory will be
+  initialized with the current version data.
+
+    > ktrouble migrate
+
+Usage:
+  ktrouble migrate [flags]
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
 ## pull
 
 ```plaintext
@@ -1022,6 +1137,7 @@ Usage:
 
 Flags:
   -a, --all   Specify --all to list locally modified definitions as pull selections
+      --env   Use this switch to operate on the environment definitions
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1053,6 +1169,9 @@ EXAMPLE:
 Usage:
   ktrouble push [flags]
 
+Flags:
+      --env   Use this switch to operate on the environment definitions
+
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
   -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
@@ -1079,7 +1198,11 @@ Usage:
   ktrouble remove [flags]
   ktrouble remove [command]
 
+Aliases:
+  remove, rm
+
 Available Commands:
+  environment Remove an environment from the config file, or HIDE it if it is an upstream definition, use --remove-upstream to remove it from the upstream repository
   utility     Remove a utility from the config file, or HIDE it if it is an upstream definition
 
 Global Flags:
@@ -1100,6 +1223,41 @@ Use "ktrouble remove [command] --help" for more information about a command.
 
 [TOC](#TOC)
 
+## remove environment
+
+```plaintext
+EXAMPLE:
+  The 'remove environment' command will prompt to select an environment definition to
+  remove from your local 'config.yaml' file
+
+    > ktrouble remove environment
+
+Usage:
+  ktrouble remove environment [flags]
+
+Aliases:
+  environment, env, environments
+
+Flags:
+  -e, --name string       Unique name of your environment
+  -r, --remove-upstream   Remove the environment from the upstream repository on next push
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
 ## remove utility
 
 ```plaintext
@@ -1112,8 +1270,12 @@ EXAMPLE:
 Usage:
   ktrouble remove utility [flags]
 
+Aliases:
+  utility, utility, utils, util, container, containers, image, images
+
 Flags:
-  -u, --name string   Unique name for your utility pod
+  -u, --name string       Unique name of your utility pod
+  -r, --remove-upstream   Remove the utility pod from the upstream repository on next push
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1244,6 +1406,9 @@ EXAMPLE:
 Usage:
   ktrouble status [flags]
 
+Flags:
+      --env   Use this switch to operate on the environment definitions
+
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
   -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
@@ -1275,6 +1440,7 @@ Aliases:
   update, modify
 
 Available Commands:
+  environment Update an existing environment definition in the local config.yaml file
   utility     Update an existing utility pod definition in the local config.yaml file
 
 Global Flags:
@@ -1291,6 +1457,47 @@ Global Flags:
   -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 
 Use "ktrouble update [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## update environment
+
+```plaintext
+EXAMPLE:
+  Toggle the 'exclude from push' flag for an environment definition.
+
+    > ktrouble update environment -e lowers --toggle-exclude
+
+EXAMPLE:
+  Change the 'repository' for the definition 'lowers' to '8675309.dkr.ecr.us-west-2.amazonaws.com'
+
+    > ktrouble update environment -e lower -r '8675309.dkr.ecr.us-west-2.amazonaws.com'
+
+Usage:
+  ktrouble update environment [flags]
+
+Aliases:
+  environment, env, environments
+
+Flags:
+  -e, --name string         Unique name for your environment, eg: uppers or lowers
+  -r, --repository string   Repository for your environment, eg: us-docker.pkg.dev/my-lower-repo
+  -x, --toggle-exclude      Switch the current 'excludeFromShare' flag for the environment definition
+      --toggle-hidden       Switch the current 'Hidden' flag for the environment definition
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
 ```
 
 [TOC](#TOC)
@@ -1316,12 +1523,19 @@ EXAMPLE:
 Usage:
   ktrouble update utility [flags]
 
+Aliases:
+  utility, utility, utils, util, container, containers, image, images
+
 Flags:
-  -c, --cmd string          Default shell/command to use when 'exec'ing into the POD
-  -u, --name string         Unique name for your utility pod
-  -r, --repository string   Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
-  -e, --toggle-exclude      Switch the current 'excludeFromShare' flag for the utility definition
-      --toggle-hidden       Switch the current 'hidden' flag for the utility definition
+  -c, --cmd string             Default shell/command to use when 'exec'ing into the POD
+  -e, --environments strings   Specify an array of environment names: eg, --environments 'lowers,uppers'
+      --hint-file string       Specify a file containing the hint text
+  -u, --name string            Unique name for your utility pod
+  -r, --repository string      Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
+      --require-configmaps     Set the Utilty to always prompt for configmaps
+      --require-secrets        Set the Utilty to always prompt for secrets
+  -x, --toggle-exclude         Switch the current 'excludeFromShare' flag for the utility definition
+      --toggle-hidden          Switch the current 'hidden' flag for the utility definition
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)

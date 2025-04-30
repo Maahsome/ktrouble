@@ -2,6 +2,7 @@ package remove
 
 import (
 	"ktrouble/common"
+	"ktrouble/defaults"
 	"ktrouble/objects"
 
 	"github.com/sirupsen/logrus"
@@ -14,9 +15,10 @@ var utilityParam objects.UtilityPod
 
 // utilityCmd represents the utility command
 var utilityCmd = &cobra.Command{
-	Use:   "utility",
-	Short: removeUtilityHelp.Short(),
-	Long:  removeUtilityHelp.Long(),
+	Use:     "utility",
+	Aliases: defaults.GetUtilitesAliases,
+	Short:   removeUtilityHelp.Short(),
+	Long:    removeUtilityHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(utilityParam.Name) > 0 {
 			err := removeOrHideUtility()
@@ -30,7 +32,7 @@ var utilityCmd = &cobra.Command{
 				NoHeaders:        c.NoHeaders,
 				ShowHidden:       true,
 				Fields:           c.Fields,
-				AdditionalFields: []string{"HIDDEN"},
+				AdditionalFields: []string{"HIDDEN", "REMOVE_UPSTREAM"},
 			})
 		}
 	},
@@ -42,13 +44,13 @@ func removeOrHideUtility() error {
 	for i, v := range c.UtilDefs {
 		if utilityParam.Name == v.Name {
 			updatedDefs = true
-			// this is the one to delete
 			if v.Source == "ktrouble-utils" {
-				// hide it
 				c.UtilDefs[i].Hidden = true
+				if utilityParam.RemoveUpstream {
+					c.UtilDefs[i].RemoveUpstream = true
+				}
 			} else {
-				// remove it from the list
-				c.UtilDefs = removeIndex(c.UtilDefs, i)
+				c.UtilDefs = objects.RemoveUtilIndex(c.UtilDefs, i)
 			}
 			break
 		}
@@ -65,13 +67,8 @@ func removeOrHideUtility() error {
 	return nil
 }
 
-func removeIndex(s objects.UtilityPodList, index int) objects.UtilityPodList {
-	ret := make(objects.UtilityPodList, 0)
-	ret = append(ret, s[:index]...)
-	return append(ret, s[index+1:]...)
-}
-
 func init() {
 	removeCmd.AddCommand(utilityCmd)
-	utilityCmd.Flags().StringVarP(&utilityParam.Name, "name", "u", "", "Unique name for your utility pod")
+	utilityCmd.Flags().StringVarP(&utilityParam.Name, "name", "u", "", "Unique name of your utility pod")
+	utilityCmd.Flags().BoolVarP(&utilityParam.RemoveUpstream, "remove-upstream", "r", false, "Remove the utility pod from the upstream repository on next push")
 }

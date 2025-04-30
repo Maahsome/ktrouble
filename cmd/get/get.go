@@ -9,6 +9,7 @@ import (
 
 var getHelp = help.GetCmd{}
 var getConfigsHelp = help.GetConfigsCmd{}
+var getEnvironmentsHelp = help.GetEnvironmentsCmd{}
 var getRunningHelp = help.GetRunningCmd{}
 var getTemplatesHelp = help.GetTemplatesCmd{}
 var getNamespaceHelp = help.GetNamespaceCmd{}

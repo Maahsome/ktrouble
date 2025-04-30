@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"ktrouble/ask"
 	"ktrouble/common"
+	"ktrouble/objects"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 type PullParam struct {
-	All bool
+	All          bool
+	Environments bool
 }
 
 var pullParam = PullParam{}
@@ -21,11 +23,89 @@ var pullCmd = &cobra.Command{
 	Short: pullHelp.Short(),
 	Long:  pullHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
-		pullUtilityDefinitions()
+		if !c.GitUpstream.VersionDirectoryExists(fmt.Sprintf("v%d", c.Semver.Major)) {
+			if c.Semver.Major == 0 {
+				common.Logger.Error("The repository is not initialized, please create the repository usign git before running this command")
+				return
+			} else {
+				common.Logger.Error("The version directory in the repository does not exist.  Please run 'ktrouble migrate' to migrate data to the new version")
+				common.Logger.Error("The existing data will remain in the old version directory")
+				return
+			}
+		}
+		if pullParam.Environments {
+			status := pullEnvironmentDefinitions()
+			if len(status) > 0 {
+				c.OutputData(&status, objects.TextOptions{
+					NoHeaders: c.NoHeaders,
+					Fields:    c.Fields,
+				})
+			}
+		} else {
+			status := pullUtilityDefinitions()
+			if len(status) > 0 {
+				c.OutputData(&status, objects.TextOptions{
+					NoHeaders: c.NoHeaders,
+					Fields:    c.Fields,
+				})
+			}
+		}
 	},
 }
 
-func pullUtilityDefinitions() {
+func pullEnvironmentDefinitions() objects.StatusList {
+
+	status := objects.StatusList{}
+	// TODO: duplicate pullUtilityDefinitions but for environments
+	remoteDefs, remoteDefsMap := c.GitUpstream.GetNewUpstreamEnvDefs(c.EnvDefs)
+
+	if pullParam.All {
+		status := EnvironmentDefinitionStatus()
+		for _, v := range status {
+			def := c.EnvMap[v.Name]
+			if def.Source != "local" && !def.ExcludeFromShare && v.Status == "different" {
+				remoteDefs = append(remoteDefs, def)
+			}
+		}
+	}
+
+	if len(remoteDefs) > 0 {
+		for _, v := range remoteDefs {
+			foundExisting := false
+			for i, u := range c.EnvDefs {
+				if v.Name == u.Name {
+					common.Logger.Tracef("Found existing environment definition %s", v.Name)
+					c.EnvDefs[i].Repository = remoteDefsMap[v.Name].Repository
+					c.EnvDefs[i].ExcludeFromShare = remoteDefsMap[v.Name].ExcludeFromShare
+					foundExisting = true
+					break
+				}
+			}
+			if !foundExisting {
+				def := remoteDefsMap[v.Name]
+				c.EnvDefs = append(c.EnvDefs, def)
+				status = append(status, objects.Status{
+					Name:    def.Name,
+					Status:  "added",
+					Exclude: fmt.Sprintf("%t", def.ExcludeFromShare),
+				})
+			}
+		}
+		viper.Set("environments", c.EnvDefs)
+		verr := viper.WriteConfig()
+		if verr != nil {
+			common.Logger.WithError(verr).Info("Failed to write config")
+		}
+	} else {
+		fmt.Println("Up to date")
+	}
+
+	return status
+}
+
+func pullUtilityDefinitions() objects.StatusList {
+
+	status := objects.StatusList{}
 
 	remoteDefs, remoteDefsMap := c.GitUpstream.GetNewUpstreamDefs(c.UtilDefs)
 
@@ -61,6 +141,11 @@ func pullUtilityDefinitions() {
 					def := remoteDefsMap[v]
 					def.Hidden = false
 					c.UtilDefs = append(c.UtilDefs, def)
+					status = append(status, objects.Status{
+						Name:    def.Name,
+						Status:  "added",
+						Exclude: fmt.Sprintf("%t", def.ExcludeFromShare),
+					})
 				}
 			}
 			viper.Set("utilityDefinitions", c.UtilDefs)
@@ -75,9 +160,12 @@ func pullUtilityDefinitions() {
 		fmt.Println("Up to date")
 	}
 
+	return status
+
 }
 
 func init() {
 	RootCmd.AddCommand(pullCmd)
 	pullCmd.Flags().BoolVarP(&pullParam.All, "all", "a", false, "Specify --all to list locally modified definitions as pull selections")
+	pullCmd.Flags().BoolVar(&pullParam.Environments, "env", false, "Use this switch to operate on the environment definitions")
 }
