@@ -13,6 +13,7 @@ import (
 type PullParam struct {
 	All          bool
 	Environments bool
+	Utilities    []string
 }
 
 var pullParam = PullParam{}
@@ -106,6 +107,7 @@ func pullEnvironmentDefinitions() objects.StatusList {
 func pullUtilityDefinitions() objects.StatusList {
 
 	status := objects.StatusList{}
+	addUtils := []string{}
 
 	remoteDefs, remoteDefsMap := c.GitUpstream.GetNewUpstreamDefs(c.UtilDefs)
 
@@ -120,8 +122,16 @@ func pullUtilityDefinitions() objects.StatusList {
 	}
 
 	if len(remoteDefs) > 0 {
-		prompt := "Choose utility definitions to add/update to your local configuration:"
-		addUtils := ask.PromptForUtilityList(remoteDefs, prompt)
+		if len(pullParam.Utilities) == 0 {
+			prompt := "Choose utility definitions to add/update to your local configuration:"
+			addUtils = ask.PromptForUtilityList(remoteDefs, prompt)
+		} else {
+			if paramUtilitiesExist(remoteDefs) {
+				addUtils = pullParam.Utilities
+			} else {
+				common.Logger.Fatal("Some of the utility definition names you specified do not exist in the remote repository, or are aleady the same locally, use 'ktrouble status' to get a list of 'different' utilities")
+			}
+		}
 
 		if len(addUtils) > 0 {
 			for _, v := range addUtils {
@@ -133,20 +143,24 @@ func pullUtilityDefinitions() objects.StatusList {
 						c.UtilDefs[i].ExecCommand = remoteDefsMap[v].ExecCommand
 						c.UtilDefs[i].ExcludeFromShare = remoteDefsMap[v].ExcludeFromShare
 						c.UtilDefs[i].Hidden = remoteDefsMap[v].Hidden
+						c.UtilDefs[i].Environments = remoteDefsMap[v].Environments
 						foundExisting = true
 						break
 					}
 				}
-				if !foundExisting {
-					def := remoteDefsMap[v]
-					def.Hidden = false
+				pullStatus := "added"
+				def := remoteDefsMap[v]
+				def.Hidden = false
+				if foundExisting {
+					pullStatus = "updated"
+				} else {
 					c.UtilDefs = append(c.UtilDefs, def)
-					status = append(status, objects.Status{
-						Name:    def.Name,
-						Status:  "added",
-						Exclude: fmt.Sprintf("%t", def.ExcludeFromShare),
-					})
 				}
+				status = append(status, objects.Status{
+					Name:    def.Name,
+					Status:  pullStatus,
+					Exclude: fmt.Sprintf("%t", def.ExcludeFromShare),
+				})
 			}
 			viper.Set("utilityDefinitions", c.UtilDefs)
 			verr := viper.WriteConfig()
@@ -164,8 +178,26 @@ func pullUtilityDefinitions() objects.StatusList {
 
 }
 
+func paramUtilitiesExist(remoteDefs objects.UtilityPodList) bool {
+	for _, v := range pullParam.Utilities {
+		// check v.Name exists in remoteDefs
+		found := false
+		for _, u := range remoteDefs {
+			if v == u.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
+}
+
 func init() {
 	RootCmd.AddCommand(pullCmd)
 	pullCmd.Flags().BoolVarP(&pullParam.All, "all", "a", false, "Specify --all to list locally modified definitions as pull selections")
 	pullCmd.Flags().BoolVar(&pullParam.Environments, "env", false, "Use this switch to operate on the environment definitions")
+	pullCmd.Flags().StringSliceVarP(&pullParam.Utilities, "utilities", "u", []string{}, "Specify an array of utility names to pull: eg, --utilities 'basic-tools,dns-tools', default is to prompt")
 }
