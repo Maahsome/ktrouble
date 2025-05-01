@@ -3,6 +3,7 @@ package cmd
 import (
 	"ktrouble/ask"
 	"ktrouble/common"
+	"ktrouble/defaults"
 
 	"github.com/spf13/cobra"
 )
@@ -15,9 +16,10 @@ var deleteParam = DeleteParam{}
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: deleteHelp.Short(),
-	Long:  deleteHelp.Long(),
+	Use:     "delete",
+	Aliases: defaults.DeleteAliases,
+	Short:   deleteHelp.Short(),
+	Long:    deleteHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 		if c.Client != nil {
 			podList := c.Client.GetCreatedPods(deleteParam.All)

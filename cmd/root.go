@@ -187,22 +187,23 @@ func containsAlias(v string, a []string) bool {
 
 func needKubernetes(arg string, sub string) bool {
 
-	if arg == "launch" {
-		switch {
-		case containsAlias(arg, defaults.LaunchAliases):
-			return true
-		}
+	// handle the TOP level kubernetes commands
+	switch arg {
+	case "attach", "delete", "launch":
+		return true
 	}
-	if arg == "attach" {
-		switch {
-		case containsAlias(arg, defaults.AttachAliases):
-			return true
-		}
+	switch {
+	case containsAlias(arg, defaults.AttachAliases),
+		containsAlias(arg, defaults.DeleteAliases),
+		containsAlias(arg, defaults.LaunchAliases):
+		return true
 	}
+
+	// handle the get 'subcommands' and subcommand aliases
 	if arg == "get" {
 		switch sub {
 		case "attachments", "ingresses", "namespace", "node", "nodelabels", "running", "serviceaccount", "services":
-			return false
+			return true
 		}
 		switch {
 		case containsAlias(sub, defaults.GetIngressesAliases),
@@ -212,40 +213,9 @@ func needKubernetes(arg string, sub string) bool {
 			containsAlias(sub, defaults.GetRunningAliases),
 			containsAlias(sub, defaults.GetServiceAccountsAliases),
 			containsAlias(sub, defaults.GetServicesAliases):
-			return false
+			return true
 		}
 	}
-
-	// if arg == "get" {
-	// 	switch sub {
-	// 	case "configs", "environments", "utilities", "sizes", "templates":
-	// 		return false
-	// 	}
-	// 	switch {
-	// 	case containsAlias(sub, defaults.EnvironmentAliases), containsAlias(sub, defaults.GetSizesAliases), containsAlias(sub, defaults.GetUtilitesAliases):
-	// 		return false
-	// 	}
-	// }
-
-	// switch arg {
-	// case "add":
-	// 	switch {
-	// 	case containsAlias(arg, defaults.AddAliases):
-	// 		return false
-	// 	}
-	// case "changelog":
-	// 	switch {
-	// 	case containsAlias(arg, defaults.ChangelogAliases):
-	// 		return false
-	// 	}
-	// case "remove":
-	// 	switch {
-	// 	case containsAlias(arg, defaults.RemoveAliases):
-	// 		return false
-	// 	}
-	// case "diff", "edit", "changes", "fields", "help", "publish", "version", "genhelp", "pull", "push", "status", "set", "update", "modify":
-	// 	return false
-	// }
 
 	return false
 }

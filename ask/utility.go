@@ -22,7 +22,7 @@ func PromptForUtility(utils []objects.UtilityPod, envMap map[string]objects.Envi
 	var utilArray []string
 	for _, v := range utils {
 		if !v.Hidden || showHidden {
-			if v.Environments == nil {
+			if len(v.Environments) == 0 {
 				utilArray = append(utilArray, v.Name)
 			} else {
 				for _, env := range v.Environments {

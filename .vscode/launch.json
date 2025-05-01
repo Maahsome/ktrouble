@@ -16,10 +16,8 @@
         "mode": "auto",
         "program": "${workspaceFolder}/",
         "args": [
-          "pull",
-          "-a",
-          "--utilities",
-          "netshoot,mysql5-futurama,psql11-futurama-02"
+          "get",
+          "pods"
         ],
         "env": {
           "MODNAME": "ktrouble",
