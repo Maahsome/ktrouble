@@ -310,6 +310,9 @@ EXAMPLE:
 Usage:
   ktrouble delete [flags]
 
+Aliases:
+  delete, del
+
 Flags:
   -a, --all   Choose from a list of running PODs from ALL users
 
