@@ -1136,8 +1136,9 @@ Usage:
   ktrouble pull [flags]
 
 Flags:
-  -a, --all   Specify --all to list locally modified definitions as pull selections
-      --env   Use this switch to operate on the environment definitions
+  -a, --all                 Specify --all to list locally modified definitions as pull selections
+      --env                 Use this switch to operate on the environment definitions
+  -u, --utilities strings   Specify an array of utility names to pull: eg, --utilities 'basic-tools,dns-tools', default is to prompt
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
