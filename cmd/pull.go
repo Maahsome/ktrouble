@@ -57,7 +57,6 @@ var pullCmd = &cobra.Command{
 func pullEnvironmentDefinitions() objects.StatusList {
 
 	status := objects.StatusList{}
-	// TODO: duplicate pullUtilityDefinitions but for environments
 	remoteDefs, remoteDefsMap := c.GitUpstream.GetNewUpstreamEnvDefs(c.EnvDefs)
 
 	if pullParam.All {

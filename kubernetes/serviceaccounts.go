@@ -21,3 +21,13 @@ func (k *kubernetesClient) GetServiceAccounts(namespace string) *v1.ServiceAccou
 	}
 	return sasList
 }
+
+func (k *kubernetesClient) IsServiceAccountValid(namespace string, sa string) bool {
+	sasList := k.GetServiceAccounts(namespace)
+	for _, saItem := range sasList.Items {
+		if saItem.Name == sa {
+			return true
+		}
+	}
+	return false
+}
