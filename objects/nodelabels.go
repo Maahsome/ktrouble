@@ -51,15 +51,18 @@ func (nl *NodeLabels) ToYAML() string {
 
 func (nl *NodeLabels) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf, row := new(bytes.Buffer), make([]string, 0)
-
-	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		headerText := []string{"LABEL"}
-		table.SetHeader(headerText)
+	fields := []string{}
+
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"LABEL"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -75,8 +78,12 @@ func (nl *NodeLabels) ToTEXT(to TextOptions) string {
 	table.SetNoWhiteSpace(true)
 
 	for _, v := range *nl {
-		row = []string{
-			v,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "LABEL":
+				row = append(row, v)
+			}
 		}
 		table.Append(row)
 	}

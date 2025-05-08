@@ -53,15 +53,18 @@ func (n *NamespaceList) ToYAML() string {
 
 func (n *NamespaceList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf := new(bytes.Buffer)
 	var row []string
-
-	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		table.SetHeader([]string{"NAMESPACE"})
+	fields := []string{}
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"NAMESPACE"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -77,8 +80,12 @@ func (n *NamespaceList) ToTEXT(to TextOptions) string {
 	table.SetNoWhiteSpace(true)
 
 	for _, v := range n.Namespace {
-		row = []string{
-			v,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAMESPACE":
+				row = append(row, v)
+			}
 		}
 		table.Append(row)
 	}

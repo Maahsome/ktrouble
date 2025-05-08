@@ -6,6 +6,7 @@ var ChangelogAliases = []string{"cl", "changes"}
 var DeleteAliases = []string{"del"}
 var EnvironmentAliases = []string{"env", "environments"}
 var GetAttachmentsAliases = []string{"attach", "att", "attachment"}
+var GetConfigsAliases = []string{"config"}
 var GetIngressesAliases = []string{"ingress", "ing"}
 var GetNamespacesAliases = []string{"namespaces", "ns"}
 var GetNodeLabelsAliases = []string{"nodelabel", "nl", "labels"}

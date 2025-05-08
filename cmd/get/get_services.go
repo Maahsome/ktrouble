@@ -53,6 +53,7 @@ Get a list of services that are installed by ktrouble
 				BashLinks:    c.EnableBashLinks,
 				UtilMap:      c.UtilMap,
 				UniqIdLength: c.UniqIdLength,
+				Fields:       c.Fields,
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch installed services, no valid kubernetes context")

@@ -619,7 +619,7 @@ Usage:
   ktrouble get configs [flags]
 
 Aliases:
-  configs, size, requests, request, limit, limits
+  configs, config
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)

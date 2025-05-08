@@ -56,20 +56,24 @@ func (es *EphemeralSleepList) ToYAML() string {
 
 func (es *EphemeralSleepList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf, row := new(bytes.Buffer), make([]string, 0)
-
-	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		headerText := []string{"NAME", "SECONDS"}
-		table.SetHeader(headerText)
+	fields := []string{}
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			fields = append(fields, to.Fields...)
+		} else {
+			fields = []string{"NAME", "SECONDS"}
+		}
+		if len(to.AdditionalFields) > 0 {
+			fields = append(fields, to.AdditionalFields...)
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
 	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(false)
+	table.SetAutoFormatHeaders(true)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
 	table.SetColumnSeparator("")
@@ -88,9 +92,14 @@ func (es *EphemeralSleepList) ToTEXT(to TextOptions) string {
 	}
 
 	for _, v := range nameList {
-		row = []string{
-			mapList[v].Name,
-			mapList[v].Seconds,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, mapList[v].Name)
+			case "SECONDS":
+				row = append(row, mapList[v].Seconds)
+			}
 		}
 		table.Append(row)
 	}

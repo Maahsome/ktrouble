@@ -25,7 +25,10 @@ var serviceaccountCmd = &cobra.Command{
 				saData.ServiceAccount = append(saData.ServiceAccount, v.Name)
 			}
 
-			c.OutputData(&saData, objects.TextOptions{NoHeaders: c.NoHeaders})
+			c.OutputData(&saData, objects.TextOptions{
+				NoHeaders: c.NoHeaders,
+				Fields:    c.Fields,
+			})
 		} else {
 			common.Logger.Warn("Cannot fetch service accounts, no valid kubernetes context")
 		}

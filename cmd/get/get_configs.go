@@ -13,7 +13,7 @@ import (
 // configsCmd represents the templates command
 var configsCmd = &cobra.Command{
 	Use:     "configs",
-	Aliases: defaults.GetSizesAliases,
+	Aliases: defaults.GetConfigsAliases,
 	Short:   getConfigsHelp.Short(),
 	Long:    getConfigsHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {

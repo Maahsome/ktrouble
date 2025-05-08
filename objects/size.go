@@ -59,15 +59,19 @@ func (rs *ResourceSizeList) ToYAML() string {
 
 func (rs *ResourceSizeList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf, row := new(bytes.Buffer), make([]string, 0)
+	table := tablewriter.NewWriter(buf)
+	fields := []string{}
 
 	// ************************** TableWriter ******************************
-	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		headerText := []string{"NAME", "CPU_LIMIT", "MEM_LIMIT", "CPU_REQUEST", "MEM_REQUEST"}
-		table.SetHeader(headerText)
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"NAME", "CPU_LIMIT", "MEM_LIMIT", "CPU_REQUEST", "MEM_REQUEST"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -91,12 +95,20 @@ func (rs *ResourceSizeList) ToTEXT(to TextOptions) string {
 	}
 
 	for _, v := range nameList {
-		row = []string{
-			mapList[v].Name,
-			mapList[v].LimitsCPU,
-			mapList[v].LimitsMEM,
-			mapList[v].RequestCPU,
-			mapList[v].RequestMEM,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, mapList[v].Name)
+			case "CPU_LIMIT":
+				row = append(row, mapList[v].LimitsCPU)
+			case "MEM_LIMIT":
+				row = append(row, mapList[v].LimitsMEM)
+			case "CPU_REQUEST":
+				row = append(row, mapList[v].RequestCPU)
+			case "MEM_REQUEST":
+				row = append(row, mapList[v].RequestMEM)
+			}
 		}
 		table.Append(row)
 	}

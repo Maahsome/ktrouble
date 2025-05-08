@@ -55,20 +55,25 @@ func (v *Version) ToYAML() string {
 
 func (v *Version) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf := new(bytes.Buffer)
 	var row []string
+	table := tablewriter.NewWriter(buf)
+	fields := []string{}
 
 	// ************************** TableWriter ******************************
-	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		table.SetHeader([]string{"COMPONENT", "VERSION"})
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"SEMVER", "BUILD_DATE", "GIT_COMMIT", "GIT_REF"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
 	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(true)
+	table.SetAutoFormatHeaders(false)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
 	table.SetColumnSeparator("")
@@ -78,13 +83,19 @@ func (v *Version) ToTEXT(to TextOptions) string {
 	table.SetTablePadding("\t") // pad with tabs
 	table.SetNoWhiteSpace(true)
 
-	row = []string{"Version", v.SemVer}
-	table.Append(row)
-	row = []string{"BuildDate", v.BuildDate}
-	table.Append(row)
-	row = []string{"GitCommit", v.GitCommit}
-	table.Append(row)
-	row = []string{"GitRef", v.GitRef}
+	row = []string{}
+	for _, f := range fields {
+		switch strings.ToUpper(f) {
+		case "SEMVER":
+			row = append(row, v.SemVer)
+		case "BUILD_DATE":
+			row = append(row, v.BuildDate)
+		case "GIT_COMMIT":
+			row = append(row, v.GitCommit)
+		case "GIT_REF":
+			row = append(row, v.GitRef)
+		}
+	}
 	table.Append(row)
 
 	table.Render()
