@@ -1040,7 +1040,7 @@ EXAMPLE:
   namespace selected.  The chosen secrets will all be mounted under '/secrets/'
   directory, with each key as a file inside a directory named for the secret.
 
-    > ktrouble launch --secrets
+    > ktrouble launch --prompt-secrets
 
 EXAMPLE:
   Launch a container that has nginx setup to consume two environment variables;
@@ -1054,8 +1054,25 @@ EXAMPLE:
     > ktrouble launch --port 8080 --host myservice.example.com --path service-myservice --ingress
 
 EXAMPLE:
-  TODO: add command line parameters that can be used to set all the options
-  for launching a POD
+  All of the above examples prompt for all the missing parameters.  You can also specify ALL of the
+  parameters on the command line, and optionally just return the POD name.
+
+  All of these parameters, except or node-selecotr, need to be set if you want to suppress the prompts.
+
+  Parameters:
+    - --utility/-u <name>           : The name of the utility to launch, must match the utility name
+                                    : be sure to specify the "environment" name if the utility
+                                    : has multiple environments, eg: --utility 'uppers/dns-tools'
+    - --namespace/-n <name>         : The namespace to use
+    - --service-account <name>      : The name of the service account to use
+    - --node-selector <label/value> : The node selector to use
+                                    : The label/value pair must be inside single quotes, eg:
+                                    : --node-selector '"kubernetes.io/arch": "amd64"'
+                                    : MUST specify '-none-' to suppress the prompt
+    - --secrets '<name>,<name>'     : The secret names to mount, comma separated
+    - --configmaps '<name>,<name>'  : The configmap names to mount, comma separated
+    - --size <name>                 : The size of the POD to use, must match a size name, ktrouble get sizes
+    - --output-name                 : Use this boolean switch to just return the name of the POD
 
     > ktrouble launch (...)
 
@@ -1066,13 +1083,21 @@ Aliases:
   launch, create, apply, pod, l
 
 Flags:
-      --configs       Use this switch to prompt to mount configmaps in the POD
-      --host string   Specify the host that the ingress will listen on, for configuration of ingress-nginx (default "flexo.bender.rocks")
-      --ingress       Use this switch to enable creating a service and ingress for the POD
-      --path string   Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes (default "service-futurama")
-      --port int      Specify the port that the POD listens on, used in the service and ingress settings (default 8080)
-      --secrets       Use this switch to prompt to mount secrets in the POD
-      --volumes       Use this switch to prompt to mount volumes in the POD
+      --configmaps strings       Specify an array of configmap names to mount, eg --secrets 'cm1,cm2'
+      --host string              Specify the host that the ingress will listen on, for configuration of ingress-nginx (default "flexo.bender.rocks")
+      --ingress                  Use this switch to enable creating a service and ingress for the POD
+  -n, --namespace string         Specify the namespace to use
+      --node-selector string     Specify the node selector to use
+      --output-name              Use this switch to only output the name of the POD
+      --path string              Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes (default "service-futurama")
+      --port int                 Specify the port that the POD listens on, used in the service and ingress settings (default 8080)
+      --prompt-configmaps        Use this switch to prompt to mount configmaps in the POD
+      --prompt-secrets           Use this switch to prompt to mount secrets in the POD
+      --secrets strings          Specify an array of secret names to mount, eg --secrets 'secret1,secret2'
+      --service-account string   Specify the name of the service account to use
+      --size string              Specify the size of the POD, eg --size 'small,medium,large'
+  -u, --utility string           Specify the name of the utility to launch
+      --volumes                  Use this switch to prompt to mount volumes in the POD
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1080,7 +1105,6 @@ Global Flags:
       --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
       --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
-  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
       --no-headers                Suppress header output in Text output
   -o, --output string             output types: json, text, yaml, gron, raw
       --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")

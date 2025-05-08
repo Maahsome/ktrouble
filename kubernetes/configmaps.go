@@ -21,3 +21,21 @@ func (k *kubernetesClient) GetConfigMaps(namespace string) *v1.ConfigMapList {
 	}
 	return configmapList
 }
+
+func (k *kubernetesClient) IsValidConfigmaps(namespace string, configmaps []string) bool {
+	configmapList := k.GetConfigMaps(namespace)
+	if len(configmapList.Items) == 0 {
+		return false
+	}
+
+	configmapMap := make(map[string]string, len(configmapList.Items))
+	for _, v := range configmapList.Items {
+		configmapMap[v.Name] = v.Name
+	}
+	for _, v := range configmaps {
+		if _, ok := configmapMap[v]; !ok {
+			return false
+		}
+	}
+	return true
+}

@@ -26,6 +26,7 @@ type KubernetesClient interface {
 	GetNamespaces() *v1.NamespaceList
 	GetNodes() *v1.NodeList
 	GetServiceAccounts(namespace string) *v1.ServiceAccountList
+	IsServiceAccountValid(namespace string, sa string) bool
 	GetSecrets(namespace string) *v1.SecretList
 	GetConfigMaps(namespace string) *v1.ConfigMapList
 	GetAssociatedService(pod ask.PodDetail) *v1.ServiceList
@@ -34,11 +35,15 @@ type KubernetesClient interface {
 	DeleteAssociatedService(pod ask.PodDetail) error
 	DeleteAssociatedIngress(pod ask.PodDetail) error
 	DetermineNamespace(nsParam string) string
+	IsNamespaceValid(namespace string) bool
 	GetCreatedIngresses(all bool) *networkingv1.IngressList
 	GetCreatedServices(all bool) *v1.ServiceList
 	AttachContainerToPod(namespace string, podName string, containerName string, image string, sleep string, mounts []v1.VolumeMount) error
 	GetAttachedContainers(all bool) *v1.PodList
 	GetPodMounts(namespace string, podName string) []v1.VolumeMount
+	IsValidNodeSelector(selector string) bool
+	IsValidSecrets(namespace string, secrets []string) bool
+	IsValidConfigmaps(namespace string, configmaps []string) bool
 }
 
 type kubernetesClient struct {
