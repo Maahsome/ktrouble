@@ -47,3 +47,13 @@ func (k *kubernetesClient) DetermineNamespace(nsParam string) string {
 	}
 	return namespace
 }
+
+func (k *kubernetesClient) IsNamespaceValid(namespace string) bool {
+	nssList := k.GetNamespaces()
+	for _, ns := range nssList.Items {
+		if ns.Name == namespace {
+			return true
+		}
+	}
+	return false
+}

@@ -22,3 +22,21 @@ func (k *kubernetesClient) GetSecrets(namespace string) *v1.SecretList {
 	}
 	return secretList
 }
+
+func (k *kubernetesClient) IsValidSecrets(namespace string, secrets []string) bool {
+	secretList := k.GetSecrets(namespace)
+	if len(secretList.Items) == 0 {
+		return false
+	}
+
+	secretMap := make(map[string]string, len(secretList.Items))
+	for _, v := range secretList.Items {
+		secretMap[v.Name] = v.Name
+	}
+	for _, v := range secrets {
+		if _, ok := secretMap[v]; !ok {
+			return false
+		}
+	}
+	return true
+}
