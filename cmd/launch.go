@@ -15,15 +15,14 @@ type launchParam struct {
 	Port                int
 	Host                string
 	Path                string
-	// TODO: finish parames
-	Utility        string
-	ServiceAccount string
-	Namespace      string
-	NodeSelector   string
-	Secrets        []string
-	ConfigMaps     []string
-	Size           string
-	OutputName     bool
+	Utility             string
+	ServiceAccount      string
+	Namespace           string
+	NodeSelector        string
+	Secrets             []string
+	ConfigMaps          []string
+	Size                string
+	OutputName          bool
 }
 
 var p launchParam
