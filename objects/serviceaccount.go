@@ -53,14 +53,20 @@ func (sa *ServiceAccountList) ToYAML() string {
 
 func (sa *ServiceAccountList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
 	buf := new(bytes.Buffer)
 	var row []string
+	table := tablewriter.NewWriter(buf)
+	fields := []string{}
 
 	// ************************** TableWriter ******************************
-	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		table.SetHeader([]string{"SERVICE_ACCOUNT"})
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"SERVICE_ACCOUNT"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -76,8 +82,12 @@ func (sa *ServiceAccountList) ToTEXT(to TextOptions) string {
 	table.SetNoWhiteSpace(true)
 
 	for _, v := range sa.ServiceAccount {
-		row = []string{
-			v,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "SERVICE_ACCOUNT":
+				row = append(row, v)
+			}
 		}
 		table.Append(row)
 	}

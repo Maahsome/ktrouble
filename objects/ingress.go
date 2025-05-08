@@ -61,15 +61,20 @@ func (i *IngressList) ToYAML() string {
 
 func (i *IngressList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf, row := new(bytes.Buffer), make([]string, 0)
-
-	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "CLASS", "URL", "ADDRESS", "PORTS", "LAUNCHED_BY"}
-		table.SetHeader(headerText)
+	fields := []string{}
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"NAME", "NAMESPACE", "CLASS", "URL", "ADDRESS", "PORTS", "LAUNCHED_BY"}
+		}
+		if len(to.AdditionalFields) > 0 {
+			fields = append(fields, to.AdditionalFields...)
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -85,14 +90,24 @@ func (i *IngressList) ToTEXT(to TextOptions) string {
 	table.SetNoWhiteSpace(true)
 
 	for _, v := range *i {
-		row = []string{
-			v.Name,
-			v.Namespace,
-			v.Class,
-			v.Hosts,
-			v.Address,
-			v.Ports,
-			v.LaunchedBy,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, v.Name)
+			case "NAMESPACE":
+				row = append(row, v.Namespace)
+			case "CLASS":
+				row = append(row, v.Class)
+			case "URL":
+				row = append(row, v.Hosts)
+			case "ADDRESS":
+				row = append(row, v.Address)
+			case "PORTS":
+				row = append(row, v.Ports)
+			case "LAUNCHED_BY":
+				row = append(row, v.LaunchedBy)
+			}
 		}
 		table.Append(row)
 	}

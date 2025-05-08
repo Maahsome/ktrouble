@@ -65,18 +65,22 @@ func (p *PodList) ToYAML() string {
 func (p *PodList) ToTEXT(to TextOptions) string {
 
 	termFormatter := termenv.NewOutput(os.Stdout)
-	noHeaders := to.NoHeaders
 	bashLinks := to.BashLinks
 	utilMap := to.UtilMap
 	uniqIdLength := to.UniqIdLength
 
 	buf, row := new(bytes.Buffer), make([]string, 0)
-
-	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "UTILITY", "SHELL/SERVICE"}
-		table.SetHeader(headerText)
+	fields := []string{}
+
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "UTILITY", "SHELL/SERVICE"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -109,13 +113,22 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 				shellText = shellText + fmt.Sprintf(" svc/%s %s:443", v.Service, v.ServicePort)
 			}
 		}
-		row = []string{
-			v.Name,
-			v.Namespace,
-			v.Status,
-			v.LaunchedBy,
-			baseTool,
-			shellText,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, v.Name)
+			case "NAMESPACE":
+				row = append(row, v.Namespace)
+			case "STATUS":
+				row = append(row, v.Status)
+			case "LAUNCHED_BY":
+				row = append(row, v.LaunchedBy)
+			case "UTILITY":
+				row = append(row, baseTool)
+			case "SHELL/SERVICE":
+				row = append(row, shellText)
+			}
 		}
 		table.Append(row)
 	}

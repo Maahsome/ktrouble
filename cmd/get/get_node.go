@@ -24,7 +24,10 @@ var nodeCmd = &cobra.Command{
 				nodeData.Node = append(nodeData.Node, v.Name)
 			}
 
-			c.OutputData(&nodeData, objects.TextOptions{NoHeaders: c.NoHeaders})
+			c.OutputData(&nodeData, objects.TextOptions{
+				NoHeaders: c.NoHeaders,
+				Fields:    c.Fields,
+			})
 		} else {
 			common.Logger.Warn("Cannot fetch nodes, no valid kubernetes context")
 		}

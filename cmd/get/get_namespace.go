@@ -24,7 +24,10 @@ var namespaceCmd = &cobra.Command{
 				nsData.Namespace = append(nsData.Namespace, v.Name)
 			}
 
-			c.OutputData(&nsData, objects.TextOptions{NoHeaders: c.NoHeaders})
+			c.OutputData(&nsData, objects.TextOptions{
+				NoHeaders: c.NoHeaders,
+				Fields:    c.Fields,
+			})
 		} else {
 			common.Logger.Warn("Cannot fetch namespaces, no valid kubernetes context")
 		}

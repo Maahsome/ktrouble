@@ -57,15 +57,20 @@ func (s *StatusList) ToYAML() string {
 
 func (s *StatusList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf := new(bytes.Buffer)
 	var row []string
+	table := tablewriter.NewWriter(buf)
+	fields := []string{}
 
 	// ************************** TableWriter ******************************
-	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		table.SetHeader([]string{"NAME", "STATUS", "PUSH_EXCLUDE"})
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"NAME", "STATUS", "PUSH_EXCLUDE"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -81,10 +86,16 @@ func (s *StatusList) ToTEXT(to TextOptions) string {
 	table.SetNoWhiteSpace(true)
 
 	for _, v := range *s {
-		row = []string{
-			v.Name,
-			v.Status,
-			v.Exclude,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, v.Name)
+			case "STATUS":
+				row = append(row, v.Status)
+			case "EXCLUDE":
+				row = append(row, v.Exclude)
+			}
 		}
 		table.Append(row)
 	}

@@ -15,8 +15,10 @@ var sizesCmd = &cobra.Command{
 	Long:    getSizesHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		c.OutputData(&c.SizeDefs, objects.TextOptions{NoHeaders: c.NoHeaders})
-
+		c.OutputData(&c.SizeDefs, objects.TextOptions{
+			NoHeaders: c.NoHeaders,
+			Fields:    c.Fields,
+		})
 	},
 }
 

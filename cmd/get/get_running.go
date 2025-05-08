@@ -59,6 +59,7 @@ var runningCmd = &cobra.Command{
 				BashLinks:    c.EnableBashLinks,
 				UtilMap:      c.UtilMap,
 				UniqIdLength: c.UniqIdLength,
+				Fields:       c.Fields,
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch running pods, no valid kubernetes context")

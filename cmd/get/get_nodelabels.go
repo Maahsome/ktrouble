@@ -16,7 +16,10 @@ var nodelabelsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		nodeLabels := objects.NodeLabels{}
 		nodeLabels = c.NodeSelectorLabels
-		c.OutputData(&nodeLabels, objects.TextOptions{NoHeaders: c.NoHeaders})
+		c.OutputData(&nodeLabels, objects.TextOptions{
+			NoHeaders: c.NoHeaders,
+			Fields:    c.Fields,
+		})
 	},
 }
 

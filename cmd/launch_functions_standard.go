@@ -142,7 +142,7 @@ func standardLaunch(p launchParam) {
 				"host":           p.Host,
 				"targetPort":     fmt.Sprintf("%d", p.Port),
 				"path":           p.Path,
-				"associatedPod":  fmt.Sprintf("%s-%s", utility, shortUniq),
+				"associatedPod":  fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq),
 			},
 			Secrets:    selectedSecrets,
 			ConfigMaps: selectedConfigMaps,

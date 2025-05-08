@@ -62,15 +62,19 @@ func (s *ServiceList) ToYAML() string {
 
 func (s *ServiceList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-
 	buf, row := new(bytes.Buffer), make([]string, 0)
+	table := tablewriter.NewWriter(buf)
+	fields := []string{}
 
 	// ************************** TableWriter ******************************
-	table := tablewriter.NewWriter(buf)
-	if !noHeaders {
-		headerText := []string{"NAME", "NAMESPACE", "TYPE", "CLUSTER-IP", "EXTERNAL-IP", "PORT(S)", "LAUNCHED_BY"}
-		table.SetHeader(headerText)
+	if !to.NoHeaders {
+		if len(to.Fields) > 0 {
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
+		} else {
+			fields = []string{"NAME", "NAMESPACE", "TYPE", "CLUSTER_IP", "EXTERNAL_IP", "PORTS", "LAUNCHED_BY"}
+		}
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
@@ -86,14 +90,24 @@ func (s *ServiceList) ToTEXT(to TextOptions) string {
 	table.SetNoWhiteSpace(true)
 
 	for _, v := range *s {
-		row = []string{
-			v.Name,
-			v.Namespace,
-			v.ServiceType,
-			v.ClusterIP,
-			v.ExternalIP,
-			v.Ports,
-			v.LaunchedBy,
+		row = []string{}
+		for _, f := range fields {
+			switch strings.ToUpper(f) {
+			case "NAME":
+				row = append(row, v.Name)
+			case "NAMESPACE":
+				row = append(row, v.Namespace)
+			case "TYPE":
+				row = append(row, v.ServiceType)
+			case "CLUSTER_IP":
+				row = append(row, v.ClusterIP)
+			case "EXTERNAL_IP":
+				row = append(row, v.ExternalIP)
+			case "PORTS":
+				row = append(row, v.Ports)
+			case "LAUNCHED_BY":
+				row = append(row, v.LaunchedBy)
+			}
 		}
 		table.Append(row)
 	}

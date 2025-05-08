@@ -19,8 +19,11 @@ var sleepCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		c.OutputData(&c.EphemeralSleepDefs, objects.TextOptions{NoHeaders: c.NoHeaders})
-
+		c.OutputData(&c.EphemeralSleepDefs, objects.TextOptions{
+			NoHeaders:  c.NoHeaders,
+			ShowHidden: c.ShowHidden,
+			Fields:     c.Fields,
+		})
 	},
 }
 

@@ -109,31 +109,20 @@ func (en *EnvironmentList) ToYAML() string {
 
 func (en *EnvironmentList) ToTEXT(to TextOptions) string {
 
-	noHeaders := to.NoHeaders
-	fields := []string{}
-	if len(to.Fields) > 0 {
-		fields = append(fields, to.Fields...)
-	} else {
-		fields = []string{"NAME", "REPOSITORY", "EXCLUDED"}
-	}
-	if len(to.AdditionalFields) > 0 {
-		fields = append(fields, to.AdditionalFields...)
-	}
 	buf, row := new(bytes.Buffer), make([]string, 0)
-
-	// ************************** TableWriter ******************************
 	table := tablewriter.NewWriter(buf)
-	headerText := []string{}
-	if !noHeaders {
+	fields := []string{}
+	if !to.NoHeaders {
 		if len(to.Fields) > 0 {
-			headerText = append(headerText, to.Fields...)
+			upperFields := fieldsToUpper(to.Fields)
+			fields = append(fields, upperFields...)
 		} else {
-			headerText = []string{"NAME", "REPOSITORY", "EXCLUDED"}
+			fields = []string{"NAME", "REPOSITORY", "EXCLUDED"}
 		}
 		if len(to.AdditionalFields) > 0 {
-			headerText = append(headerText, to.AdditionalFields...)
+			fields = append(fields, to.AdditionalFields...)
 		}
-		table.SetHeader(headerText)
+		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	}
 
