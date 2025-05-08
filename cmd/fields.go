@@ -51,7 +51,7 @@ func displayFieldHelp() {
 
   COMMAND: get service
 
-      FIELDS: NAME, NAMESPACE, TYPE, CLUSTER-IP, EXTERNAL-IP, PORT(S), LAUNCHED_BY
+      FIELDS: NAME, NAMESPACE, TYPE, CLUSTER_IP, EXTERNAL_IP, PORTS, LAUNCHED_BY
 
   COMMAND: get serviceaccount
 

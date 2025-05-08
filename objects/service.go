@@ -72,7 +72,7 @@ func (s *ServiceList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "NAMESPACE", "TYPE", "CLUSTER-IP", "EXTERNAL-IP", "PORT(S)", "LAUNCHED_BY"}
+			fields = []string{"NAME", "NAMESPACE", "TYPE", "CLUSTER_IP", "EXTERNAL_IP", "PORTS", "LAUNCHED_BY"}
 		}
 		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
@@ -99,11 +99,11 @@ func (s *ServiceList) ToTEXT(to TextOptions) string {
 				row = append(row, v.Namespace)
 			case "TYPE":
 				row = append(row, v.ServiceType)
-			case "CLUSTER-IP":
+			case "CLUSTER_IP":
 				row = append(row, v.ClusterIP)
-			case "EXTERNAL-IP":
+			case "EXTERNAL_IP":
 				row = append(row, v.ExternalIP)
-			case "PORT(S)":
+			case "PORTS":
 				row = append(row, v.Ports)
 			case "LAUNCHED_BY":
 				row = append(row, v.LaunchedBy)
