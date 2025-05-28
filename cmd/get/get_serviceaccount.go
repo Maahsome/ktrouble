@@ -26,8 +26,9 @@ var serviceaccountCmd = &cobra.Command{
 			}
 
 			c.OutputData(&saData, objects.TextOptions{
-				NoHeaders: c.NoHeaders,
-				Fields:    c.Fields,
+				NoHeaders:     c.NoHeaders,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["service_account"],
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch service accounts, no valid kubernetes context")

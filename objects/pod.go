@@ -78,7 +78,7 @@ func (p *PodList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "NAMESPACE", "STATUS", "LAUNCHED_BY", "UTILITY", "SHELL/SERVICE"}
+			fields = to.DefaultFields
 		}
 		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)

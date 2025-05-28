@@ -45,11 +45,12 @@ Get a list of ingresses that are installed by ktrouble
 			}
 
 			c.OutputData(&ingressData, objects.TextOptions{
-				NoHeaders:    c.NoHeaders,
-				BashLinks:    c.EnableBashLinks,
-				UtilMap:      c.UtilMap,
-				UniqIdLength: c.UniqIdLength,
-				Fields:       c.Fields,
+				NoHeaders:     c.NoHeaders,
+				BashLinks:     c.EnableBashLinks,
+				UtilMap:       c.UtilMap,
+				UniqIdLength:  c.UniqIdLength,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["ingress"],
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch installed ingresses, no valid kubernetes context")

@@ -35,6 +35,7 @@ var utilityCmd = &cobra.Command{
 				ShowHidden:       c.ShowHidden,
 				Fields:           c.Fields,
 				AdditionalFields: []string{"EXCLUDED"},
+				DefaultFields:    c.OutputFieldsMap["utility"],
 			})
 		} else {
 			common.Logger.Error("Parameters passed in have failed checks.  Please review the warnings above")
@@ -89,9 +90,10 @@ func checkAddUtilityParams() bool {
 					c.OutputFormat = "text"
 				}
 				c.OutputData(&u, objects.TextOptions{
-					NoHeaders:  c.NoHeaders,
-					ShowHidden: c.ShowHidden,
-					Fields:     c.Fields,
+					NoHeaders:     c.NoHeaders,
+					ShowHidden:    c.ShowHidden,
+					Fields:        c.Fields,
+					DefaultFields: c.OutputFieldsMap["utility"],
 				})
 			}
 		}

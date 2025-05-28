@@ -30,8 +30,9 @@ var environmentCmd = &cobra.Command{
 			added := objects.EnvironmentList{}
 			added = append(added, u)
 			c.OutputData(&added, objects.TextOptions{
-				NoHeaders: c.NoHeaders,
-				Fields:    c.Fields,
+				NoHeaders:     c.NoHeaders,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["environments"],
 			})
 		} else {
 			common.Logger.Error("Parameters passed in have failed checks.  Please review the warnings above")
@@ -72,9 +73,10 @@ func checkAddEnvironmentParams() bool {
 					c.OutputFormat = "text"
 				}
 				c.OutputData(&u, objects.TextOptions{
-					NoHeaders:  c.NoHeaders,
-					ShowHidden: c.ShowHidden,
-					Fields:     c.Fields,
+					NoHeaders:     c.NoHeaders,
+					ShowHidden:    c.ShowHidden,
+					Fields:        c.Fields,
+					DefaultFields: c.OutputFieldsMap["environments"],
 				})
 			}
 		}

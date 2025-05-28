@@ -33,7 +33,10 @@ var environmentCmd = &cobra.Command{
 				ShowHidden:       true,
 				Fields:           c.Fields,
 				AdditionalFields: []string{"HIDDEN", "REMOVE_UPSTREAM"},
+				DefaultFields:    c.OutputFieldsMap["environments"],
 			})
+		} else {
+			logrus.Warn("--name/-e environment name must be specified")
 		}
 	},
 }

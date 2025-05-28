@@ -25,8 +25,9 @@ var nodeCmd = &cobra.Command{
 			}
 
 			c.OutputData(&nodeData, objects.TextOptions{
-				NoHeaders: c.NoHeaders,
-				Fields:    c.Fields,
+				NoHeaders:     c.NoHeaders,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["node"],
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch nodes, no valid kubernetes context")

@@ -319,8 +319,48 @@ func initConfig() {
 		}
 	}
 
+	// OutputFields Definitions
+	err := viper.UnmarshalKey("outputFields", &c.OutputFieldsDefs)
+	if err != nil {
+		logrus.Fatal("Error unmarshalling output fields...")
+	}
+	if len(c.OutputFieldsDefs) == 0 {
+		logrus.Warn("Adding default output fields to config.yaml")
+		seedFields := defaults.OutputFieldsList()
+		viper.Set("outputFields", seedFields)
+		c.OutputFieldsDefs = defaults.OutputFieldsList()
+		c.OutputFieldsMap = make(map[string][]string, len(c.OutputFieldsDefs))
+		for _, v := range c.OutputFieldsDefs {
+			c.OutputFieldsMap[v.Name] = strings.Split(v.Fields, ",")
+		}
+		verr := viper.WriteConfig()
+		if verr != nil {
+			logrus.WithError(verr).Info("Failed to write config")
+		}
+	} else {
+		c.OutputFieldsMap = make(map[string][]string, len(c.OutputFieldsDefs))
+		for _, v := range c.OutputFieldsDefs {
+			c.OutputFieldsMap[v.Name] = strings.Split(v.Fields, ",")
+		}
+		missing := defaults.MissingConfigOutputFieldDefinitions(c.OutputFieldsMap)
+		if len(missing) > 0 {
+			logrus.Warnf("The following output field definitions have been re-added to the config: %s", strings.Join(missing, ", "))
+			defaultFieldMap := defaults.OutputNamesList()
+			// add the missing fields to the config
+			for _, v := range missing {
+				c.OutputFieldsDefs = append(c.OutputFieldsDefs, objects.OutputFields{Name: v, Fields: defaultFieldMap[v]})
+				c.OutputFieldsMap[v] = strings.Split(defaultFieldMap[v], ",")
+			}
+			viper.Set("outputFields", c.OutputFieldsDefs)
+			verr := viper.WriteConfig()
+			if verr != nil {
+				logrus.WithError(verr).Info("Failed to write config")
+			}
+		}
+	}
+
 	// Environment Definitions
-	err := viper.UnmarshalKey("environments", &c.EnvDefs)
+	err = viper.UnmarshalKey("environments", &c.EnvDefs)
 	if err != nil {
 		logrus.Fatal("Error unmarshalling environment defs...")
 	}

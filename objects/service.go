@@ -72,7 +72,7 @@ func (s *ServiceList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "NAMESPACE", "TYPE", "CLUSTER_IP", "EXTERNAL_IP", "PORTS", "LAUNCHED_BY"}
+			fields = to.DefaultFields
 		}
 		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)

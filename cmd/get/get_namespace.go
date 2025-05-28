@@ -25,8 +25,9 @@ var namespaceCmd = &cobra.Command{
 			}
 
 			c.OutputData(&nsData, objects.TextOptions{
-				NoHeaders: c.NoHeaders,
-				Fields:    c.Fields,
+				NoHeaders:     c.NoHeaders,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["namespace"],
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch namespaces, no valid kubernetes context")

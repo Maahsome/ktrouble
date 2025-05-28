@@ -46,6 +46,8 @@ type (
 		IngressTemplateFile string
 		EphemeralSleepMap   map[string]objects.EphemeralSleep
 		EphemeralSleepDefs  objects.EphemeralSleepList
+		OutputFieldsDefs    objects.OutputFieldsList
+		OutputFieldsMap     map[string][]string
 	}
 
 	Outputtable interface {

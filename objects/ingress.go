@@ -69,7 +69,7 @@ func (i *IngressList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "NAMESPACE", "CLASS", "URL", "ADDRESS", "PORTS", "LAUNCHED_BY"}
+			fields = to.DefaultFields
 		}
 		if len(to.AdditionalFields) > 0 {
 			fields = append(fields, to.AdditionalFields...)

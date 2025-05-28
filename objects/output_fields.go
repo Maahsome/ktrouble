@@ -12,26 +12,29 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type NamespaceList struct {
-	Namespace []string `json:"namespace"`
+type OutputFieldsList []OutputFields
+
+type OutputFields struct {
+	Name   string `json:"name"`
+	Fields string `json:"fields"`
 }
 
 // ToJSON - Write the output as JSON
-func (n *NamespaceList) ToJSON() string {
-	nsJSON, err := json.MarshalIndent(n, "", "  ")
+func (of *OutputFieldsList) ToJSON() string {
+	ofJSON, err := json.MarshalIndent(of, "", "  ")
 	if err != nil {
 		common.Logger.WithError(err).Error("Error extracting JSON")
 		return ""
 	}
-	return string(nsJSON[:])
+	return string(ofJSON[:])
 }
 
-func (n *NamespaceList) ToGRON() string {
-	nsJSON, err := json.MarshalIndent(n, "", "  ")
+func (of *OutputFieldsList) ToGRON() string {
+	ofJSON, err := json.MarshalIndent(of, "", "  ")
 	if err != nil {
 		common.Logger.WithError(err).Error("Error extracting JSON for GRON")
 	}
-	subReader := strings.NewReader(string(nsJSON[:]))
+	subReader := strings.NewReader(string(ofJSON[:]))
 	subValues := &bytes.Buffer{}
 	ges := gron.NewGron(subReader, subValues)
 	ges.SetMonochrome(false)
@@ -39,24 +42,25 @@ func (n *NamespaceList) ToGRON() string {
 		common.Logger.WithError(serr).Error("Problem generating GRON syntax")
 		return ""
 	}
-	return subValues.String()
+	return string(subValues.Bytes())
 }
 
-func (n *NamespaceList) ToYAML() string {
-	nsYAML, err := yaml.Marshal(n)
+func (of *OutputFieldsList) ToYAML() string {
+	ofYAML, err := yaml.Marshal(of)
 	if err != nil {
 		common.Logger.WithError(err).Error("Error extracting YAML")
 		return ""
 	}
-	return string(nsYAML[:])
+	return string(ofYAML[:])
 }
 
-func (n *NamespaceList) ToTEXT(to TextOptions) string {
+func (of *OutputFieldsList) ToTEXT(to TextOptions) string {
 
-	buf := new(bytes.Buffer)
-	var row []string
+	buf, row := new(bytes.Buffer), make([]string, 0)
 	table := tablewriter.NewWriter(buf)
 	fields := []string{}
+
+	// ************************** TableWriter ******************************
 	if !to.NoHeaders {
 		if len(to.Fields) > 0 {
 			upperFields := fieldsToUpper(to.Fields)
@@ -79,17 +83,29 @@ func (n *NamespaceList) ToTEXT(to TextOptions) string {
 	table.SetTablePadding("\t") // pad with tabs
 	table.SetNoWhiteSpace(true)
 
-	for _, v := range n.Namespace {
+	mapList := make(map[string]OutputFields, len(*of))
+	nameList := []string{}
+
+	for _, v := range *of {
+		mapList[v.Name] = v
+		nameList = append(nameList, v.Name)
+	}
+
+	for _, v := range nameList {
 		row = []string{}
 		for _, f := range fields {
 			switch strings.ToUpper(f) {
-			case "NAMESPACE":
-				row = append(row, v)
+			case "NAME":
+				row = append(row, mapList[v].Name)
+			case "FIELDS":
+				row = append(row, mapList[v].Fields)
 			}
 		}
 		table.Append(row)
 	}
+
 	table.Render()
 
 	return buf.String()
+
 }

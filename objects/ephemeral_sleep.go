@@ -63,7 +63,7 @@ func (es *EphemeralSleepList) ToTEXT(to TextOptions) string {
 		if len(to.Fields) > 0 {
 			fields = append(fields, to.Fields...)
 		} else {
-			fields = []string{"NAME", "SECONDS"}
+			fields = to.DefaultFields
 		}
 		if len(to.AdditionalFields) > 0 {
 			fields = append(fields, to.AdditionalFields...)

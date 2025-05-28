@@ -16,8 +16,9 @@ var sizesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		c.OutputData(&c.SizeDefs, objects.TextOptions{
-			NoHeaders: c.NoHeaders,
-			Fields:    c.Fields,
+			NoHeaders:     c.NoHeaders,
+			Fields:        c.Fields,
+			DefaultFields: c.OutputFieldsMap["size"],
 		})
 	},
 }

@@ -22,6 +22,7 @@
 - [get namespace](#get-namespace)
 - [get node](#get-node)
 - [get nodelabels](#get-nodelabels)
+- [get output-fields](#get-output-fields)
 - [get running](#get-running)
 - [get serviceaccount](#get-serviceaccount)
 - [get services](#get-services)
@@ -38,6 +39,7 @@
 - [remove utility](#remove-utility)
 - [set](#set)
 - [set config](#set-config)
+- [set output-fields](#set-output-fields)
 - [status](#status)
 - [update](#update)
 - [update environment](#update-environment)
@@ -528,6 +530,7 @@ Available Commands:
   namespace      Get a list of namespaces
   node           Get a list of node labels
   nodelabels     Get a list of defined node labels in config.yaml
+  output-fields  Get a list fo the current output fields definitions
   running        Get a list of running pods
   serviceaccount Get a list of K8s ServiceAccount(s) in a Namespace
   services       Get a list of ktrouble installed services
@@ -773,6 +776,36 @@ Usage:
 
 Aliases:
   nodelabels, nodelabel, nl, labels
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## get output-fields
+
+```plaintext
+EXAMPLE:
+  Display a list of output definition names and their related fields from the configuration file
+
+    > ktrouble get output-fields
+
+Usage:
+  ktrouble get output-fields [flags]
+
+Aliases:
+  output-fields, of, fields, field, output-field
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1057,7 +1090,7 @@ EXAMPLE:
   All of the above examples prompt for all the missing parameters.  You can also specify ALL of the
   parameters on the command line, and optionally just return the POD name.
 
-  All of these parameters, except or node-selecotr, need to be set if you want to suppress the prompts.
+  All of these parameters, except or node-selector, need to be set if you want to suppress the prompts.
 
   Parameters:
     - --utility/-u <name>           : The name of the utility to launch, must match the utility name
@@ -1332,7 +1365,8 @@ Usage:
   ktrouble set [command]
 
 Available Commands:
-  config      Set configuration options for ktrouble
+  config        Set configuration options for ktrouble
+  output-fields Set default output fields for ktrouble commands
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1408,6 +1442,74 @@ Flags:
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
   -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## set output-fields
+
+```plaintext
+EXAMPLE:
+  Set the default output field for 'environment' commands to 'name,repository,source,hidden'.
+
+    > ktrouble set output-fields --output-name environments --fields 'name,repository,excluded,hidden'
+
+EXAMPLE:
+  Set the default output for 'pod' commands to 'name,launched_by'
+
+    > ktrouble set output-fields --output-name pod --fields 'name,launched_by'
+
+EXAMPLE:
+  Reset to the default output fields for 'pod' commands.
+
+    > ktrouble set output-fields --output-name pod --fields ''
+
+EXAMPLE:
+  The possible --output-name and --field combinations are:
+
+  Output Names/Fields:
+
+    - environments   : NAME,  REPOSITORY,  EXCLUDED,  HIDDEN,  REMOVE_UPSTREAM
+    - ephemeral_sleep: NAME,  SECONDS
+    - ingress        : NAME,  NAMESPACE,  CLASS,  HOSTS,  ADDRESS
+                       PORTS,  LAUNCHED_BY
+    - namespace      : NAMESPACE
+    - node           : NODE
+    - node_labels    : LABEL
+    - output_fields  : NAME,  FIELDS
+    - pod            : NAME,  NAMESPACE,  STATUS,  LAUNCHED_BY,  UTILITY
+                       SHELL/SERVICE
+    - service        : NAME,  NAMESPACE,  TYPE,  CLUSTER_IP,  EXTERNAL_IP
+                       PORTS,  LAUNCHED_BY
+    - service_account: SERVICE_ACCOUNT
+    - size           : NAME,  CPU_LIMIT,  MEM_LIMIT,  CPU_REQUEST,  MEM_REQUEST
+    - status         : NAME,  STATUS,  EXCLUDE
+    - utility        : NAME,  REPOSITORY,  EXEC,  HIDDEN,  EXCLUDED
+                       SOURCE,  ENVIRONMENTS,  REQUIRECONFIGMAPS,  REQUIRESECRETS,  HINT
+                       REMOVE_UPSTREAM
+    - version        : SEMVER,  BUILD_DATE,  GIT_COMMIT,  GIT_REF
+
+Usage:
+  ktrouble set output-fields [flags]
+
+Aliases:
+  output-fields, of, fields, field, output-field
+
+Flags:
+      --fields strings       Comma-separated list of fields to set for the output (e.g., name,repository,source,hidden); 'default' to set to default fields
+      --output-name string   The name of the output to set the fields for (e.g., pod, environment, utility, etc.)
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
       --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
       --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
   -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal

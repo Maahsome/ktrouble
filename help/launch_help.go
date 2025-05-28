@@ -45,7 +45,7 @@ func (l *LaunchCmd) Long() string {
   All of the above examples prompt for all the missing parameters.  You can also specify ALL of the
   parameters on the command line, and optionally just return the POD name.
 
-  All of these parameters, except or node-selecotr, need to be set if you want to suppress the prompts.
+  All of these parameters, except or node-selector, need to be set if you want to suppress the prompts.
 
   Parameters:
     - --utility/-u <name>           : The name of the utility to launch, must match the utility name
