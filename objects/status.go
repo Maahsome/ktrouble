@@ -68,7 +68,7 @@ func (s *StatusList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "STATUS", "PUSH_EXCLUDE"}
+			fields = to.DefaultFields
 		}
 		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)

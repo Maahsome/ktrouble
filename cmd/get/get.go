@@ -15,6 +15,7 @@ var getTemplatesHelp = help.GetTemplatesCmd{}
 var getNamespaceHelp = help.GetNamespaceCmd{}
 var getNodeHelp = help.GetNodeCmd{}
 var getNodeLabelsHelp = help.GetNodeLabelsCmd{}
+var getOutputFieldsHelp = help.GetOutputFieldsCmd{}
 var getServiceAccountHelp = help.GetServiceAccountCmd{}
 var getSizesHelp = help.GetSizesCmd{}
 var getUtilitiesHelp = help.GetUtilitiesCmd{}

@@ -137,7 +137,7 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "REPOSITORY", "EXEC"}
+			fields = to.DefaultFields
 		}
 		if len(to.AdditionalFields) > 0 {
 			fields = append(fields, to.AdditionalFields...)

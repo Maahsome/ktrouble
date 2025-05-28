@@ -38,16 +38,18 @@ var pullCmd = &cobra.Command{
 			status := pullEnvironmentDefinitions()
 			if len(status) > 0 {
 				c.OutputData(&status, objects.TextOptions{
-					NoHeaders: c.NoHeaders,
-					Fields:    c.Fields,
+					NoHeaders:     c.NoHeaders,
+					Fields:        c.Fields,
+					DefaultFields: c.OutputFieldsMap["environments"],
 				})
 			}
 		} else {
 			status := pullUtilityDefinitions()
 			if len(status) > 0 {
 				c.OutputData(&status, objects.TextOptions{
-					NoHeaders: c.NoHeaders,
-					Fields:    c.Fields,
+					NoHeaders:     c.NoHeaders,
+					Fields:        c.Fields,
+					DefaultFields: c.OutputFieldsMap["environments"],
 				})
 			}
 		}

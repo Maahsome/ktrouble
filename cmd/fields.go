@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"ktrouble/defaults"
 
 	"github.com/spf13/cobra"
 )
@@ -18,58 +19,67 @@ var fieldsCmd = &cobra.Command{
 
 func displayFieldHelp() {
 
+	validFields := defaults.ValidOutputFields()
 	help := `A list of valid FIELDS that can be specified by command:
 
   COMMAND: get|add|update|remove environment
-
-      FIELDS: NAME, REPOSITORY, EXCLUDED, HIDDEN, REMOVE_UPSTREAM
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["environment"])
+	help += `
 
   COMMAND: get ingress
-
-      FIELDS: NAME, NAMESPACE, CLASS, HOSTS, ADDRESS, PORTS, LAUNCHED_BY
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["ingress"])
+	help += `
 
   COMMAND: get|add|update|remove sleep
-
-      FIELDS: NAME, SECONDS
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["ephemeral_sleep"])
+	help += `
 
   COMMAND: get|add|update|remove utility
-
-      FIELDS: NAME, REPOSITORY, EXEC, HIDDEN, EXCLUDED, SOURCE, ENVIRONMENTS,
-              REQUIRECONFIGMAPS, REQUIRESECRETS, HINT, REMOVE_UPSTREAM
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["utility"])
+	help += `
 
   COMMAND: get namespace
-
-      FIELDS: NAMESPACE
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["namespace"])
+	help += `
 
   COMMAND: get nodes
-
-      FIELDS: NODE
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["node_labels"])
+	help += `
 
   COMMAND: get running
-
-      FIELDS: NAME, NAMESPACE, STATUS, LAUNCHED_BY, UTILITY, SHELL/SERVICE
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["pod"])
+	help += `
 
   COMMAND: get service
-
-      FIELDS: NAME, NAMESPACE, TYPE, CLUSTER_IP, EXTERNAL_IP, PORTS, LAUNCHED_BY
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["service"])
+	help += `
 
   COMMAND: get serviceaccount
-
-      FIELDS: SERVICE_ACCOUNT
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["service_account"])
+	help += `
 
   COMMAND: get sizes
-
-      FIELDS: NAME, CPU_LIMIT, MEM_LIMIT, CPU_REQUEST, MEM_REQUEST
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["size"])
+	help += `
 
   COMMAND: status
-
-      FIELDS: NAME, STATUS, EXCLUDE
+`
+	help += fmt.Sprintf("      FIELDS: %s", validFields["status"])
+	help += `
 
   COMMAND version
-
-      FIELDS: SEMVER, BUILD_DATE, GIT_COMMIT, GIT_REF
-
 `
+	help += fmt.Sprintf("      FIELDS: %s", validFields["version"])
 
 	fmt.Println(help)
 }

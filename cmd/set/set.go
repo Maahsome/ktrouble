@@ -9,6 +9,7 @@ import (
 
 var setHelp = help.SetCmd{}
 var setConfigHelp = help.SetConfigCmd{}
+var setOutputFieldsHelp = help.SetOutputFieldsCmd{}
 
 var setCmd = &cobra.Command{
 	Use:   "set",

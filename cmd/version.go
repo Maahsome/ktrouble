@@ -24,8 +24,9 @@ var versionCmd = &cobra.Command{
 			c.OutputFormat = "json"
 		}
 		c.OutputData(&version, objects.TextOptions{
-			NoHeaders: c.NoHeaders,
-			Fields:    c.Fields,
+			NoHeaders:     c.NoHeaders,
+			Fields:        c.Fields,
+			DefaultFields: c.OutputFieldsMap["version"],
 		})
 	},
 }

@@ -30,8 +30,9 @@ var environmentCmd = &cobra.Command{
 		updated := objects.EnvironmentList{}
 		updated = append(updated, u)
 		c.OutputData(&updated, objects.TextOptions{
-			NoHeaders: c.NoHeaders,
-			Fields:    c.Fields,
+			NoHeaders:     c.NoHeaders,
+			Fields:        c.Fields,
+			DefaultFields: c.OutputFieldsMap["environments"],
 		})
 	},
 }

@@ -9,5 +9,6 @@ type (
 		ShowHidden       bool
 		Fields           []string
 		AdditionalFields []string
+		DefaultFields    []string
 	}
 )

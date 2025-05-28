@@ -117,7 +117,7 @@ func (en *EnvironmentList) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"NAME", "REPOSITORY", "EXCLUDED"}
+			fields = to.DefaultFields
 		}
 		if len(to.AdditionalFields) > 0 {
 			fields = append(fields, to.AdditionalFields...)

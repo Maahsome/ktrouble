@@ -33,6 +33,7 @@ var utilityCmd = &cobra.Command{
 				ShowHidden:       true,
 				Fields:           c.Fields,
 				AdditionalFields: []string{"HIDDEN", "REMOVE_UPSTREAM"},
+				DefaultFields:    c.OutputFieldsMap["utility"],
 			})
 		}
 	},

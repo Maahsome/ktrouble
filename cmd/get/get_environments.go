@@ -24,6 +24,7 @@ var environmentsCmd = &cobra.Command{
 			ShowHidden:       c.ShowHidden,
 			Fields:           c.Fields,
 			AdditionalFields: additionalFields,
+			DefaultFields:    c.OutputFieldsMap["environments"],
 		})
 	},
 }

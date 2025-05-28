@@ -17,8 +17,9 @@ var nodelabelsCmd = &cobra.Command{
 		nodeLabels := objects.NodeLabels{}
 		nodeLabels = c.NodeSelectorLabels
 		c.OutputData(&nodeLabels, objects.TextOptions{
-			NoHeaders: c.NoHeaders,
-			Fields:    c.Fields,
+			NoHeaders:     c.NoHeaders,
+			Fields:        c.Fields,
+			DefaultFields: c.OutputFieldsMap["node_labels"],
 		})
 	},
 }

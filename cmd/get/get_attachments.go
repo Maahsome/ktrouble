@@ -57,10 +57,11 @@ var attachmentsCmd = &cobra.Command{
 			}
 
 			c.OutputData(&podData, objects.TextOptions{
-				NoHeaders:    c.NoHeaders,
-				BashLinks:    c.EnableBashLinks,
-				UtilMap:      c.UtilMap,
-				UniqIdLength: c.UniqIdLength,
+				NoHeaders:     c.NoHeaders,
+				BashLinks:     c.EnableBashLinks,
+				UtilMap:       c.UtilMap,
+				UniqIdLength:  c.UniqIdLength,
+				DefaultFields: c.OutputFieldsMap["pod"],
 			})
 		} else {
 			common.Logger.Warn("Cannot fetch attached containers, no valid kubernetes context")

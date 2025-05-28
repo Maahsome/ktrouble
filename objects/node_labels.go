@@ -60,7 +60,7 @@ func (nl *NodeLabels) ToTEXT(to TextOptions) string {
 			upperFields := fieldsToUpper(to.Fields)
 			fields = append(fields, upperFields...)
 		} else {
-			fields = []string{"LABEL"}
+			fields = to.DefaultFields
 		}
 		table.SetHeader(fields)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)

@@ -36,14 +36,16 @@ var statusCmd = &cobra.Command{
 		if statusP.Environments {
 			status := EnvironmentDefinitionStatus()
 			c.OutputData(&status, objects.TextOptions{
-				NoHeaders: c.NoHeaders,
-				Fields:    c.Fields,
+				NoHeaders:     c.NoHeaders,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["status"],
 			})
 		} else {
 			status := UtilityDefinitionStatus()
 			c.OutputData(&status, objects.TextOptions{
-				NoHeaders: c.NoHeaders,
-				Fields:    c.Fields,
+				NoHeaders:     c.NoHeaders,
+				Fields:        c.Fields,
+				DefaultFields: c.OutputFieldsMap["status"],
 			})
 		}
 	},
