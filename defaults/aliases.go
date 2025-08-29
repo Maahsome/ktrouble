@@ -21,3 +21,4 @@ var LaunchAliases = []string{"create", "apply", "pod", "l"}
 var OutputFieldsAliases = []string{"of", "fields", "field", "output-field"}
 var RemoveAliases = []string{"rm"}
 var UpdateAliases = []string{"modify"}
+var CombineAliases = []string{"merge", "join"}

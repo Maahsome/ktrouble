@@ -57,6 +57,12 @@ func unmarshallEnvDefinition(env objects.Environment) string {
 }
 
 func unmarshallUtilityDefinition(util objects.UtilityPod) string {
+
+	// These fields we want to not affect the diff
+	// Upstream definitions will ALWAYS be RemoveUpstream = false
+	// Upstream definitions will ALWAYS have Hidden = false as well
+	util.RemoveUpstream = false
+	util.Hidden = false
 	utilYAML, rerr := yaml.Marshal(util)
 	if rerr != nil {
 		return ""

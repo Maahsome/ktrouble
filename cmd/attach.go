@@ -16,6 +16,7 @@ type attachParam struct {
 	Port                int
 	Host                string
 	Path                string
+	BuildCommand        bool
 }
 
 var a attachParam

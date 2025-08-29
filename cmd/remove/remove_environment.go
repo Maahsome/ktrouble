@@ -47,12 +47,10 @@ func removeOrHideEnvironment() error {
 	for i, v := range c.EnvDefs {
 		if environmentParam.Name == v.Name {
 			updatedDefs = true
-			if v.Source == "ktrouble-utils" {
-				common.Logger.WithField("name", v.Name).Tracef("Hiding environment definition")
+			common.Logger.WithField("name", v.Name).Tracef("Hiding environment definition")
+			if environmentParam.RemoveUpstream {
+				c.EnvDefs[i].RemoveUpstream = true
 				c.EnvDefs[i].Hidden = true
-				if environmentParam.RemoveUpstream {
-					c.EnvDefs[i].RemoveUpstream = true
-				}
 			} else {
 				common.Logger.WithField("name", v.Name).Tracef("Removing environment definition")
 				c.EnvDefs = objects.RemoveEnvIndex(c.EnvDefs, i)

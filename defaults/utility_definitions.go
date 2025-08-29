@@ -9,23 +9,21 @@ func UtilityDefinitions() []objects.UtilityPod {
 
 	utilityDefinitionHints["dnsutils"] = `Image has basic DNS investigation tools like nslookup and dig`
 	utilityDefinitionHints["psql-curl"] = `Image has a psql client and curl installed`
-	utilityDefinitionHints["psqlutils15"] = `A debian image with a version 15 psql client`
-	utilityDefinitionHints["psqlutils14"] = `A debian image with a version 14 psql client`
+	utilityDefinitionHints["psqlutils"] = `A debian image with psql client`
 	utilityDefinitionHints["awscli"] = `The "latest" tagged aws-cli image from amazon`
 	utilityDefinitionHints["gcloudutils"] = `The "latest" tagged cloud-sdk image from google`
 	utilityDefinitionHints["azutils"] = `The "latest" tagged azure-cli image from microsoft`
-	utilityDefinitionHints["mysqlutils5"] = `A debian image with mysql 5.7.40 versioned client`
-	utilityDefinitionHints["mysqlutils8"] = `A debian image with mysql 8.n.n versioned client`
-	utilityDefinitionHints["redis6"] = `An alpine image with redis-cli v6.2 installed`
+	utilityDefinitionHints["mysqlutils"] = `A debian image with mysql client`
+	utilityDefinitionHints["redis"] = `An alpine image with redis-cli installed`
 	utilityDefinitionHints["curl"] = `Just the "latest" curl command in a small image`
 	utilityDefinitionHints["basic-tools"] = `A small image with curl, jq, yq, and others`
 
 	return []objects.UtilityPod{
 		{
 			Name:              "dnsutils",
-			Repository:        "gcr.io/kubernetes-e2e-test-images/dnsutils:1.3",
+			Image:             "gcr.io/kubernetes-e2e-test-images/dnsutils",
+			Tags:              []string{"1.3"},
 			ExecCommand:       "/bin/sh",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
@@ -36,9 +34,9 @@ func UtilityDefinitions() []objects.UtilityPod {
 		},
 		{
 			Name:              "psql-curl",
-			Repository:        "barrypiccinni/psql-curl:latest",
+			Image:             "barrypiccinni/psql-curl",
+			Tags:              []string{"latest"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
@@ -48,36 +46,23 @@ func UtilityDefinitions() []objects.UtilityPod {
 			Environments:      []string{},
 		},
 		{
-			Name:              "psqlutils15",
-			Repository:        "postgres:15-bullseye",
+			Name:              "psqlutils",
+			Image:             "postgres",
+			Tags:              []string{"14-bullseye", "15-bullseye"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
-			Hint:              utilityDefinitionHints["psqlutils15"],
-			RemoveUpstream:    false,
-			Environments:      []string{},
-		},
-		{
-			Name:              "psqlutils14",
-			Repository:        "postgres:14-bullseye",
-			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
-			ExcludeFromShare:  false,
-			Hidden:            false,
-			RequireSecrets:    false,
-			RequireConfigmaps: false,
-			Hint:              utilityDefinitionHints["psqlutils14"],
+			Hint:              utilityDefinitionHints["psqlutils"],
 			RemoveUpstream:    false,
 			Environments:      []string{},
 		},
 		{
 			Name:              "awscli",
-			Repository:        "amazon/aws-cli:latest",
+			Image:             "amazon/aws-cli",
+			Tags:              []string{"latest"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
@@ -88,9 +73,9 @@ func UtilityDefinitions() []objects.UtilityPod {
 		},
 		{
 			Name:              "gcloudutils",
-			Repository:        "google/cloud-sdk:latest",
+			Image:             "google/cloud-sdk",
+			Tags:              []string{"latest"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
@@ -101,9 +86,9 @@ func UtilityDefinitions() []objects.UtilityPod {
 		},
 		{
 			Name:              "azutils",
-			Repository:        "mcr.microsoft.com/azure-cli",
+			Image:             "mcr.microsoft.com/azure-cli",
+			Tags:              []string{"latest"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
@@ -113,49 +98,36 @@ func UtilityDefinitions() []objects.UtilityPod {
 			Environments:      []string{},
 		},
 		{
-			Name:              "mysqlutils5",
-			Repository:        "mysql:5.7.40-debian",
+			Name:              "mysqlutils",
+			Image:             "mysql",
+			Tags:              []string{"5.7.40-debian", "8-debian"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
-			Hint:              utilityDefinitionHints["mysqlutils5"],
+			Hint:              utilityDefinitionHints["mysqlutils"],
 			RemoveUpstream:    false,
 			Environments:      []string{},
 		},
 		{
-			Name:              "mysqlutils8",
-			Repository:        "mysql:8-debian",
+			Name:              "redis",
+			Image:             "cmaahs/redis-cli",
+			Tags:              []string{"6.2"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
 			RequireConfigmaps: false,
-			Hint:              utilityDefinitionHints["mysqlutils8"],
-			RemoveUpstream:    false,
-			Environments:      []string{},
-		},
-		{
-			Name:              "redis6",
-			Repository:        "cmaahs/redis-cli:6.2",
-			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
-			ExcludeFromShare:  false,
-			Hidden:            false,
-			RequireSecrets:    false,
-			RequireConfigmaps: false,
-			Hint:              utilityDefinitionHints["redis6"],
+			Hint:              utilityDefinitionHints["redis"],
 			RemoveUpstream:    false,
 			Environments:      []string{},
 		},
 		{
 			Name:              "curl",
-			Repository:        "curlimages/curl:latest",
+			Image:             "curlimages/curl",
+			Tags:              []string{"latest"},
 			ExecCommand:       "/bin/sh",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,
@@ -166,9 +138,9 @@ func UtilityDefinitions() []objects.UtilityPod {
 		},
 		{
 			Name:              "basic-tools",
-			Repository:        "cmaahs/basic-tools:v0.0.1",
+			Image:             "cmaahs/basic-tools",
+			Tags:              []string{"v0.0.1"},
 			ExecCommand:       "/bin/bash",
-			Source:            "ktrouble-utils",
 			ExcludeFromShare:  false,
 			Hidden:            false,
 			RequireSecrets:    false,

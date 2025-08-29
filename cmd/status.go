@@ -96,15 +96,25 @@ func UtilityDefinitionStatus() objects.StatusList {
 				Exclude: fmt.Sprintf("%t", l.ExcludeFromShare),
 			})
 		} else {
-			s := compareDefs(l, r)
-			status = append(status, objects.Status{
-				Name:    l.Name,
-				Status:  s,
-				Exclude: fmt.Sprintf("%t", l.ExcludeFromShare),
-			})
+			if l.RemoveUpstream {
+				status = append(status, objects.Status{
+					Name:    l.Name,
+					Status:  "remove upstream",
+					Exclude: fmt.Sprintf("%t", l.ExcludeFromShare),
+				})
+			} else {
+				s := compareDefs(l, r)
+				status = append(status, objects.Status{
+					Name:    l.Name,
+					Status:  s,
+					Exclude: fmt.Sprintf("%t", l.ExcludeFromShare),
+				})
+			}
 		}
 	}
 	for _, r := range remoteDefs {
+		common.Logger.Tracef("Checking remote utility definition: %s", r.Name)
+		common.Logger.Tracef("Local utility definitions: %s", c.UtilMap[r.Name].Name)
 		if _, ok := c.UtilMap[r.Name]; !ok {
 			status = append(status, objects.Status{
 				Name:    r.Name,

@@ -49,8 +49,8 @@ func (l *LaunchCmd) Long() string {
 
   Parameters:
     - --utility/-u <name>           : The name of the utility to launch, must match the utility name
-                                    : be sure to specify the "environment" name if the utility
-                                    : has multiple environments, eg: --utility 'uppers/dns-tools'
+    - --tag                         : Specify the tag of the image, eg --tag 'latest'
+    - --environment                 : specify an environment, if the utility has environments defined, eg: --environment 'lowers'
     - --namespace/-n <name>         : The namespace to use
     - --service-account <name>      : The name of the service account to use
     - --node-selector <label/value> : The node selector to use

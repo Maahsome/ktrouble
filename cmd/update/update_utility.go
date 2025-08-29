@@ -70,11 +70,11 @@ func checkUpdateUtilityParams() bool {
 			showUtil := false
 			u := objects.UtilityPodList{}
 			common.Logger.Debugf("utilityParam.Name: %s, exising: %s", utilityParam.Name, v.Name)
-			if utilityParam.Repository == v.Repository {
+			if utilityParam.Image == v.Image && utilityParam.Name != v.Name {
 				allParamsSet = false
 				showUtil = true
 				u = append(u, v)
-				common.Logger.Warnf("The --repository/-r parameter clashes with an existing utility: %s, please consider using that utility definition", v.Name)
+				common.Logger.Warnf("The --image/-i parameter clashes with an existing utility: %s, please consider using that utility definition", v.Name)
 			}
 			if showUtil {
 				if !c.FormatOverridden {
@@ -98,8 +98,12 @@ func updateUtility() (objects.UtilityPod, error) {
 	updatedDef := objects.UtilityPod{}
 	for i, v := range c.UtilDefs {
 		if utilityParam.Name == v.Name {
-			if len(utilityParam.Repository) > 0 {
-				c.UtilDefs[i].Repository = utilityParam.Repository
+			if len(utilityParam.Image) > 0 {
+				c.UtilDefs[i].Image = utilityParam.Image
+				updatedUtilty = true
+			}
+			if len(utilityParam.Tags) > 0 {
+				c.UtilDefs[i].Tags = utilityParam.Tags
 				updatedUtilty = true
 			}
 			if len(utilityParam.ExecCommand) > 0 {
@@ -155,7 +159,8 @@ func updateUtility() (objects.UtilityPod, error) {
 func init() {
 	updateCmd.AddCommand(utilityCmd)
 	utilityCmd.Flags().StringVarP(&utilityParam.Name, "name", "u", "", "Unique name for your utility pod")
-	utilityCmd.Flags().StringVarP(&utilityParam.Repository, "repository", "r", "", "Repository and tag for your utility container, eg: cmaahs/basic-tools:latest")
+	utilityCmd.Flags().StringVarP(&utilityParam.Image, "image", "i", "", "Image path for your utility container, eg: cmaahs/basic-tools")
+	utilityCmd.Flags().StringSliceVar(&utilityParam.Tags, "tags", []string{}, "Specify an array of tags for the image eg, --tags 'latest,0.0.1'")
 	utilityCmd.Flags().StringVarP(&utilityParam.ExecCommand, "cmd", "c", "", "Default shell/command to use when 'exec'ing into the POD")
 	utilityCmd.Flags().BoolVarP(&utilityParam.ExcludeFromShare, "toggle-exclude", "x", false, "Switch the current 'excludeFromShare' flag for the utility definition")
 	utilityCmd.Flags().BoolVar(&utilityParam.Hidden, "toggle-hidden", false, "Switch the current 'hidden' flag for the utility definition")

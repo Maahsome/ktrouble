@@ -40,7 +40,7 @@ var pullCmd = &cobra.Command{
 				c.OutputData(&status, objects.TextOptions{
 					NoHeaders:     c.NoHeaders,
 					Fields:        c.Fields,
-					DefaultFields: c.OutputFieldsMap["environments"],
+					DefaultFields: c.OutputFieldsMap["status"],
 				})
 			}
 		} else {
@@ -49,7 +49,7 @@ var pullCmd = &cobra.Command{
 				c.OutputData(&status, objects.TextOptions{
 					NoHeaders:     c.NoHeaders,
 					Fields:        c.Fields,
-					DefaultFields: c.OutputFieldsMap["environments"],
+					DefaultFields: c.OutputFieldsMap["status"],
 				})
 			}
 		}
@@ -65,7 +65,7 @@ func pullEnvironmentDefinitions() objects.StatusList {
 		status := EnvironmentDefinitionStatus()
 		for _, v := range status {
 			def := c.EnvMap[v.Name]
-			if def.Source != "local" && !def.ExcludeFromShare && v.Status == "different" {
+			if !def.ExcludeFromShare && v.Status == "different" {
 				remoteDefs = append(remoteDefs, def)
 			}
 		}
@@ -116,7 +116,7 @@ func pullUtilityDefinitions() objects.StatusList {
 		status := UtilityDefinitionStatus()
 		for _, v := range status {
 			def := c.UtilMap[v.Name]
-			if def.Source != "local" && !def.ExcludeFromShare && v.Status == "different" {
+			if !def.ExcludeFromShare && v.Status == "different" {
 				remoteDefs = append(remoteDefs, def)
 			}
 		}
@@ -139,12 +139,15 @@ func pullUtilityDefinitions() objects.StatusList {
 				foundExisting := false
 				for i, u := range c.UtilDefs {
 					if v == u.Name {
-						c.UtilDefs[i].Repository = remoteDefsMap[v].Repository
-						c.UtilDefs[i].Source = remoteDefsMap[v].Source
+						c.UtilDefs[i].Image = remoteDefsMap[v].Image
+						c.UtilDefs[i].Tags = remoteDefsMap[v].Tags
 						c.UtilDefs[i].ExecCommand = remoteDefsMap[v].ExecCommand
 						c.UtilDefs[i].ExcludeFromShare = remoteDefsMap[v].ExcludeFromShare
 						c.UtilDefs[i].Hidden = remoteDefsMap[v].Hidden
+						c.UtilDefs[i].Hint = remoteDefsMap[v].Hint
 						c.UtilDefs[i].Environments = remoteDefsMap[v].Environments
+						c.UtilDefs[i].RequireSecrets = remoteDefsMap[v].RequireSecrets
+						c.UtilDefs[i].RequireConfigmaps = remoteDefsMap[v].RequireConfigmaps
 						foundExisting = true
 						break
 					}

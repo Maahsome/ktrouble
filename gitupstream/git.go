@@ -24,7 +24,7 @@ type GitUpstream interface {
 	GetNewUpstreamEnvDefs(localDefs objects.EnvironmentList) (objects.EnvironmentList, map[string]objects.Environment)
 	PushEnvLocals(localDefs objects.EnvironmentConfig) bool
 	VersionDirectoryExists(version string) bool
-	Migrate(fromVer string, toVer string) bool
+	Migrate(fromVer string, toVer string, dryRun bool) bool
 }
 
 type gitUpstream struct {
@@ -272,7 +272,6 @@ func (gu *gitUpstream) PushEnvLocals(envConfig objects.EnvironmentConfig) bool {
 		for i, e := range existingEnvConfig.Environments {
 			if v.Name == e.Name {
 				common.Logger.Tracef("updating existing env %s", v.Name)
-				existingEnvConfig.Environments[i].Source = "ktrouble-utils"
 				existingEnvConfig.Environments[i].ExcludeFromShare = v.ExcludeFromShare
 				existingEnvConfig.Environments[i].Repository = v.Repository
 				if v.RemoveUpstream {
@@ -375,7 +374,6 @@ func (gu *gitUpstream) PushLocals(localDefs objects.UtilityPodList) bool {
 	adding := []string{}
 	for _, v := range localDefs {
 
-		v.Source = "ktrouble-utils"
 		defData, merr := yaml.Marshal(v)
 		if merr != nil {
 			common.Logger.Fatal("Error Marshaling YAML data for write")

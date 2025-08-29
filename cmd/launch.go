@@ -22,7 +22,10 @@ type launchParam struct {
 	Secrets             []string
 	ConfigMaps          []string
 	Size                string
+	Tag                 string
+	Environment         string
 	OutputName          bool
+	BuildCommand        bool
 }
 
 var p launchParam
@@ -56,7 +59,7 @@ func init() {
 	launchCmd.Flags().BoolVar(&p.CreateIngress, "ingress", false, "Use this switch to enable creating a service and ingress for the POD")
 	launchCmd.Flags().IntVar(&p.Port, "port", 8080, "Specify the port that the POD listens on, used in the service and ingress settings")
 	launchCmd.Flags().StringVar(&p.Host, "host", "flexo.bender.rocks", "Specify the host that the ingress will listen on, for configuration of ingress-nginx")
-	launchCmd.Flags().StringVar(&p.Path, "path", "service-futurama", "Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes")
+	launchCmd.Flags().StringVar(&p.Path, "path", "service-ktrouble", "Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes")
 	launchCmd.Flags().StringVarP(&p.Utility, "utility", "u", "", "Specify the name of the utility to launch")
 	launchCmd.Flags().StringVar(&p.ServiceAccount, "service-account", "", "Specify the name of the service account to use")
 	launchCmd.Flags().StringVarP(&p.Namespace, "namespace", "n", "", "Specify the namespace to use")
@@ -64,5 +67,8 @@ func init() {
 	launchCmd.Flags().StringSliceVar(&p.Secrets, "secrets", []string{}, "Specify an array of secret names to mount, eg --secrets 'secret1,secret2'")
 	launchCmd.Flags().StringSliceVar(&p.ConfigMaps, "configmaps", []string{}, "Specify an array of configmap names to mount, eg --secrets 'cm1,cm2'")
 	launchCmd.Flags().StringVar(&p.Size, "size", "", "Specify the size of the POD, eg --size 'small,medium,large'")
+	launchCmd.Flags().StringVar(&p.Tag, "tag", "", "Specify the tag of the image, eg --tag 'latest'")
+	launchCmd.Flags().StringVar(&p.Environment, "environment", "", "Specify the environment of the image, eg --environment 'lowers'")
 	launchCmd.Flags().BoolVar(&p.OutputName, "output-name", false, "Use this switch to only output the name of the POD")
+	launchCmd.Flags().BoolVar(&p.BuildCommand, "build-command", false, "Use this switch to only output the ktrouble command line for launching the utility")
 }

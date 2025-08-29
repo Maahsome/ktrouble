@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"ktrouble/cmd/add"
+	"ktrouble/cmd/combine"
 	"ktrouble/cmd/edit"
 	"ktrouble/cmd/get"
 	"ktrouble/cmd/remove"
@@ -228,7 +229,7 @@ func buildRootCmd() *cobra.Command {
 	RootCmd.PersistentFlags().StringVar(&c.LogFile, "log-file", "", "Set the logging level: trace,debug,info,warning,error,fatal")
 	RootCmd.PersistentFlags().StringVarP(&c.Namespace, "namespace", "n", "", "Specify the namespace to run in, ENV NAMESPACE then -n for preference")
 	RootCmd.PersistentFlags().BoolVarP(&c.ShowHidden, "show-hidden", "s", false, "Show entries with the 'hidden' property set to 'true'")
-	RootCmd.PersistentFlags().StringSliceVarP(&c.Fields, "fields", "f", []string{}, "Specify an array of field names: eg, --fields 'NAME,REPOSITORY'")
+	RootCmd.PersistentFlags().StringSliceVarP(&c.Fields, "fields", "f", []string{}, "Specify an array of field names: eg, --fields 'NAME,IMAGE'")
 	RootCmd.PersistentFlags().StringVarP(&c.TemplateFile, "template", "t", "default", "Specify the template file to use to render the POD manifest")
 	RootCmd.PersistentFlags().StringVar(&c.ServiceTemplateFile, "service-template", "default-service", "Specify the service template file to use to render the SERVICE manifest, for --create-ingress option")
 	RootCmd.PersistentFlags().StringVar(&c.IngressTemplateFile, "ingress-template", "default-ingress", "Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option")
@@ -245,6 +246,7 @@ func addSubCommands() {
 		remove.InitSubCommands(c),
 		update.InitSubCommands(c),
 		set.InitSubCommands(c),
+		combine.InitSubCommands(c),
 	)
 }
 
@@ -267,14 +269,21 @@ func init() {
 func initConfig() {
 	home, herr := os.UserHomeDir()
 	cobra.CheckErr(herr)
-	confDir := fmt.Sprintf("%s/.config/ktrouble", home)
-	tmplDir := fmt.Sprintf("%s/.config/ktrouble/templates", home)
+	configHome := fmt.Sprintf("%s/.config", home)
+	if os.Getenv("XDG_CONFIG_HOME") != "" {
+		configHome = os.Getenv("XDG_CONFIG_HOME")
+	}
+	confDir := fmt.Sprintf("%s/ktrouble", configHome)
+	tmplDir := fmt.Sprintf("%s/ktrouble/templates", configHome)
 	envCfgFile := os.Getenv("KTROUBLE_CONFIG")
 	if envCfgFile != "" {
 		logrus.Debug("Using KTROUBLE_CONFIG")
 		configFile := fmt.Sprintf("%s/%s", confDir, envCfgFile)
-		createRestrictedConfigFile(configFile)
+		created := createRestrictedConfigFile(configFile)
 		viper.SetConfigFile(configFile)
+		if created {
+			setConfigFileVersion()
+		}
 	} else {
 		if cfgFile != "" {
 			// Use config file from the flag.
@@ -291,8 +300,11 @@ func initConfig() {
 			}
 			if stat, err := os.Stat(confDir); err == nil && stat.IsDir() {
 				configFile := fmt.Sprintf("%s/%s", confDir, "config.yaml")
-				createRestrictedConfigFile(configFile)
+				created := createRestrictedConfigFile(configFile)
 				viper.SetConfigFile(configFile)
+				if created {
+					setConfigFileVersion()
+				}
 			} else {
 				logrus.Info("The ~/.config/ktrouble path is a file and not a directory, please remove the 'ktrouble' file.")
 				os.Exit(1)
@@ -390,22 +402,9 @@ func initConfig() {
 			logrus.WithError(verr).Info("Failed to write config")
 		}
 	} else {
-		updatedSources := false
-		defaultDefs := defaults.UtilityDefinitions()
 		c.UtilMap = make(map[string]objects.UtilityPod, len(c.UtilDefs))
-		for i, v := range c.UtilDefs {
+		for _, v := range c.UtilDefs {
 			c.UtilMap[v.Name] = v
-			if len(v.Source) == 0 {
-				c.UtilDefs[i].Source = whichSource(defaultDefs, v.Name)
-				updatedSources = true
-			}
-		}
-		if updatedSources {
-			viper.Set("utilityDefinitions", c.UtilDefs)
-			verr := viper.WriteConfig()
-			if verr != nil {
-				logrus.WithError(verr).Info("Failed to write config")
-			}
 		}
 	}
 
@@ -570,32 +569,27 @@ func initConfig() {
 
 	// Create 'default' template in the config templates directory
 	templateFile := fmt.Sprintf("%s/default", tmplDir)
+	envDefaultTemplateFile := os.Getenv("KTROUBLE_DEFAULT_TEMPLATE")
+	if envDefaultTemplateFile != "" {
+		templateFile = fmt.Sprintf("%s/%s", tmplDir, envDefaultTemplateFile)
+	}
 	createDefaultTemplateFile(templateFile)
 
 	// Create 'default' service template in the config templates directory
 	serviceTemplateFile := fmt.Sprintf("%s/default-service", tmplDir)
+	envDefaultServiceTemplateFile := os.Getenv("KTROUBLE_DEFAULT_SERVICE_TEMPLATE")
+	if envDefaultServiceTemplateFile != "" {
+		serviceTemplateFile = fmt.Sprintf("%s/%s", tmplDir, envDefaultServiceTemplateFile)
+	}
 	createDefaultServiceTemplateFile(serviceTemplateFile)
 
 	// Create 'default' ingress template in the config templates directory
 	ingressTemplateFile := fmt.Sprintf("%s/default-ingress", tmplDir)
-	createDefaultIngressTemplateFile(ingressTemplateFile)
-}
-
-// whichSource returns 'ktrouble-utils' if the utility name is in the default list
-// otherwise it returns 'local' which would be something that was added locally.
-// this function is to bring the config.yaml up to date with new properties added
-func whichSource(defList []objects.UtilityPod, name string) string {
-
-	source := "local"
-
-	for _, v := range defList {
-		if name == v.Name {
-			source = "ktrouble-utils"
-			break
-		}
+	envDefaultIngressTemplateFile := os.Getenv("KTROUBLE_DEFAULT_INGRESS_TEMPLATE")
+	if envDefaultIngressTemplateFile != "" {
+		ingressTemplateFile = fmt.Sprintf("%s/%s", tmplDir, envDefaultIngressTemplateFile)
 	}
-
-	return source
+	createDefaultIngressTemplateFile(ingressTemplateFile)
 }
 
 func createDefaultTemplateFile(fileName string) {
@@ -742,19 +736,34 @@ func createDefaultIngressTemplateFile(fileName string) {
 	}
 }
 
-func createRestrictedConfigFile(fileName string) {
+// returns true if the file was created, false if it already exists
+func createRestrictedConfigFile(fileName string) bool {
 	if _, err := os.Stat(fileName); err != nil {
 		if os.IsNotExist(err) {
 			file, ferr := os.Create(fileName)
 			if ferr != nil {
-				logrus.Info("Unable to create the configfile.")
-				os.Exit(1)
+				logrus.Fatal("Unable to create the configfile.")
 			}
 			mode := int(0600)
 			if cherr := file.Chmod(os.FileMode(mode)); cherr != nil {
-				logrus.Info("Chmod for config file failed, please set the mode to 0600.")
+				logrus.Warn("Chmod for config file failed, please set the mode to 0600.")
 			}
+			return true
 		}
+	}
+	return false
+}
+
+func setConfigFileVersion() {
+	verParts, verr := config.ParseSemver(semVer)
+	if verr != nil {
+		logrus.WithError(verr).Fatal("Failed to parse the semver")
+	}
+	viper.Set("configVersion", fmt.Sprintf("v%d", verParts.Major))
+	c.ConfigVersion = fmt.Sprintf("v%d", verParts.Major)
+	werr := viper.WriteConfig()
+	if werr != nil {
+		logrus.WithError(werr).Info("Failed to write config")
 	}
 }
 

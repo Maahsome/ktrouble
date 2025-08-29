@@ -25,7 +25,6 @@ type Environment struct {
 	Name             string `json:"name"`
 	Repository       string `json:"repository"`
 	ExcludeFromShare bool   `json:"excludefromshare"`
-	Source           string `json:"source"`
 	Hidden           bool   `json:"hidden"`
 	RemoveUpstream   bool   `json:"removeupstream"`
 }

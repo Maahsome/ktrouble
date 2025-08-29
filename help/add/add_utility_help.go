@@ -21,7 +21,13 @@ func (a *AddUtilityCmd) Long() string {
   Use 'add utility' command to add a new utility definition to your 'config.yaml'
   file`
 
-	longText = fmt.Sprintf("%s\n\n    > %s\n\n", longText, yellow(`ktrouble add utility -u helm-kubectl311 -c "/bin/bash" -r "dtzar/helm-kubectl:3.11"`))
+	longText = fmt.Sprintf("%s\n\n    > %s\n\n", longText, yellow(`ktrouble add utility -u helm-kubectl -c "/bin/bash" -i "dtzar/helm-kubectl" --tags "3.11"`))
+
+	longText += `EXAMPLE:
+  Use 'add utility' command to add a new utility definition with multiple tags
+  to your 'config.yaml' file`
+
+	longText = fmt.Sprintf("%s\n\n    > %s\n\n", longText, yellow(`ktrouble add utility -u psqlutils -c "/bin/bash" -i "postgres" --tags "14-bullseye,15-bullseye"`))
 
 	return longText
 }

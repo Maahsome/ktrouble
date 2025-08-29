@@ -18,7 +18,7 @@
         "args": [
           "launch",
           "-u",
-          "uppers/infra-dataplane-service-tools",
+          "lowers/infra-dataplane-service-tools",
           "-n",
           "infra-dataplane-service",
           "--secrets",
@@ -34,13 +34,13 @@
         ],
         "env": {
           "MODNAME": "ktrouble",
-          "SEMVER": "v1.0.0",         // Replace with dynamic values if desired
-          "BUILD_DATE": "2025-04-29", // Replace with dynamic values if desired
+          "SEMVER": "v2.0.0",         // Replace with dynamic values if desired
+          "BUILD_DATE": "2025-08-27", // Replace with dynamic values if desired
           "GIT_COMMIT": "abc123def",  // Replace with dynamic values if desired
-          "GIT_REF": "/refs/tags/v1.0.0",
-          "KUBECONFIG": "/Users/christopher.maahs/.kube/tsh.c-us-e4-a00004"
+          "GIT_REF": "/refs/tags/v2.0.0",
+          "KUBECONFIG": "/Users/christopher.maahs/.kube/tsh.c-us-e4-d00101"
         },
-        "buildFlags": "-ldflags='-X ktrouble/cmd.semVer=v1.0.0 -X ktrouble/cmd.buildDate=2025-05-05 -X ktrouble/cmd.gitCommit=abc12345 -X ktrouble/cmd.gitRef=tag1'"
+        "buildFlags": "-ldflags='-X ktrouble/cmd.semVer=v2.0.0 -X ktrouble/cmd.buildDate=2025-08-27 -X ktrouble/cmd.gitCommit=abc123def -X ktrouble/cmd.gitRef=/refs/tags/v2.0.0'"
       }
     ]
   }

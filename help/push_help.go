@@ -19,7 +19,7 @@ func (p *PushCmd) Long() string {
 
 	longText += `EXAMPLE:
   The 'push' command allows you to push your local utility definitions into a
-  common repository in 'futurama/farnsworth/tools/ktrouble-utils'.  The command
+  common repository in the repository defined in the config file.  The command
   will prompt you to choose a list of utilities to push to the repository.
   Utilities marked 'exclude from push' will not appear on the selection list.
 `

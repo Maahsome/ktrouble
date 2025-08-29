@@ -118,5 +118,5 @@ func init() {
 	setCmd.AddCommand(setOutputFieldsCmd)
 
 	setOutputFieldsCmd.Flags().StringVar(&fieldsP.Name, "output-name", "", "The name of the output to set the fields for (e.g., pod, environment, utility, etc.)")
-	setOutputFieldsCmd.Flags().StringSliceVar(&fieldsP.Fields, "fields", []string{}, "Comma-separated list of fields to set for the output (e.g., name,repository,source,hidden); 'default' to set to default fields")
+	setOutputFieldsCmd.Flags().StringSliceVar(&fieldsP.Fields, "fields", []string{}, "Comma-separated list of fields to set for the output (e.g., name,image,hidden); 'default' to set to default fields")
 }

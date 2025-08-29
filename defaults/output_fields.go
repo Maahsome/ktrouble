@@ -55,7 +55,7 @@ func ValidOutputFields() map[string]string {
 		"service":         "NAME, NAMESPACE, TYPE, CLUSTER_IP, EXTERNAL_IP, PORTS, LAUNCHED_BY",
 		"size":            "NAME, CPU_LIMIT, MEM_LIMIT, CPU_REQUEST, MEM_REQUEST",
 		"status":          "NAME, STATUS, EXCLUDE",
-		"utility":         "NAME, REPOSITORY, EXEC, HIDDEN, EXCLUDED, SOURCE, ENVIRONMENTS, REQUIRECONFIGMAPS, REQUIRESECRETS, HINT, REMOVE_UPSTREAM",
+		"utility":         "NAME, IMAGE, TAGS, EXEC, HIDDEN, EXCLUDED, ENVIRONMENTS, REQUIRECONFIGMAPS, REQUIRESECRETS, HINT, REMOVE_UPSTREAM",
 		"version":         "SEMVER, BUILD_DATE, GIT_COMMIT, GIT_REF",
 	}
 }
@@ -113,7 +113,7 @@ func OutputFieldsList() []objects.OutputFields {
 		},
 		{
 			Name:   "utility",
-			Fields: "NAME,REPOSITORY,EXEC",
+			Fields: "NAME,IMAGE,TAGS,EXEC",
 		},
 		{
 			Name:   "version",

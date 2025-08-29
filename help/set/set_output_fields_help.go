@@ -21,10 +21,10 @@ func (s *SetOutputFieldsCmd) Long() string {
 	yellow := color.New(color.FgYellow).SprintFunc()
 
 	longText += `EXAMPLE:
-  Set the default output field for 'environment' commands to 'name,repository,source,hidden'.
+  Set the default output field for 'environment' commands to 'name,image,hidden'.
 `
 
-	longText = fmt.Sprintf("%s\n    > %s\n\n", longText, yellow(`ktrouble set output-fields --output-name environments --fields 'name,repository,excluded,hidden'`))
+	longText = fmt.Sprintf("%s\n    > %s\n\n", longText, yellow(`ktrouble set output-fields --output-name environments --fields 'name,image,excluded,hidden'`))
 
 	longText += `EXAMPLE:
   Set the default output for 'pod' commands to 'name,launched_by'

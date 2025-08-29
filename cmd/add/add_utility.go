@@ -50,9 +50,13 @@ func checkAddUtilityParams() bool {
 		allParamsSet = false
 		common.Logger.Warn("The --name/-u parameter must be set")
 	}
-	if len(utilityParam.Repository) == 0 {
+	if len(utilityParam.Image) == 0 {
 		allParamsSet = false
-		common.Logger.Warn("The --repository/-r repository parameter must be set")
+		common.Logger.Warn("The --image/-i image parameter must be set")
+	}
+	if len(utilityParam.Tags) == 0 {
+		allParamsSet = false
+		common.Logger.Warn("The --tags/-t parameter must be set to at least one tag")
 	}
 	if len(utilityParam.Hint) > 0 {
 		if !fileExists(utilityParam.Hint) {
@@ -79,11 +83,11 @@ func checkAddUtilityParams() bool {
 				u = append(u, v)
 				common.Logger.Warn("The --name/-n utility name clashes with an existing utility name, please choose another, or use 'update utility'")
 			}
-			if utilityParam.Repository == v.Repository {
+			if utilityParam.Image == v.Image {
 				allParamsSet = false
 				showUtil = true
 				u = append(u, v)
-				common.Logger.Warnf("The --repository/-r parameter clashes with an existing utility: %s, please consider using that utility definition", v.Name)
+				common.Logger.Warnf("The --image/-i parameter clashes with an existing utility: %s, please consider using that utility definition", v.Name)
 			}
 			if showUtil {
 				if !c.FormatOverridden {
@@ -105,9 +109,9 @@ func addUtility() (objects.UtilityPod, error) {
 
 	newUtil := objects.UtilityPod{
 		Name:              utilityParam.Name,
-		Repository:        utilityParam.Repository,
+		Image:             utilityParam.Image,
+		Tags:              utilityParam.Tags,
 		ExecCommand:       utilityParam.ExecCommand,
-		Source:            "local",
 		ExcludeFromShare:  utilityParam.ExcludeFromShare,
 		RequireSecrets:    utilityParam.RequireSecrets,
 		RequireConfigmaps: utilityParam.RequireConfigmaps,
@@ -143,7 +147,8 @@ func init() {
 	addCmd.AddCommand(utilityCmd)
 
 	utilityCmd.Flags().StringVarP(&utilityParam.Name, "name", "u", "", "Unique name for your utility pod")
-	utilityCmd.Flags().StringVarP(&utilityParam.Repository, "repository", "r", "", "Repository and tag for your utility container, eg: cmaahs/basic-tools:latest")
+	utilityCmd.Flags().StringVarP(&utilityParam.Image, "image", "i", "", "IMage path for your utility container, eg: cmaahs/basic-tools")
+	utilityCmd.Flags().StringSliceVar(&utilityParam.Tags, "tags", []string{"latest"}, "Specify an array of image tags: eg, --tags 'latest,0.0.1'")
 	utilityCmd.Flags().StringVarP(&utilityParam.ExecCommand, "cmd", "c", "/bin/sh", "Default shell/command to use when 'exec'ing into the POD")
 	utilityCmd.Flags().BoolVarP(&utilityParam.ExcludeFromShare, "exclude", "x", false, "Exclude from 'push' to central repository")
 	utilityCmd.Flags().BoolVar(&utilityParam.Hidden, "toggle-hidden", false, "Switch the current 'hidden' flag for the utility definition")
