@@ -8,6 +8,8 @@
 - [add utility](#add-utility)
 - [attach](#attach)
 - [changelog](#changelog)
+- [combine](#combine)
+- [combine utility](#combine-utility)
 - [delete](#delete)
 - [diff](#diff)
 - [edit](#edit)
@@ -67,6 +69,7 @@ Available Commands:
   add         Add various objects for ktrouble
   attach      attach a kubernetes troubleshooting container to a running pod
   changelog   Get changelog information
+  combine     Combine utilty definitions for ktrouble
   completion  Generate the autocompletion script for the specified shell
   delete      Delete PODs that have been created by ktrouble
   diff        Get a context diff on each utility definition
@@ -290,6 +293,81 @@ Aliases:
 Flags:
       --all              Specify this switch to show ALL of the changelog entries
       --version string   Sepecify the version to display the changelog for
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+```
+
+[TOC](#TOC)
+
+## combine
+
+```plaintext
+EXAMPLE:
+    > ktrouble combine utility --help
+
+Usage:
+  ktrouble combine [flags]
+  ktrouble combine [command]
+
+Aliases:
+  combine, merge, join
+
+Available Commands:
+  utility     Combine a utility from the config file
+
+Global Flags:
+      --config string             config file (default is $HOME/.splicectl/config.yml)
+  -f, --fields strings            Specify an array of field names: eg, --fields 'NAME,REPOSITORY'
+      --ingress-template string   Specify the ingress template file to use to render the INGRESS manifest, for --create-ingress option (default "default-ingress")
+      --log-file string           Set the logging level: trace,debug,info,warning,error,fatal
+  -v, --log-level string          Set the logging level: trace,debug,info,warning,error,fatal
+  -n, --namespace string          Specify the namespace to run in, ENV NAMESPACE then -n for preference
+      --no-headers                Suppress header output in Text output
+  -o, --output string             output types: json, text, yaml, gron, raw
+      --service-template string   Specify the service template file to use to render the SERVICE manifest, for --create-ingress option (default "default-service")
+  -s, --show-hidden               Show entries with the 'hidden' property set to 'true'
+  -t, --template string           Specify the template file to use to render the POD manifest (default "default")
+
+Use "ktrouble combine [command] --help" for more information about a command.
+```
+
+[TOC](#TOC)
+
+## combine utility
+
+```plaintext
+EXAMPLE:
+  The 'combine utility' allows you to collapse several utility definitions that
+  share the same 'image' and differing 'tags' into a single definition.  This
+  will create the new utility definition, adding the 'tags' from each to the
+  'tags' list of the new definition.  It will also mark the utilities defined in
+  the '--combine' parameter as "hidden", this way it can be removed from the
+  upstream git repository with a 'ktrouble remove utility' with the
+  '--remove-upstream' switch
+
+    > ktrouble combine utility --name 'mysql' --combine 'mysql5,mysql8'
+
+Usage:
+  ktrouble combine utility [flags]
+
+Aliases:
+  utility, utility, utils, util, container, containers, image, images
+
+Flags:
+      --combine strings   A comma-separated list of utility pod names to combine, eg, --combine 'mysql5,mysql8'
+  -u, --name string       Unique name of your utility pod
+  -r, --remove-upstream   Remove the combined utility pods from the upstream repository on next push
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1101,8 +1179,8 @@ EXAMPLE:
 
   Parameters:
     - --utility/-u <name>           : The name of the utility to launch, must match the utility name
-                                    : be sure to specify the "environment" name if the utility
-                                    : has multiple environments, eg: --utility 'uppers/dns-tools'
+    - --tag                         : Specify the tag of the image, eg --tag 'latest'
+    - --environment                 : specify an environment, if the utility has environments defined, eg: --environment 'lowers'
     - --namespace/-n <name>         : The namespace to use
     - --service-account <name>      : The name of the service account to use
     - --node-selector <label/value> : The node selector to use
@@ -1123,7 +1201,9 @@ Aliases:
   launch, create, apply, pod, l
 
 Flags:
+      --build-command            Use this switch to only output the ktrouble command line for launching the utility
       --configmaps strings       Specify an array of configmap names to mount, eg --secrets 'cm1,cm2'
+      --environment string       Specify the environment of the image, eg --environment 'lowers'
       --host string              Specify the host that the ingress will listen on, for configuration of ingress-nginx (default "flexo.bender.rocks")
       --ingress                  Use this switch to enable creating a service and ingress for the POD
   -n, --namespace string         Specify the namespace to use
@@ -1136,6 +1216,7 @@ Flags:
       --secrets strings          Specify an array of secret names to mount, eg --secrets 'secret1,secret2'
       --service-account string   Specify the name of the service account to use
       --size string              Specify the size of the POD, eg --size 'small,medium,large'
+      --tag string               Specify the tag of the image, eg --tag 'latest'
   -u, --utility string           Specify the name of the utility to launch
       --volumes                  Use this switch to prompt to mount volumes in the POD
 
@@ -1504,8 +1585,8 @@ EXAMPLE:
     - size           : NAME,  CPU_LIMIT,  MEM_LIMIT,  CPU_REQUEST,  MEM_REQUEST
     - status         : NAME,  STATUS,  EXCLUDE
     - utility        : NAME,  IMAGE,  TAGS,  EXEC,  HIDDEN
-                       EXCLUDED,  SOURCE,  ENVIRONMENTS,  REQUIRECONFIGMAPS,  REQUIRESECRETS
-                       HINT,  REMOVE_UPSTREAM
+                       EXCLUDED,  ENVIRONMENTS,  REQUIRECONFIGMAPS,  REQUIRESECRETS,  HINT
+                       REMOVE_UPSTREAM
     - version        : SEMVER,  BUILD_DATE,  GIT_COMMIT,  GIT_REF
 
 Usage:
