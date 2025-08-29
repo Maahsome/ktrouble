@@ -14,7 +14,7 @@ metadata:
 spec:
   containers:
   - name: {{ $.Parameters.name }}
-    image: {{ $.Parameters.registry }}
+    image: {{ $.Parameters.image }}:{{ $.Parameters.tag }}
     {{- if eq $.Parameters.ingressEnabled "false" }}
     command:
       - sleep

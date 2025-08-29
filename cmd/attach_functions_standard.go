@@ -15,12 +15,13 @@ import (
 
 func standardAttach(utility string, sa string) {
 
+	selectedUtility := objects.SelectedUtilityPod{}
 	termFormatter := termenv.NewOutput(os.Stdout)
 	if c.Client != nil {
 		utilMap := objects.GetUtilityMap(c.UtilDefs, c.EnvMap)
 
 		if utility == "" {
-			utility = ask.PromptForUtility(c.UtilDefs, c.EnvMap, c.ShowHidden)
+			utility, selectedUtility = ask.PromptForUtility(c.UtilDefs, c.EnvMap, c.ShowHidden)
 		}
 
 		// Display the HINT
@@ -56,19 +57,26 @@ func standardAttach(utility string, sa string) {
 			selectedMounts = ask.PromptForEphemeralMounts(mounts)
 		}
 		shortUniq := randSeq(c.UniqIdLength)
-		containerName := fmt.Sprintf("%s-%s", utility, shortUniq)
-		aerr := c.Client.AttachContainerToPod(namespace, selectedPod.Name, containerName,
-			utilMap[utility].Repository, sleepTime, selectedMounts)
-		if aerr != nil {
-			common.Logger.WithError(aerr).Fatal("Failed to attach container to pod")
-		}
-
-		if c.EnableBashLinks {
-			hl := fmt.Sprintf("<bash:kubectl -n %s exec -it -c %s %s -- %s>", namespace, containerName, selectedPod.Name, utilMap[utility].ExecCommand)
-			tx := fmt.Sprintf("kubectl -n %s exec -it -c %s %s -- %s", namespace, containerName, selectedPod.Name, utilMap[utility].ExecCommand)
-			fmt.Println(termFormatter.Hyperlink(hl, tx))
+		containerName := fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq)
+		common.Logger.Tracef("Utility selected: %#v", selectedUtility)
+		image := fmt.Sprintf("%s:%s", utilMap[utility].Image, utilMap[utility].Tags[0])
+		if p.BuildCommand {
+			fmt.Printf("TODO: parameterize the attach command\n")
+			fmt.Printf("ktrouble attach \n")
 		} else {
-			fmt.Printf("kubectl -n %s exec -it -c %s %s -- %s\n", namespace, containerName, selectedPod.Name, utilMap[utility].ExecCommand)
+			aerr := c.Client.AttachContainerToPod(namespace, selectedPod.Name, containerName,
+				image, sleepTime, selectedMounts)
+			if aerr != nil {
+				common.Logger.WithError(aerr).Fatal("Failed to attach container to pod")
+			}
+
+			if c.EnableBashLinks {
+				hl := fmt.Sprintf("<bash:kubectl -n %s exec -it -c %s %s -- %s>", namespace, containerName, selectedPod.Name, utilMap[utility].ExecCommand)
+				tx := fmt.Sprintf("kubectl -n %s exec -it -c %s %s -- %s", namespace, containerName, selectedPod.Name, utilMap[utility].ExecCommand)
+				fmt.Println(termFormatter.Hyperlink(hl, tx))
+			} else {
+				fmt.Printf("kubectl -n %s exec -it -c %s %s -- %s\n", namespace, containerName, selectedPod.Name, utilMap[utility].ExecCommand)
+			}
 		}
 	} else {
 		common.Logger.Warn("Cannot launch a pod, no valid kubernetes context")

@@ -19,8 +19,8 @@ func (s *StatusCmd) Long() string {
 
 	longText += `EXAMPLE:
   The 'status' command will list the disposition of your local 'config.yaml'
-  file 'utilities' definitions against the 'futurama/farnsworth/tools/ktrouble-utils'
-  repostory.
+  file 'utilities' definitions against the repository defined in the config
+  file.
 `
 	longText = fmt.Sprintf("%s\n    > %s\n\n", longText, yellow(`ktrouble status`))
 

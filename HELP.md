@@ -183,7 +183,13 @@ EXAMPLE:
   Use 'add utility' command to add a new utility definition to your 'config.yaml'
   file
 
-    > ktrouble add utility -u helm-kubectl311 -c "/bin/bash" -r "dtzar/helm-kubectl:3.11"
+    > ktrouble add utility -u helm-kubectl -c "/bin/bash" -i "dtzar/helm-kubectl" --tags "3.11"
+
+EXAMPLE:
+  Use 'add utility' command to add a new utility definition with multiple tags
+  to your 'config.yaml' file
+
+    > ktrouble add utility -u psqlutils -c "/bin/bash" -i "postgres" --tags "14-bullseye,15-bullseye"
 
 Usage:
   ktrouble add utility [flags]
@@ -196,10 +202,11 @@ Flags:
   -e, --environments strings   Specify an array of environment names: eg, --environments 'lowers,uppers'
   -x, --exclude                Exclude from 'push' to central repository
       --hint-file string       Specify a file containing the hint text
+  -i, --image string           IMage path for your utility container, eg: cmaahs/basic-tools
   -u, --name string            Unique name for your utility pod
-  -r, --repository string      Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
       --require-configmaps     Set the Utilty to always prompt for configmaps
       --require-secrets        Set the Utilty to always prompt for secrets
+      --tags strings           Specify an array of image tags: eg, --tags 'latest,0.0.1' (default [latest])
       --toggle-hidden          Switch the current 'hidden' flag for the utility definition
 
 Global Flags:
@@ -1122,7 +1129,7 @@ Flags:
   -n, --namespace string         Specify the namespace to use
       --node-selector string     Specify the node selector to use
       --output-name              Use this switch to only output the name of the POD
-      --path string              Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes (default "service-futurama")
+      --path string              Specify the PATH that the ingress will listen on, for configuration of ingress-nginx, sans the enclosing slashes (default "service-ktrouble")
       --port int                 Specify the port that the POD listens on, used in the service and ingress settings (default 8080)
       --prompt-configmaps        Use this switch to prompt to mount configmaps in the POD
       --prompt-secrets           Use this switch to prompt to mount secrets in the POD
@@ -1160,6 +1167,9 @@ EXAMPLE:
 
 Usage:
   ktrouble migrate [flags]
+
+Flags:
+      --dry-run   Specify --dry-run to simulate the migration without making changes
 
 Global Flags:
       --config string             config file (default is $HOME/.splicectl/config.yml)
@@ -1221,7 +1231,7 @@ Global Flags:
 ```plaintext
 EXAMPLE:
   The 'push' command allows you to push your local utility definitions into a
-  common repository in 'futurama/farnsworth/tools/ktrouble-utils'.  The command
+  common repository in the repository defined in the config file.  The command
   will prompt you to choose a list of utilities to push to the repository.
   Utilities marked 'exclude from push' will not appear on the selection list.
 
@@ -1493,9 +1503,9 @@ EXAMPLE:
     - service_account: SERVICE_ACCOUNT
     - size           : NAME,  CPU_LIMIT,  MEM_LIMIT,  CPU_REQUEST,  MEM_REQUEST
     - status         : NAME,  STATUS,  EXCLUDE
-    - utility        : NAME,  REPOSITORY,  EXEC,  HIDDEN,  EXCLUDED
-                       SOURCE,  ENVIRONMENTS,  REQUIRECONFIGMAPS,  REQUIRESECRETS,  HINT
-                       REMOVE_UPSTREAM
+    - utility        : NAME,  IMAGE,  TAGS,  EXEC,  HIDDEN
+                       EXCLUDED,  SOURCE,  ENVIRONMENTS,  REQUIRECONFIGMAPS,  REQUIRESECRETS
+                       HINT,  REMOVE_UPSTREAM
     - version        : SEMVER,  BUILD_DATE,  GIT_COMMIT,  GIT_REF
 
 Usage:
@@ -1528,8 +1538,8 @@ Global Flags:
 ```plaintext
 EXAMPLE:
   The 'status' command will list the disposition of your local 'config.yaml'
-  file 'utilities' definitions against the 'futurama/farnsworth/tools/ktrouble-utils'
-  repostory.
+  file 'utilities' definitions against the repository defined in the config
+  file.
 
     > ktrouble status
 
@@ -1638,7 +1648,7 @@ Global Flags:
 EXAMPLE:
   Toggle the 'exclude from push' flag for a utility definition.
 
-    > ktrouble update utility -u helm-kubectl311 --toggle-exclude
+    > ktrouble update utility -u helm-kubectl --toggle-exclude
 
 EXAMPLE:
   Toggle the 'hidden' flag for an existing utility pod definition
@@ -1648,7 +1658,18 @@ EXAMPLE:
 EXAMPLE:
   Change the 'command' the utility will run
 
-    > ktrouble update utility -u helm-kubectl311 -c '/bin/sh'
+    > ktrouble update utility -u helm-kubectl -c '/bin/sh'
+
+EXAMPLE:
+  Set the image tags for a utility pod definition.  This is an overriding operation
+  so make sure you specify all the tags you want to keep.
+
+    > ktrouble update utility -u helm-kubectl --tags "3.11,3.12"
+
+EXAMPLE:
+  Change the image for a utility pod definition.
+
+    > ktrouble update utility -u redis -i "redis"
 
 Usage:
   ktrouble update utility [flags]
@@ -1660,10 +1681,11 @@ Flags:
   -c, --cmd string             Default shell/command to use when 'exec'ing into the POD
   -e, --environments strings   Specify an array of environment names: eg, --environments 'lowers,uppers'
       --hint-file string       Specify a file containing the hint text
+  -i, --image string           Image path for your utility container, eg: cmaahs/basic-tools
   -u, --name string            Unique name for your utility pod
-  -r, --repository string      Repository and tag for your utility container, eg: cmaahs/basic-tools:latest
       --require-configmaps     Set the Utilty to always prompt for configmaps
       --require-secrets        Set the Utilty to always prompt for secrets
+      --tags strings           Specify an array of tags for the image eg, --tags 'latest,0.0.1'
   -x, --toggle-exclude         Switch the current 'excludeFromShare' flag for the utility definition
       --toggle-hidden          Switch the current 'hidden' flag for the utility definition
 
@@ -1707,3 +1729,4 @@ Global Flags:
 ```
 
 [TOC](#TOC)
+

@@ -17,8 +17,30 @@ import (
 
 type UtilityPodList []UtilityPod
 type UtilityPodListV0 []UtilityPodV0
+type UtilityPodListV1 []UtilityPodV1
 
 type UtilityPod struct {
+	Name              string   `json:"name"`
+	Image             string   `json:"image"`
+	ExecCommand       string   `json:"execcommand"`
+	RequireSecrets    bool     `json:"requiresecrets"`
+	RequireConfigmaps bool     `json:"requireconfigmaps"`
+	ExcludeFromShare  bool     `json:"excludefromshare"`
+	Hidden            bool     `json:"hidden"`
+	Hint              string   `json:"hint"`
+	RemoveUpstream    bool     `json:"removeupstream"`
+	Environments      []string `json:"environments"`
+	Tags              []string `json:"tags,omitempty"`
+}
+
+type SelectedUtilityPod struct {
+	Name        string `json:"name"`
+	Image       string `json:"image"`
+	Environment string `json:"environment,omitempty"`
+	Tag         string `json:"tag,omitempty"`
+}
+
+type UtilityPodV1 struct {
 	Name              string   `json:"name"`
 	Repository        string   `json:"repository"`
 	ExecCommand       string   `json:"execcommand"`
@@ -48,30 +70,50 @@ type UtilityPodV0 struct {
 func GetUtilityMap(utilDefs UtilityPodList, envMap map[string]Environment) map[string]UtilityPod {
 	utilMap := make(map[string]UtilityPod)
 	for _, v := range utilDefs {
-		if v.Environments == nil {
-			utilMap[v.Name] = UtilityPod{
-				Name:              v.Name,
-				Repository:        v.Repository,
-				ExecCommand:       v.ExecCommand,
-				RequireSecrets:    v.RequireSecrets,
-				RequireConfigmaps: v.RequireConfigmaps,
-				Hint:              v.Hint,
-			}
-		} else {
-			for _, env := range v.Environments {
-				utilMap[fmt.Sprintf("%s/%s", env, v.Name)] = UtilityPod{
+		if len(v.Environments) == 0 || v.Environments == nil {
+			for _, tag := range v.Tags {
+				utilMap[fmt.Sprintf("%s:%s", v.Name, tag)] = UtilityPod{
 					Name:              v.Name,
-					Repository:        fmt.Sprintf("%s/%s", envMap[env].Repository, v.Repository),
+					Image:             v.Image,
+					Tags:              []string{tag},
 					ExecCommand:       v.ExecCommand,
 					RequireSecrets:    v.RequireSecrets,
 					RequireConfigmaps: v.RequireConfigmaps,
 					Hint:              v.Hint,
 				}
 			}
+		} else {
+			for _, env := range v.Environments {
+				for _, tag := range v.Tags {
+					utilMap[fmt.Sprintf("%s/%s:%s", env, v.Name, tag)] = UtilityPod{
+						Name:              v.Name,
+						Image:             fmt.Sprintf("%s/%s", envMap[env].Repository, v.Image),
+						Tags:              []string{tag},
+						ExecCommand:       v.ExecCommand,
+						RequireSecrets:    v.RequireSecrets,
+						RequireConfigmaps: v.RequireConfigmaps,
+						Hint:              v.Hint,
+					}
+				}
+			}
 		}
 	}
 
 	return utilMap
+}
+
+func (u *UtilityPodList) UpdateProperty(name string, property string, newValue any) {
+	for i, v := range *u {
+		if v.Name == name {
+			switch property {
+			case "hidden":
+				(*u)[i].Hidden = newValue.(bool)
+			case "removeupstream":
+				(*u)[i].RemoveUpstream = newValue.(bool)
+			}
+			break
+		}
+	}
 }
 
 func RemoveUtilIndex(s UtilityPodList, index int) UtilityPodList {
@@ -174,8 +216,14 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 			switch strings.ToUpper(f) {
 			case "NAME":
 				row = append(row, mapList[v].Name)
-			case "REPOSITORY":
-				row = append(row, mapList[v].Repository)
+			case "IMAGE":
+				row = append(row, mapList[v].Image)
+			case "TAGS":
+				if len(mapList[v].Tags) > 0 {
+					row = append(row, strings.Join(mapList[v].Tags, ","))
+				} else {
+					row = append(row, "latest")
+				}
 			case "EXEC":
 				row = append(row, mapList[v].ExecCommand)
 			case "HIDDEN":
@@ -184,8 +232,6 @@ func (up *UtilityPodList) ToTEXT(to TextOptions) string {
 				row = append(row, fmt.Sprintf("%t", mapList[v].ExcludeFromShare))
 			case "REMOVE_UPSTREAM":
 				row = append(row, fmt.Sprintf("%t", mapList[v].RemoveUpstream))
-			case "SOURCE":
-				row = append(row, mapList[v].Source)
 			case "REQUIRESECRETS":
 				row = append(row, fmt.Sprintf("%t", mapList[v].RequireSecrets))
 			case "REQUIRECONFIGMAPS":

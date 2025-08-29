@@ -1,6 +1,7 @@
 package remove
 
 import (
+	"fmt"
 	"ktrouble/common"
 	"ktrouble/defaults"
 	"ktrouble/objects"
@@ -35,6 +36,8 @@ var utilityCmd = &cobra.Command{
 				AdditionalFields: []string{"HIDDEN", "REMOVE_UPSTREAM"},
 				DefaultFields:    c.OutputFieldsMap["utility"],
 			})
+		} else {
+			fmt.Println("No utility definition specified, need -u/--name to be specified")
 		}
 	},
 }
@@ -45,17 +48,16 @@ func removeOrHideUtility() error {
 	for i, v := range c.UtilDefs {
 		if utilityParam.Name == v.Name {
 			updatedDefs = true
-			if v.Source == "ktrouble-utils" {
+			if utilityParam.RemoveUpstream {
+				c.UtilDefs[i].RemoveUpstream = true
 				c.UtilDefs[i].Hidden = true
-				if utilityParam.RemoveUpstream {
-					c.UtilDefs[i].RemoveUpstream = true
-				}
 			} else {
 				c.UtilDefs = objects.RemoveUtilIndex(c.UtilDefs, i)
 			}
 			break
 		}
 	}
+
 	if updatedDefs {
 		viper.Set("utilityDefinitions", c.UtilDefs)
 		verr := viper.WriteConfig()

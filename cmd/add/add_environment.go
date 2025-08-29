@@ -89,7 +89,6 @@ func addEnvironment() (objects.Environment, error) {
 	newEnv := objects.Environment{
 		Name:             environmentParam.Name,
 		Repository:       environmentParam.Repository,
-		Source:           "local",
 		ExcludeFromShare: environmentParam.ExcludeFromShare,
 	}
 

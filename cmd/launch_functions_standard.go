@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"ktrouble/ask"
 	"ktrouble/common"
@@ -14,6 +15,7 @@ import (
 
 func standardLaunch(p launchParam) {
 
+	selectedUtility := objects.SelectedUtilityPod{}
 	utility := p.Utility
 	namespace := p.Namespace
 	sa := p.ServiceAccount
@@ -26,17 +28,22 @@ func standardLaunch(p launchParam) {
 		utilMap := objects.GetUtilityMap(c.UtilDefs, c.EnvMap)
 
 		if p.Utility == "" {
-			utility = ask.PromptForUtility(c.UtilDefs, c.EnvMap, c.ShowHidden)
+			utility, selectedUtility = ask.PromptForUtility(c.UtilDefs, c.EnvMap, c.ShowHidden)
 			if len(utilMap[utility].Hint) > 0 {
 				fmt.Println(utilMap[utility].Hint)
 			}
 		} else {
-			if _, ok := utilMap[p.Utility]; !ok {
-				fmt.Printf("Invalid utility: %s\n", p.Utility)
+			common.Logger.Tracef("Utility provided on command line: %s", p.Utility)
+			common.Logger.Tracef("Environment provided on command line: %s", p.Environment)
+			common.Logger.Tracef("Tag provided on command line: %s", p.Tag)
+			utility = fmt.Sprintf("%s/%s:%s", p.Environment, p.Utility, p.Tag)
+			utility = strings.TrimPrefix(utility, "/")
+			if _, ok := utilMap[utility]; !ok {
+				fmt.Printf("Invalid utility: %s/%s:%s\n", p.Environment, p.Utility, p.Tag)
 				return
 			}
-			utility = p.Utility
 		}
+		common.Logger.Tracef("Utility with env and tag: %s", utility)
 
 		if p.Namespace == "" {
 			namespace = c.Client.DetermineNamespace(c.Namespace)
@@ -125,12 +132,15 @@ func standardLaunch(p launchParam) {
 
 		shortUniq := randSeq(c.UniqIdLength)
 		osUser := os.Getenv("USER")
+		common.Logger.Tracef("Tags: %#v", utilMap[utility].Tags)
+		common.Logger.Tracef("Image, Tag: %s, %s", utilMap[utility].Image, utilMap[utility].Tags[0])
 		tc := &template.TemplateConfig{
 			Parameters: map[string]string{
 				"name":           fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq),
 				"serviceAccount": sa,
 				"namespace":      namespace,
-				"registry":       utilMap[utility].Repository,
+				"image":          utilMap[utility].Image,
+				"tag":            utilMap[utility].Tags[0],
 				"limitsCpu":      c.SizeMap[resourceSize].LimitsCPU,
 				"limitsMem":      c.SizeMap[resourceSize].LimitsMEM,
 				"requestCpu":     c.SizeMap[resourceSize].RequestCPU,
@@ -152,31 +162,55 @@ func standardLaunch(p launchParam) {
 		tp := template.New(c.TemplateFile)
 		podManifest := tp.RenderTemplate(tc)
 		common.Logger.Debugf("Manifest: \n%s\n", podManifest)
-		c.Client.CreatePod(podManifest, namespace)
-
-		if p.CreateIngress {
-			common.Logger.Debugf("Service Template file: %s", c.ServiceTemplateFile)
-			tps := template.New(c.ServiceTemplateFile)
-			serviceManifest := tps.RenderTemplate(tc)
-			common.Logger.Debugf("Manifest: \n%s\n", serviceManifest)
-			c.Client.CreateService(serviceManifest, namespace)
-
-			common.Logger.Debugf("Ingress Template file: %s", c.IngressTemplateFile)
-			tpi := template.New(c.IngressTemplateFile)
-			ingressManifest := tpi.RenderTemplate(tc)
-			common.Logger.Debugf("Manifest: \n%s\n", ingressManifest)
-			c.Client.CreateIngress(ingressManifest, namespace)
-		}
-
-		if p.OutputName {
-			fmt.Printf("%s-%s\n", utilMap[utility].Name, shortUniq)
-		} else {
-			if c.EnableBashLinks {
-				hl := fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq), utilMap[utility].ExecCommand)
-				tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s", namespace, fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq), utilMap[utility].ExecCommand)
-				fmt.Println(termFormatter.Hyperlink(hl, tx))
+		if p.BuildCommand {
+			fmt.Printf("ktrouble launch ")
+			fmt.Printf("\\\n  --utility %s ", selectedUtility.Name)
+			fmt.Printf("\\\n  --tag %s ", selectedUtility.Tag)
+			if len(selectedUtility.Environment) > 0 {
+				fmt.Printf("\\\n  --environment %s ", selectedUtility.Environment)
+			}
+			fmt.Printf("\\\n  --namespace %s ", namespace)
+			fmt.Printf("\\\n  --service-account %s ", sa)
+			fmt.Printf("\\\n  --size %s ", resourceSize)
+			if hasSelector == "true" {
+				fmt.Printf("\\\n  --node-selector %s ", selector)
 			} else {
-				fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq), utilMap[utility].ExecCommand)
+				fmt.Printf("\\\n  --node-selector '-none-' ")
+			}
+			if len(selectedSecrets) > 0 {
+				fmt.Printf("\\\n  --secrets '%s' ", strings.Join(selectedSecrets, ","))
+			}
+			if len(selectedConfigMaps) > 0 {
+				fmt.Printf("\\\n  --configmaps '%s' ", strings.Join(selectedConfigMaps, ","))
+			}
+			fmt.Printf("\n")
+		} else {
+			c.Client.CreatePod(podManifest, namespace)
+
+			if p.CreateIngress {
+				common.Logger.Debugf("Service Template file: %s", c.ServiceTemplateFile)
+				tps := template.New(c.ServiceTemplateFile)
+				serviceManifest := tps.RenderTemplate(tc)
+				common.Logger.Debugf("Manifest: \n%s\n", serviceManifest)
+				c.Client.CreateService(serviceManifest, namespace)
+
+				common.Logger.Debugf("Ingress Template file: %s", c.IngressTemplateFile)
+				tpi := template.New(c.IngressTemplateFile)
+				ingressManifest := tpi.RenderTemplate(tc)
+				common.Logger.Debugf("Manifest: \n%s\n", ingressManifest)
+				c.Client.CreateIngress(ingressManifest, namespace)
+			}
+
+			if p.OutputName {
+				fmt.Printf("%s-%s\n", utilMap[utility].Name, shortUniq)
+			} else {
+				if c.EnableBashLinks {
+					hl := fmt.Sprintf("<bash:kubectl -n %s exec -it %s -- %s>", namespace, fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq), utilMap[utility].ExecCommand)
+					tx := fmt.Sprintf("kubectl -n %s exec -it %s -- %s", namespace, fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq), utilMap[utility].ExecCommand)
+					fmt.Println(termFormatter.Hyperlink(hl, tx))
+				} else {
+					fmt.Printf("kubectl -n %s exec -it %s -- %s\n", namespace, fmt.Sprintf("%s-%s", utilMap[utility].Name, shortUniq), utilMap[utility].ExecCommand)
+				}
 			}
 		}
 	} else {
