@@ -18,11 +18,10 @@ builds:
     goos:
       - darwin
       - linux
-      - windows
 
 archives:
   - id: general
-    ids:
+    builds:
       - general
     wrap_in_directory: true
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
@@ -31,7 +30,7 @@ checksum:
   name_template: "checksums.txt"
 
 snapshot:
-  version_template: "{{ incpatch .Tag }}-next"
+  name_template: "{{ incpatch .Tag }}-next"
 
 brews:
   - name: ktrouble
