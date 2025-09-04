@@ -29,8 +29,6 @@ archives:
     formats: [tar.gz]
     wrap_in_directory: true
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
-    files:
-      - none*  # This preserves the old behavior of only including the binary
 
 checksum:
   name_template: "checksums.txt"
