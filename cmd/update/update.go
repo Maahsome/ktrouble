@@ -11,6 +11,7 @@ import (
 var updateHelp = help.UpdateCmd{}
 var updateEnvironmentHelp = help.UpdateEnvironmentCmd{}
 var updateUtilityHelp = help.UpdateUtilityCmd{}
+var updateSizeHelp = help.UpdateSizeCmd{}
 
 var updateCmd = &cobra.Command{
 	Use:     "update",
