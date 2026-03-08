@@ -11,6 +11,7 @@ import (
 var addHelp = help.AddCmd{}
 var addEnvironmentHelp = help.AddEnvironmentCmd{}
 var addUtilityHelp = help.AddUtilityCmd{}
+var addSizeHelp = help.AddSizeCmd{}
 
 var addCmd = &cobra.Command{
 	Use:     "add",

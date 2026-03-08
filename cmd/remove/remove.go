@@ -11,6 +11,7 @@ import (
 var removeHelp = help.RemoveCmd{}
 var removeEnvironmentHelp = help.RemoveEnvironmentCmd{}
 var removeUtilityHelp = help.RemoveUtilityCmd{}
+var removeSizeHelp = help.RemoveSizeCmd{}
 
 var removeCmd = &cobra.Command{
 	Use:     "remove",
