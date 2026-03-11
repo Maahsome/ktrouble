@@ -76,5 +76,5 @@ func removeSize() error {
 
 func init() {
 	removeCmd.AddCommand(sizeCmd)
-	sizeCmd.Flags().StringVarP(&sizeParam.Name, "name", "n", "", "Name of the size definition to remove")
+	sizeCmd.Flags().StringVar(&sizeParam.Name, "name", "", "Name of the size definition to remove")
 }

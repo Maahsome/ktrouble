@@ -69,7 +69,7 @@ func checkUpdateSizeParams() bool {
 		}
 		if !found {
 			allParamsSet = false
-			common.Logger.Warnf("The --name/-n size name does not match an existing size: %s", sizeParam.Name)
+			common.Logger.Warnf("The --name size name does not match an existing size: %s", sizeParam.Name)
 		}
 	}
 
@@ -120,7 +120,7 @@ func updateSize() (objects.ResourceSize, error) {
 
 func init() {
 	updateCmd.AddCommand(sizeCmd)
-	sizeCmd.Flags().StringVarP(&sizeParam.Name, "name", "n", "", "Name of the size definition to update")
+	sizeCmd.Flags().StringVar(&sizeParam.Name, "name", "", "Name of the size definition to update")
 	sizeCmd.Flags().StringVar(&sizeParam.LimitsCPU, "limitscpu", "", "CPU limit for the size definition, eg: 250m")
 	sizeCmd.Flags().StringVar(&sizeParam.LimitsMEM, "limitsmem", "", "Memory limit for the size definition, eg: 2Gi")
 	sizeCmd.Flags().StringVar(&sizeParam.RequestCPU, "requestcpu", "", "CPU request for the size definition, eg: 100m")
