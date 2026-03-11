@@ -1,6 +1,7 @@
 package remove
 
 import (
+	"ktrouble/ask"
 	"ktrouble/common"
 	"ktrouble/defaults"
 	"ktrouble/objects"
@@ -20,24 +21,27 @@ var environmentCmd = &cobra.Command{
 	Short:   removeEnvironmentHelp.Short(),
 	Long:    removeEnvironmentHelp.Long(),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(environmentParam.Name) > 0 {
-			err := removeOrHideEnvironment()
-			if err != nil {
-				logrus.WithError(err).Error("Failed to remove the environment definition")
-			}
-			if !c.FormatOverridden {
-				c.OutputFormat = "text"
-			}
-			c.OutputData(&c.EnvDefs, objects.TextOptions{
-				NoHeaders:        c.NoHeaders,
-				ShowHidden:       true,
-				Fields:           c.Fields,
-				AdditionalFields: []string{"HIDDEN", "REMOVE_UPSTREAM"},
-				DefaultFields:    c.OutputFieldsMap["environments"],
-			})
-		} else {
-			logrus.Warn("--name/-e environment name must be specified")
+		if len(environmentParam.Name) == 0 {
+			environmentParam.Name = ask.PromptForEnvironment(c.EnvDefs)
 		}
+		if len(environmentParam.Name) == 0 {
+			logrus.Warn("--name/-e environment name must be specified")
+			return
+		}
+		err := removeOrHideEnvironment()
+		if err != nil {
+			logrus.WithError(err).Error("Failed to remove the environment definition")
+		}
+		if !c.FormatOverridden {
+			c.OutputFormat = "text"
+		}
+		c.OutputData(&c.EnvDefs, objects.TextOptions{
+			NoHeaders:        c.NoHeaders,
+			ShowHidden:       true,
+			Fields:           c.Fields,
+			AdditionalFields: []string{"HIDDEN", "REMOVE_UPSTREAM"},
+			DefaultFields:    c.OutputFieldsMap["environments"],
+		})
 	},
 }
 
