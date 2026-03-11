@@ -111,7 +111,7 @@ func addSize() (objects.ResourceSize, error) {
 func init() {
 	addCmd.AddCommand(sizeCmd)
 
-	sizeCmd.Flags().StringVarP(&sizeParam.Name, "name", "n", "", "Unique name for your size definition")
+	sizeCmd.Flags().StringVar(&sizeParam.Name, "name", "", "Unique name for your size definition")
 	sizeCmd.Flags().StringVar(&sizeParam.LimitsCPU, "limitscpu", "", "CPU limit for the size definition, eg: 250m")
 	sizeCmd.Flags().StringVar(&sizeParam.LimitsMEM, "limitsmem", "", "Memory limit for the size definition, eg: 2Gi")
 	sizeCmd.Flags().StringVar(&sizeParam.RequestCPU, "requestcpu", "", "CPU request for the size definition, eg: 100m")
