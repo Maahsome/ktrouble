@@ -16,6 +16,7 @@ var GetServiceAccountsAliases = []string{"serviceaccounts", "sa"}
 var GetServicesAliases = []string{"service", "svc"}
 var GetSizesAliases = []string{"size", "requests", "request", "limit", "limits"}
 var GetSleepAliases = []string{"ephemeral_sleep", "uptime"}
+var GetEnvVarsAliases = []string{"envvar"}
 var GetUtilitesAliases = []string{"utility", "utils", "util", "container", "containers", "image", "images"}
 var LaunchAliases = []string{"create", "apply", "pod", "l"}
 var OutputFieldsAliases = []string{"of", "fields", "field", "output-field"}
