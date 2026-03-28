@@ -18,6 +18,7 @@ var getNodeLabelsHelp = help.GetNodeLabelsCmd{}
 var getOutputFieldsHelp = help.GetOutputFieldsCmd{}
 var getServiceAccountHelp = help.GetServiceAccountCmd{}
 var getSizesHelp = help.GetSizesCmd{}
+var getEnvVarsHelp = help.GetEnvVarsCmd{}
 var getUtilitiesHelp = help.GetUtilitiesCmd{}
 
 var getCmd = &cobra.Command{
